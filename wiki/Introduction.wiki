@@ -61,4 +61,90 @@ public class MySuggestBox extends DefaultSuggestBox {
 Therefore by extending `AbstractSuggestBox<T>` you will have to hold you list values alone. You can also decide for example not to show the list unless the user typed at least 3 letters. 
 Remember all what is required from you is to give back the list through the method `getFiltredPossibilities(String text)`.
 
-==Displaying the items differently==
+==Displaying the list differently==
+===CSS styling===
+You can do pretty much on the way the list is displayed through the different css styles available for each subcomponent:
+
+// add details here
+
+===Defining your own items===
+Items are defined through the interface `ValueHolderLabel<T>`. You should implement this interface if you want to change the display of each item in the list. For example if the items should display an image, a table row or any other display by item.
+
+To have your own items, you will have to create two implementations: 
+# the item it self :  implement the `interface ValueHolderLabel<T>`
+# the item factory : implement the `interface ValueRendererFactory<T, W extends ValueHolderLabel<T>>`
+where 
+# <T> is the type of your data (the class repesenting an item)
+# <W> is your implementation of `ValueHolderLabel<T>`
+
+Finally inform the suggest box that you want to use your own item implementation by calling the method `AbstractSuggestBox#setValueRendererFactory(
+			ValueRendererFactory<T, ? extends ValueHolderLabel<T>> valueRendererFactory)` passing it your factory that creates your items.
+
+Here's the code of the default implementations that is pretty direct:
+{{{
+public class DefaultValueRenderer<T> extends HTML implements
+		ValueHolderLabel<T> {
+	private static final String ITEM_HOVER = "eu-nextstreet-SuggestItemHover";
+	private static final String MATCHING_STRING = "eu-nextstreet-SuggestMatchingString";
+	protected T value;
+
+	public DefaultValueRenderer(T value, String filterText) {
+		this.value = value;
+		String html = value.toString();
+		setHTML(html.replace(filterText, "<span class='" + MATCHING_STRING
+				+ "'>" + filterText + "</span>"));
+	}
+
+	public T getValue() {
+		return value;
+	}
+
+	public void setValue(T value) {
+		this.value = value;
+	}
+
+	@Override
+	public void hover(boolean hover) {
+		if (hover)
+			addStyleName(ITEM_HOVER);
+		else
+			removeStyleName(ITEM_HOVER);
+	}
+
+	public static final String SELECTED = "eu-nextstreet-SuggestItemSelected";
+
+	@Override
+	public void setFocused(boolean focused) {
+		if (focused)
+			addStyleName(SELECTED);
+		else
+			removeStyleName(SELECTED);
+	}
+
+}
+}}}
+
+{{{
+
+public class DefaultValueRendererFactory<T> implements
+		ValueRendererFactory<T, DefaultValueRenderer<T>> {
+
+	@Override
+	public DefaultValueRenderer<T> createValueRenderer(T value,
+			String filterText) {
+		return new DefaultValueRenderer<T>(value, filterText);
+	}
+
+}
+}}}
+
+As you see, when writing your own implementations you will have to handle the mouse over and focus events your own way (which is the asked feature).
+
+Notice that you can change the items when the application is already running without trouble, just change the current renderer.
+
+===Providing your own list container===
+You can also decide not to show the list under the suggest box but above it, or inside another container (for example a drop down panel).
+
+In that case you will have to provide your own implementation of the `interface SuggestList<T>` then call `AbstractSuggestBox#setSuggestList(SuggestList<T> suggestList)` on your suggest box to provide your instance. 
+
+Notice that you can change the list box at runtime, however you will have to handle the cleaning of the old box your self.
