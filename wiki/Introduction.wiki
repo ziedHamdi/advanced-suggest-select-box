@@ -1,0 +1,64 @@
+#labels Phase-Design,Phase-Implementation
+#This page shows the simplest way to use the suggest box with its default implementations.
+
+= Introduction =
+
+After this fast tutorial you will be able to create a suggest or select box the way you are used to with other widgets. At every extension point you will have to possibility to see how to get a more advanced look or behavior by following the proposed link. We recommend you read this document entirely before you go to the other links since it explains the overall architecture.
+
+
+= Details =
+
+The simplest test case of this library is the following:
+{{{
+	public void onModuleLoad() {
+		class Value {
+			String str;
+
+			public Value(String str) {
+				this.str = str;
+			}
+
+			@Override
+			public String toString() {
+				return str;
+			}
+
+		}
+
+		DefaultSuggestBox<Value> box = new DefaultSuggestBox<Value>();
+		box.add(new Value("01 - ABCD"));
+		box.add(new Value("02 - CDEF"));
+		box.add(new Value("03 - GHIJ"));
+		RootPanel.get("nameFieldContainer").add(box);
+	}
+
+}}}
+
+By running this example, you will see the default behavior and look of the component. 
+
+This example shows also the limitations of the standard components:
+==Filtering limitations==
+In many cases, list values have a business code and a label (at least). Users wish to have the possibility to filter by typing the code or the label. For example, the use could want to type AB and see the element *01 - ABCD* selected. 
+To accomplish this task you have two possible ways:
+===Simple way===
+Extend _DefaultSuggestBox_ and override the method _accept(String value, T item)_ which tells if _item_ has to be in the list of the elements when the user typed the string _value_
+For example to let the user type any of the code or the label as explained in the preceding chapter, create your own class as follows:
+{{{
+public class MySuggestBox extends DefaultSuggestBox {
+	protected boolean accept(String text, T t) {
+		if (t.toString().toUpperCase().contains(text.toUpperCase())) {
+			return true;
+		}
+		return false;
+	}
+}
+}}}
+  
+===Extended way===
+`DefaultSuggestBox` has a simple implementation of the base class's abstract methods `AbstractSuggestBox<T>`.
+
+`AbstractSuggestBox<T>` doesn't hold the list of items neither it defines how to hold them. Instead it only declares an abstract method `protected abstract List<T> getFiltredPossibilities(String text);` that it calls each time it needs to show (or update) the list. This way it delegates the responsibility of the list management to a user defined object: this allows to get the list from the server for example only when needed, or to generate values from what the user is typing etc...
+Therefore by extending `AbstractSuggestBox<T>` you will have to hold you list values alone. You can also decide for example not to show the list unless the user typed at least 3 letters. 
+Remember all what is required from you is to give back the list through the method `getFiltredPossibilities(String text)`.
+
+==Displaying the items differently==
