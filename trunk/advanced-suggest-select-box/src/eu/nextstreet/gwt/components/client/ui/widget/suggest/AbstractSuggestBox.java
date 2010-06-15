@@ -1,0 +1,493 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package eu.nextstreet.gwt.components.client.ui.widget.suggest;
+
+import java.util.List;
+
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.FocusEvent;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.UIObject;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
+
+import eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.DefaultSuggestList;
+import eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.DefaultValueRendererFactory;
+
+/**
+ * Suggest box (or select box) with many possibilities either in behavior and in
+ * presentation.
+ * 
+ * @author Zied Hamdi
+ * 
+ * @param <T>
+ */
+public abstract class AbstractSuggestBox<T> extends EventHandlerHolder {
+
+	private static final String SUGGEST_FIELD_PANEL = "eu.nextstreet.SuggestFieldPanel";
+	private static final String SUGGEST_FIELD = "eu-nextstreet-SuggestField";
+	private static final String ITEM = "eu-nextstreet-SuggestItem";
+	private static final int BUTTON_WIDTH = 16;
+	private static SuggestBoxUiBinder uiBinder = GWT
+			.create(SuggestBoxUiBinder.class);
+	protected T selected;
+	protected String typed;
+	protected String defautText;
+	protected ValueRendererFactory<T, ? extends ValueHolderLabel<T>> valueRendererFactory = new DefaultValueRendererFactory<T>();
+
+	@SuppressWarnings("unchecked")
+	interface SuggestBoxUiBinder extends UiBinder<Widget, AbstractSuggestBox> {
+	}
+
+	protected @UiField
+	VerticalPanel panel;
+
+	protected @UiField
+	TextBox text;
+
+	SuggestList<T> suggestList = new DefaultSuggestList<T>();
+	ScrollPanel scrollPanel = new ScrollPanel();
+	VerticalPanel popupPanel = new VerticalPanel();
+
+	protected int selectedIndex = 0;
+	private boolean recomputePopupContent = true;
+	/**
+	 * Specifies if enter is hit mutiple times with same value, whether it
+	 * generates a change event for each
+	 */
+	private boolean multipleChangeEvent;
+	private boolean fireChangeOnBlur;
+	private int maxPopupHeight = 500;
+	private int maxPopupWidth = 500;
+
+	public AbstractSuggestBox() {
+		initWidget(uiBinder.createAndBindUi(this));
+		popupPanel.setSpacing(0);
+		scrollPanel.add(popupPanel);
+		panel.setStyleName(SUGGEST_FIELD_PANEL);
+		text.setStyleName(SUGGEST_FIELD);
+		suggestList.setWidget(scrollPanel);
+	}
+
+	@UiHandler("text")
+	public void onFocus(FocusEvent focusEvent) {
+		if (defautText != null) {
+			this.text.setSelectionRange(0, getText().length());
+		}
+	}
+
+	@UiHandler("text")
+	public void onMouseDown(MouseDownEvent event) {
+		int interval = text.getAbsoluteLeft() + text.getOffsetWidth()
+				- event.getClientX();
+		if (interval < BUTTON_WIDTH) {
+			if (suggestList.isShowing()) {
+				suggestList.hide();
+			} else {
+				recomputePopupContent(KeyCodes.KEY_DOWN);
+				highlightSelectedValue();
+			}
+		}
+	}
+
+	@UiHandler("text")
+	public void onBlur(BlurEvent event) {
+		new Timer() {
+			@Override
+			public void run() {
+				String currentText = text.getText();
+				if (typed == null || !typed.equals(currentText)) {
+					valueTyped(currentText);
+				} else if (fireChangeOnBlur) {
+					valueSelected(selected);
+					fireChangeOnBlur = false;
+				}
+				if (currentText.trim().length() == 0)
+					setText(defautText);
+			}
+		}.schedule(200);
+		if (suggestList.isShowing()) {
+			new Timer() {
+				@Override
+				public void run() {
+					suggestList.hide();
+				}
+			}.schedule(300);
+		}
+	}
+
+	@UiHandler("text")
+	public void onKeyUp(KeyUpEvent keyUpEvent) {
+		int keyCode = keyUpEvent.getNativeKeyCode();
+
+		if (keyCode == KeyCodes.KEY_TAB || keyCode == KeyCodes.KEY_ALT
+				|| keyCode == KeyCodes.KEY_CTRL
+				|| keyCode == KeyCodes.KEY_SHIFT)
+			return;
+
+		if (keyCode == KeyCodes.KEY_DOWN || keyCode == KeyCodes.KEY_UP
+				|| keyCode == KeyCodes.KEY_LEFT
+				|| keyCode == KeyCodes.KEY_RIGHT) {
+			recomputePopupContent = !suggestList.isShowing();
+		}
+
+		if (recomputePopupContent) {
+			if (recomputePopupContent(keyCode))
+				return;
+
+		}
+
+		ValueHolderLabel<T> popupWidget = getPopupWidget();
+		if (selectedIndex != -1)
+			popupWidget.setFocused(false);
+		int widgetCount = popupPanel.getWidgetCount();
+
+		// TODO verifier si ca n'introduit pas un bug
+		if (widgetCount == 0)
+			return;
+
+		if (keyCode == KeyCodes.KEY_DOWN) {
+			selectedIndex = ++selectedIndex % widgetCount;
+			highlightSelectedValue();
+		} else if (keyCode == KeyCodes.KEY_UP) {
+			selectedIndex = --selectedIndex % widgetCount;
+			if (selectedIndex < 0)
+				selectedIndex += widgetCount;
+			highlightSelectedValue();
+		} else if (keyCode == KeyCodes.KEY_ENTER) {
+			if (suggestList.isShowing()) {
+				if (popupWidget != null) {
+					T t = popupWidget.getValue();
+					fillValue(t, true);
+				} else {
+					// value not in list, this enter means OK.
+					valueTyped(getText());
+				}
+			} else {
+				if (multipleChangeEvent) {
+					// popup is not visible, this enter means OK (check if the
+					// value was entered from the list or from text).
+					if (selected == null)
+						valueTyped(getText());
+					else
+						fillValue(selected, multipleChangeEvent);
+				}
+			}
+		} else if (keyCode == KeyCodes.KEY_ESCAPE) {
+			hidePopup();
+		} else if (keyCode == KeyCodes.KEY_TAB) {
+
+		} else {
+			recomputePopupContent = true;
+		}
+
+	}
+
+	protected void highlightSelectedValue() {
+		ValueHolderLabel<T> popupWidget = getPopupWidget();
+		if (popupWidget != null) {
+			popupWidget.setFocused(true);
+			scrollPanel.ensureVisible((UIObject) popupWidget);
+		}
+	}
+
+	protected void hidePopup() {
+		suggestList.hide();
+		selectedIndex = -1;
+	}
+
+	/**
+	 * Recomputes the content of the popup. Returns true to show there's no need
+	 * to do more processing. Special cases are when one of the keys
+	 * {@link KeyCodes#KEY_DOWN}, {@link KeyCodes#KEY_UP} is pressed: all
+	 * possible values are presented
+	 * 
+	 * @param keyCode
+	 * @return
+	 */
+	private boolean recomputePopupContent(int keyCode) {
+		List<T> possibilities;
+		String textValue = getTextValue();
+		// to show all possible values if a value is already selected and a up
+		// or down key is pressed
+		if (keyCode == KeyCodes.KEY_DOWN || keyCode == KeyCodes.KEY_UP)
+			textValue = "";
+
+		possibilities = getFiltredPossibilities(textValue);
+		if (possibilities.size() > 0) {
+			popupPanel.clear();
+			if (possibilities.size() == 1) {
+				// laisse l'utilisateur effacer les valeurs
+				if (keyCode != KeyCodes.KEY_BACKSPACE
+						&& keyCode != KeyCodes.KEY_LEFT
+						&& keyCode != KeyCodes.KEY_RIGHT) {
+					int startIndex = text.getText().length();
+					fillValue(possibilities.get(0), false);
+					text.setSelectionRange(startIndex, text.getText().length()
+							- startIndex);
+					return true;
+				}
+			}
+
+			constructPopupContent(possibilities);
+
+			showPopup();
+		} else {
+			hidePopup();
+		}
+		return false;
+	}
+
+	private void showPopup() {
+		suggestList.adjustPosition(text.getAbsoluteLeft(), text
+				.getAbsoluteTop()
+				+ text.getOffsetHeight());
+		suggestList.show();
+	}
+
+	public int getMaxPopupHeight() {
+		return maxPopupHeight;
+	}
+
+	public void setMaxPopupHeight(int maxPopupHeight) {
+		this.maxPopupHeight = maxPopupHeight;
+	}
+
+	public int getMaxPopupWidth() {
+		return maxPopupWidth;
+	}
+
+	public void setMaxPopupWidth(int maxPopupWidth) {
+		this.maxPopupWidth = maxPopupWidth;
+	}
+
+	protected String getTextValue() {
+		String text = getText();
+		if (text.equals(defautText))
+			return "";
+		return text;
+	}
+
+	protected void constructPopupContent(List<T> possibilities) {
+		for (int i = 0; i < possibilities.size(); i++) {
+			final T t = possibilities.get(i);
+			String value = toString(t);
+			String currentText = getText();
+			if (value.equals(currentText))
+				selectedIndex = i;
+
+			final ValueHolderLabel<T> currentLabel = createValueRenderer(t,
+					currentText);
+			currentLabel.setStyleName(ITEM);
+			popupPanel.add((Widget) currentLabel);
+			currentLabel.addClickHandler(new ClickHandler() {
+				@Override
+				public void onClick(ClickEvent clickEvent) {
+					fillValue(t, true);
+				}
+			});
+
+			class MouseHoverhandler implements MouseOverHandler,
+					MouseOutHandler {
+
+				@Override
+				public void onMouseOver(MouseOverEvent event) {
+					currentLabel.hover(true);
+				}
+
+				@Override
+				public void onMouseOut(MouseOutEvent event) {
+					currentLabel.hover(false);
+				}
+			}
+
+			MouseHoverhandler hoverhandler = new MouseHoverhandler();
+			currentLabel.addMouseOverHandler(hoverhandler);
+			currentLabel.addMouseOutHandler(hoverhandler);
+		}
+	}
+
+	private ValueHolderLabel<T> createValueRenderer(final T t, String value) {
+		final ValueHolderLabel<T> currentLabel = valueRendererFactory
+				.createValueRenderer(t, value);
+		return currentLabel;
+	}
+
+	protected String toString(final T t) {
+		return t.toString();
+	}
+
+	@SuppressWarnings("unchecked")
+	private ValueHolderLabel<T> getPopupWidget() {
+		if (selectedIndex != -1 && popupPanel.getWidgetCount() > selectedIndex)
+			return (ValueHolderLabel<T>) popupPanel.getWidget(selectedIndex);
+		return null;
+	}
+
+	/**
+	 * fill a typed value override to check existing values change
+	 * 
+	 * @param t
+	 *            the selected value
+	 * @param commit
+	 *            consider a value changed only if commit is true (otherwise you
+	 *            can have duplicate events)
+	 */
+	protected void fillValue(final T t, boolean commit) {
+		text.setText(toString(t));
+		hidePopup();
+		text.setFocus(true);
+		selected = t;
+		typed = toString(t);
+		if (commit) {
+			valueSelected(t);
+		} else {
+			// the change is not notified immediately since we just suggest the
+			// value t. We keep a flag to know there was no notification
+			fireChangeOnBlur = true;
+		}
+	}
+
+	public void valueSelected(T value) {
+		fireChange(true);
+	}
+
+	public void valueTyped(String value) {
+		selected = null;
+		if (defautText != null && defautText.equals(value))
+			value = "";
+		typed = value;
+		fireChange(false);
+	}
+
+	/**
+	 * returns the value selected from list, if a text was typed then returns
+	 * null
+	 * 
+	 * @return the value selected from list, if a text was typed then returns
+	 *         null
+	 */
+	public T getSelected() {
+		return selected;
+	}
+
+	/**
+	 * 
+	 * @return the typed value, this can also be the selected one from list: to
+	 *         check if the value belongs to the list check if
+	 *         {@link #getSelected()} returns null
+	 */
+	public String getTyped() {
+		return typed;
+	}
+
+	@Override
+	protected ChangeEvent changedValue() {
+		return new ChangeEvent() {// FIXME should save the last change event
+			// instead
+		};
+	}
+
+	public String getText() {
+		return text.getText();
+	}
+
+	public void setText(String str) {
+		text.setText(str);
+	}
+
+	public void setDefautText(String text) {
+		defautText = text;
+	}
+
+	@Override
+	protected void onLoad() {
+		super.onLoad();
+		String text = getText();
+		if (defautText != null && (text == null || text.trim().length() == 0)) {
+			setText(defautText);
+		}
+	}
+
+	public String getDefautText() {
+		return defautText;
+	}
+
+	public boolean isEmpty() {
+		return getText().length() == 0;
+	}
+
+	public void setEnabled(boolean enabled) {
+		text.setEnabled(enabled);
+	}
+
+	public void setFocus(boolean focus) {
+		text.setFocus(focus);
+	}
+
+	protected abstract List<T> getFiltredPossibilities(String text);
+
+	/**
+	 * returns the curent suggest renderer items factory
+	 * 
+	 * @return
+	 */
+	public ValueRendererFactory<T, ? extends ValueHolderLabel<T>> getValueRendererFactory() {
+		return valueRendererFactory;
+	}
+
+	/**
+	 * Sets the items renderer factory: you can define your own item factory to
+	 * control the way items are shown in the suggest list
+	 * 
+	 * @param valueRendererFactory
+	 */
+	public void setValueRendererFactory(
+			ValueRendererFactory<T, ? extends ValueHolderLabel<T>> valueRendererFactory) {
+		this.valueRendererFactory = valueRendererFactory;
+	}
+
+	public SuggestList<T> getSuggestList() {
+		return suggestList;
+	}
+
+	/**
+	 * Sets the suggesting list holder widget
+	 * 
+	 * @param suggestList
+	 */
+	public void setSuggestList(SuggestList<T> suggestList) {
+		this.suggestList = suggestList;
+	}
+
+}
