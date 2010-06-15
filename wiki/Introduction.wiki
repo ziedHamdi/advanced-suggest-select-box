@@ -147,8 +147,8 @@ Notice that you can change the items when the application is already running wit
 ===Providing your own list container===
 You can also decide not to show the list under the suggest box but above it, or inside another container (for example a drop down panel).
 
-In that case you will have to provide your own implementation of the `interface SuggestList<T>` then call {{{
-AbstractSuggestBox.setSuggestList(SuggestList<T> suggestList)
+In that case you will have to provide your own implementation of the `interface SuggestList`<T>`` then call {{{
+AbstractSuggestBox.setSuggestList(SuggestList`<T>` suggestList)
 }}} on your suggest box to provide your instance. 
 
 Notice that you can change the list box at runtime, however you will have to handle the cleaning of the old box your self.
