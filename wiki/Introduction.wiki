@@ -38,7 +38,7 @@ By running this example, you will see the default behavior and look of the compo
 
 This example shows also the limitations of the standard components:
 ==Filtering limitations==
-In many cases, list values have a business code and a label (at least). Users wish to have the possibility to filter by typing the code or the label. For example, the use could want to type AB and see the element *01 - ABCD* selected. 
+In many cases, list values have a business code and a label (at least). Users wish to have the possibility to filter by typing either the code or the label. For example, the user could wish to type AB and see the element *01 - ABCD* selected. 
 To accomplish this task you have two possible ways:
 ===Simple way===
 Extend _DefaultSuggestBox_ and override the method _accept(String value, T item)_ which tells if _item_ has to be in the list of the elements when the user typed the string _value_
