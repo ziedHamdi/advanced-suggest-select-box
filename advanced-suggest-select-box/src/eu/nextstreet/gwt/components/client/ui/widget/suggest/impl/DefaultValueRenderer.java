@@ -24,13 +24,34 @@ public class DefaultValueRenderer<T> extends HTML implements
 		ValueHolderLabel<T> {
 	private static final String ITEM_HOVER = "eu-nextstreet-SuggestItemHover";
 	private static final String MATCHING_STRING = "eu-nextstreet-SuggestMatchingString";
+	public static final String SELECTED = "eu-nextstreet-SuggestItemSelected";
 	protected T value;
+	protected boolean caseSensitive;
 
-	public DefaultValueRenderer(T value, String filterText) {
+	public DefaultValueRenderer(T value, String filterText,
+			boolean caseSensitive) {
 		this.value = value;
+		this.caseSensitive = caseSensitive;
 		String html = value.toString();
-		setHTML(html.replace(filterText, "<span class='" + MATCHING_STRING
-				+ "'>" + filterText + "</span>"));
+		if (caseSensitive) {
+			html = html.replace(filterText, "<span class='" + MATCHING_STRING
+					+ "'>" + filterText + "</span>");
+
+		} else {
+			String temp = html.toLowerCase().replace(
+					filterText.toLowerCase(),
+					"<span class='" + MATCHING_STRING + "'>" + filterText
+							+ "</span>");
+			int firstIndex = temp.indexOf("<span");
+			int lastIndex = temp.indexOf("</span") + "</span>".length();
+			if (firstIndex > -1) {
+				html = html.substring(0, firstIndex)
+						+ temp.substring(firstIndex, lastIndex)
+						+ html.substring(firstIndex + filterText.length());
+			}
+
+		}
+		setHTML(html);
 	}
 
 	public T getValue() {
@@ -49,8 +70,6 @@ public class DefaultValueRenderer<T> extends HTML implements
 			removeStyleName(ITEM_HOVER);
 	}
 
-	public static final String SELECTED = "eu-nextstreet-SuggestItemSelected";
-
 	@Override
 	public void setFocused(boolean focused) {
 		if (focused)
@@ -59,4 +78,11 @@ public class DefaultValueRenderer<T> extends HTML implements
 			removeStyleName(SELECTED);
 	}
 
+	public boolean isCaseSensitive() {
+		return caseSensitive;
+	}
+
+	public void setCaseSensitive(boolean caseSensitive) {
+		this.caseSensitive = caseSensitive;
+	}
 }

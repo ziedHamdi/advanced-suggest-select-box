@@ -19,10 +19,10 @@ package eu.nextstreet.gwt.components.client.ui.widget.suggest.impl;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
-import eu.nextstreet.gwt.components.client.ui.widget.suggest.SuggestList;
+import eu.nextstreet.gwt.components.client.ui.widget.suggest.SuggestWidget;
 
-public class DefaultSuggestList<T> extends PopupPanel implements SuggestList<T> {
-	private static final String POPUP = "eu-nextstreet-SuggestPopup";
+public class DefaultSuggestList<T> extends PopupPanel implements SuggestWidget<T> {
+	private static final String POPUP_STYLE = "eu-nextstreet-SuggestPopup";
 
 	public DefaultSuggestList() {
 		this(true, false);
@@ -30,7 +30,7 @@ public class DefaultSuggestList<T> extends PopupPanel implements SuggestList<T> 
 
 	public DefaultSuggestList(boolean autoHide, boolean modal) {
 		super(autoHide, modal);
-		addStyleName(POPUP);
+		setStylePrimaryName(POPUP_STYLE);
 	}
 
 	public DefaultSuggestList(boolean autoHide) {
