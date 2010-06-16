@@ -25,7 +25,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
  * 
  * @param <T>
  */
-public interface SuggestList<T> {
+public interface SuggestWidget<T> {
 
 	void setWidget(ScrollPanel scrollPanel);
 

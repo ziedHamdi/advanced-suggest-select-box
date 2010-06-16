@@ -57,12 +57,14 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder {
 	private static final String SUGGEST_FIELD_PANEL = "eu.nextstreet.SuggestFieldPanel";
 	private static final String SUGGEST_FIELD = "eu-nextstreet-SuggestField";
 	private static final String ITEM = "eu-nextstreet-SuggestItem";
-	private static final int BUTTON_WIDTH = 16;
 	private static SuggestBoxUiBinder uiBinder = GWT
 			.create(SuggestBoxUiBinder.class);
 	protected T selected;
 	protected String typed;
 	protected String defautText;
+	protected int buttonWidth = 16;
+	protected boolean caseSensitive;
+
 	protected ValueRendererFactory<T, ? extends ValueHolderLabel<T>> valueRendererFactory = new DefaultValueRendererFactory<T>();
 
 	@SuppressWarnings("unchecked")
@@ -75,14 +77,14 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder {
 	protected @UiField
 	TextBox text;
 
-	SuggestList<T> suggestList = new DefaultSuggestList<T>();
+	SuggestWidget<T> suggestWidget = new DefaultSuggestList<T>();
 	ScrollPanel scrollPanel = new ScrollPanel();
-	VerticalPanel popupPanel = new VerticalPanel();
+	VerticalPanel suggestPanel = new VerticalPanel();
 
 	protected int selectedIndex = 0;
 	private boolean recomputePopupContent = true;
 	/**
-	 * Specifies if enter is hit mutiple times with same value, whether it
+	 * Specifies if enter is hit multiple times with same value, whether it
 	 * generates a change event for each
 	 */
 	private boolean multipleChangeEvent;
@@ -92,11 +94,11 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder {
 
 	public AbstractSuggestBox() {
 		initWidget(uiBinder.createAndBindUi(this));
-		popupPanel.setSpacing(0);
-		scrollPanel.add(popupPanel);
+		suggestPanel.setSpacing(0);
+		scrollPanel.add(suggestPanel);
 		panel.setStyleName(SUGGEST_FIELD_PANEL);
 		text.setStyleName(SUGGEST_FIELD);
-		suggestList.setWidget(scrollPanel);
+		suggestWidget.setWidget(scrollPanel);
 	}
 
 	@UiHandler("text")
@@ -110,9 +112,9 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder {
 	public void onMouseDown(MouseDownEvent event) {
 		int interval = text.getAbsoluteLeft() + text.getOffsetWidth()
 				- event.getClientX();
-		if (interval < BUTTON_WIDTH) {
-			if (suggestList.isShowing()) {
-				suggestList.hide();
+		if (interval < buttonWidth) {
+			if (suggestWidget.isShowing()) {
+				suggestWidget.hide();
 			} else {
 				recomputePopupContent(KeyCodes.KEY_DOWN);
 				highlightSelectedValue();
@@ -136,11 +138,11 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder {
 					setText(defautText);
 			}
 		}.schedule(200);
-		if (suggestList.isShowing()) {
+		if (suggestWidget.isShowing()) {
 			new Timer() {
 				@Override
 				public void run() {
-					suggestList.hide();
+					suggestWidget.hide();
 				}
 			}.schedule(300);
 		}
@@ -158,7 +160,7 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder {
 		if (keyCode == KeyCodes.KEY_DOWN || keyCode == KeyCodes.KEY_UP
 				|| keyCode == KeyCodes.KEY_LEFT
 				|| keyCode == KeyCodes.KEY_RIGHT) {
-			recomputePopupContent = !suggestList.isShowing();
+			recomputePopupContent = !suggestWidget.isShowing();
 		}
 
 		if (recomputePopupContent) {
@@ -167,10 +169,10 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder {
 
 		}
 
-		ValueHolderLabel<T> popupWidget = getPopupWidget();
+		ValueHolderLabel<T> popupWidget = getSuggestBox();
 		if (selectedIndex != -1)
 			popupWidget.setFocused(false);
-		int widgetCount = popupPanel.getWidgetCount();
+		int widgetCount = suggestPanel.getWidgetCount();
 
 		// TODO verifier si ca n'introduit pas un bug
 		if (widgetCount == 0)
@@ -185,7 +187,7 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder {
 				selectedIndex += widgetCount;
 			highlightSelectedValue();
 		} else if (keyCode == KeyCodes.KEY_ENTER) {
-			if (suggestList.isShowing()) {
+			if (suggestWidget.isShowing()) {
 				if (popupWidget != null) {
 					T t = popupWidget.getValue();
 					fillValue(t, true);
@@ -204,7 +206,7 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder {
 				}
 			}
 		} else if (keyCode == KeyCodes.KEY_ESCAPE) {
-			hidePopup();
+			hideSuggest();
 		} else if (keyCode == KeyCodes.KEY_TAB) {
 
 		} else {
@@ -213,16 +215,22 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder {
 
 	}
 
+	/**
+	 * 
+	 */
 	protected void highlightSelectedValue() {
-		ValueHolderLabel<T> popupWidget = getPopupWidget();
+		ValueHolderLabel<T> popupWidget = getSuggestBox();
 		if (popupWidget != null) {
 			popupWidget.setFocused(true);
 			scrollPanel.ensureVisible((UIObject) popupWidget);
 		}
 	}
 
-	protected void hidePopup() {
-		suggestList.hide();
+	/**
+	 * Orders the suggest widget to be hidden
+	 */
+	protected void hideSuggest() {
+		suggestWidget.hide();
 		selectedIndex = -1;
 	}
 
@@ -245,7 +253,7 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder {
 
 		possibilities = getFiltredPossibilities(textValue);
 		if (possibilities.size() > 0) {
-			popupPanel.clear();
+			suggestPanel.clear();
 			if (possibilities.size() == 1) {
 				// laisse l'utilisateur effacer les valeurs
 				if (keyCode != KeyCodes.KEY_BACKSPACE
@@ -263,16 +271,16 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder {
 
 			showPopup();
 		} else {
-			hidePopup();
+			hideSuggest();
 		}
 		return false;
 	}
 
 	private void showPopup() {
-		suggestList.adjustPosition(text.getAbsoluteLeft(), text
+		suggestWidget.adjustPosition(text.getAbsoluteLeft(), text
 				.getAbsoluteTop()
 				+ text.getOffsetHeight());
-		suggestList.show();
+		suggestWidget.show();
 	}
 
 	public int getMaxPopupHeight() {
@@ -309,7 +317,7 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder {
 			final ValueHolderLabel<T> currentLabel = createValueRenderer(t,
 					currentText);
 			currentLabel.setStyleName(ITEM);
-			popupPanel.add((Widget) currentLabel);
+			suggestPanel.add((Widget) currentLabel);
 			currentLabel.addClickHandler(new ClickHandler() {
 				@Override
 				public void onClick(ClickEvent clickEvent) {
@@ -339,7 +347,7 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder {
 
 	private ValueHolderLabel<T> createValueRenderer(final T t, String value) {
 		final ValueHolderLabel<T> currentLabel = valueRendererFactory
-				.createValueRenderer(t, value);
+				.createValueRenderer(t, value, caseSensitive);
 		return currentLabel;
 	}
 
@@ -348,9 +356,10 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder {
 	}
 
 	@SuppressWarnings("unchecked")
-	private ValueHolderLabel<T> getPopupWidget() {
-		if (selectedIndex != -1 && popupPanel.getWidgetCount() > selectedIndex)
-			return (ValueHolderLabel<T>) popupPanel.getWidget(selectedIndex);
+	private ValueHolderLabel<T> getSuggestBox() {
+		if (selectedIndex != -1
+				&& suggestPanel.getWidgetCount() > selectedIndex)
+			return (ValueHolderLabel<T>) suggestPanel.getWidget(selectedIndex);
 		return null;
 	}
 
@@ -365,7 +374,7 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder {
 	 */
 	protected void fillValue(final T t, boolean commit) {
 		text.setText(toString(t));
-		hidePopup();
+		hideSuggest();
 		text.setFocus(true);
 		selected = t;
 		typed = toString(t);
@@ -477,17 +486,33 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder {
 		this.valueRendererFactory = valueRendererFactory;
 	}
 
-	public SuggestList<T> getSuggestList() {
-		return suggestList;
+	public SuggestWidget<T> getSuggestWidget() {
+		return suggestWidget;
 	}
 
 	/**
 	 * Sets the suggesting list holder widget
 	 * 
-	 * @param suggestList
+	 * @param suggestWidget
 	 */
-	public void setSuggestList(SuggestList<T> suggestList) {
-		this.suggestList = suggestList;
+	public void setSuggestWidget(SuggestWidget<T> suggestWidget) {
+		this.suggestWidget = suggestWidget;
+	}
+
+	public int getButtonWidth() {
+		return buttonWidth;
+	}
+
+	public void setButtonWidth(int buttonWidth) {
+		this.buttonWidth = buttonWidth;
+	}
+
+	public boolean isCaseSensitive() {
+		return caseSensitive;
+	}
+
+	public void setCaseSensitive(boolean caseSensitive) {
+		this.caseSensitive = caseSensitive;
 	}
 
 }

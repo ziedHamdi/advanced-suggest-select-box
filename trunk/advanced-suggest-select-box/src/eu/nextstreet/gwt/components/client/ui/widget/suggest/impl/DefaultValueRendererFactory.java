@@ -23,8 +23,8 @@ public class DefaultValueRendererFactory<T> implements
 
 	@Override
 	public DefaultValueRenderer<T> createValueRenderer(T value,
-			String filterText) {
-		return new DefaultValueRenderer<T>(value, filterText);
+			String filterText, boolean caseSensitive) {
+		return new DefaultValueRenderer<T>(value, filterText, caseSensitive);
 	}
 
 }

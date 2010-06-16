@@ -17,7 +17,11 @@
 package eu.nextstreet.gwt.components.client;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.DefaultSuggestBox;
 
@@ -44,11 +48,37 @@ public class IntoGwt implements EntryPoint {
 
 		}
 
-		DefaultSuggestBox<Value> box = new DefaultSuggestBox<Value>();
+		final DefaultSuggestBox<Value> box = new DefaultSuggestBox<Value>();
 		box.add(new Value("01 - ABCD"));
 		box.add(new Value("02 - CDEF"));
-		box.add(new Value("03 - GHIJ"));
-		RootPanel.get("nameFieldContainer").add(box);
-		// RootPanel.get("sendButtonContainer").add(sendButton);
+		box.add(new Value("03 - CFGHIJ"));
+		RootPanel.get("suggestBoxContainer").add(box);
+
+		CheckBox startOnly = new CheckBox("Start Only");
+		startOnly.setValue(box.isStartsWith());
+		startOnly.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+
+			@Override
+			public void onValueChange(ValueChangeEvent<Boolean> event) {
+				box.setStartsWith(event.getValue());
+			}
+		});
+
+		CheckBox caseSensitive = new CheckBox("Case Sensitive");
+		caseSensitive.setValue(box.isCaseSensitive());
+		caseSensitive.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+
+			@Override
+			public void onValueChange(ValueChangeEvent<Boolean> event) {
+				box.setCaseSensitive(event.getValue());
+			}
+		});
+
+		VerticalPanel options = new VerticalPanel();
+		options.add(startOnly);
+		options.add(caseSensitive);
+
+		RootPanel.get("options").add(options);
+
 	}
 }

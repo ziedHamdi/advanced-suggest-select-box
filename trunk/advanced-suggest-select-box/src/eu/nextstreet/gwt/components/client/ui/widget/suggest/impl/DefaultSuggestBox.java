@@ -30,9 +30,22 @@ import eu.nextstreet.gwt.components.client.ui.widget.suggest.AbstractSuggestBox;
  * @param <T>
  */
 public class DefaultSuggestBox<T> extends AbstractSuggestBox<T> {
-	protected List<T> possiblilities = new ArrayList<T>();
+	protected List<T> possiblilities;
+	protected boolean startsWith;
 
 	public DefaultSuggestBox() {
+		this(false, true);
+	}
+
+	public DefaultSuggestBox(boolean caseSensitive, boolean startsWith) {
+		this(new ArrayList<T>(), caseSensitive, startsWith);
+	}
+
+	public DefaultSuggestBox(List<T> possiblilities, boolean caseSensitive,
+			boolean startsWith) {
+		this.possiblilities = possiblilities;
+		this.startsWith = startsWith;
+		super.setCaseSensitive(caseSensitive);
 	}
 
 	public void add(T t) {
@@ -62,10 +75,30 @@ public class DefaultSuggestBox<T> extends AbstractSuggestBox<T> {
 	 * @return
 	 */
 	protected boolean accept(String text, T t) {
-		if (toString(t).toUpperCase().startsWith(text.toUpperCase())) {
+		String stringValue = caseSensitive ? toString(t) : toString(t)
+				.toUpperCase();
+		String textValue = caseSensitive ? text : text.toUpperCase();
+		if (startsWith ? stringValue.startsWith(textValue) : (stringValue
+				.indexOf(textValue) != -1)) {
 			return true;
 		}
 		return false;
+	}
+
+	public List<T> getPossiblilities() {
+		return possiblilities;
+	}
+
+	public void setPossiblilities(List<T> possiblilities) {
+		this.possiblilities = possiblilities;
+	}
+
+	public boolean isStartsWith() {
+		return startsWith;
+	}
+
+	public void setStartsWith(boolean startsWith) {
+		this.startsWith = startsWith;
 	}
 
 }

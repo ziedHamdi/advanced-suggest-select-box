@@ -33,7 +33,8 @@ public interface ValueRendererFactory<T, W extends ValueHolderLabel<T>> {
 	 * 
 	 * @param value
 	 * @param filterText
+	 * @param caseSensitive
 	 * @return
 	 */
-	W createValueRenderer(T value, String filterText);
+	W createValueRenderer(T value, String filterText, boolean caseSensitive);
 }
