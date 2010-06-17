@@ -16,10 +16,16 @@
  */
 package eu.nextstreet.gwt.components.client;
 
+import java.util.Date;
+
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.CheckBox;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -29,11 +35,17 @@ import eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.DefaultSuggest
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class IntoGwt implements EntryPoint {
+	private boolean test = true;
 
 	/**
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
+		if (test)
+			testWidget();
+	}
+
+	private void testWidget() {
 		class Value {
 			String str;
 
@@ -54,9 +66,9 @@ public class IntoGwt implements EntryPoint {
 		box.add(new Value("03 - CFGHIJ"));
 		RootPanel.get("suggestBoxContainer").add(box);
 
-		CheckBox startOnly = new CheckBox("Start Only");
-		startOnly.setValue(box.isStartsWith());
-		startOnly.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+		CheckBox startsWith = new CheckBox("Starts With");
+		startsWith.setValue(box.isStartsWith());
+		startsWith.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
 
 			@Override
 			public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -75,10 +87,25 @@ public class IntoGwt implements EntryPoint {
 		});
 
 		VerticalPanel options = new VerticalPanel();
-		options.add(startOnly);
+		options.add(startsWith);
 		options.add(caseSensitive);
 
 		RootPanel.get("options").add(options);
 
+		final VerticalPanel infoContainer = new VerticalPanel();
+		RootPanel.get("infoContainer").add(infoContainer);
+		final DateTimeFormat dateTimeFormat = DateTimeFormat
+				.getFormat("HH:mm:ss");
+		box.addChangeHandler(new ChangeHandler() {
+
+			@Override
+			public void onChange(ChangeEvent event) {
+				if (infoContainer.getWidgetCount() > 3)
+					infoContainer.remove(3);
+				infoContainer.insert(new Label(dateTimeFormat
+						.format(new Date())
+						+ " : " + box.getText()), 0);
+			}
+		});
 	}
 }

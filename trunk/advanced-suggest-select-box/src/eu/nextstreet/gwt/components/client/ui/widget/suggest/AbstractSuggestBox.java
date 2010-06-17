@@ -54,7 +54,6 @@ import eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.DefaultValueRe
  */
 public abstract class AbstractSuggestBox<T> extends EventHandlerHolder {
 
-	private static final String SUGGEST_FIELD_PANEL = "eu.nextstreet.SuggestFieldPanel";
 	private static final String SUGGEST_FIELD = "eu-nextstreet-SuggestField";
 	private static final String ITEM = "eu-nextstreet-SuggestItem";
 	private static SuggestBoxUiBinder uiBinder = GWT
@@ -70,9 +69,6 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder {
 	@SuppressWarnings("unchecked")
 	interface SuggestBoxUiBinder extends UiBinder<Widget, AbstractSuggestBox> {
 	}
-
-	protected @UiField
-	VerticalPanel panel;
 
 	protected @UiField
 	TextBox text;
@@ -96,7 +92,6 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder {
 		initWidget(uiBinder.createAndBindUi(this));
 		suggestPanel.setSpacing(0);
 		scrollPanel.add(suggestPanel);
-		panel.setStyleName(SUGGEST_FIELD_PANEL);
 		text.setStyleName(SUGGEST_FIELD);
 		suggestWidget.setWidget(scrollPanel);
 	}
@@ -170,7 +165,7 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder {
 		}
 
 		ValueHolderLabel<T> popupWidget = getSuggestBox();
-		if (selectedIndex != -1)
+		if (popupWidget != null && selectedIndex != -1)
 			popupWidget.setFocused(false);
 		int widgetCount = suggestPanel.getWidgetCount();
 
@@ -259,10 +254,7 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder {
 				if (keyCode != KeyCodes.KEY_BACKSPACE
 						&& keyCode != KeyCodes.KEY_LEFT
 						&& keyCode != KeyCodes.KEY_RIGHT) {
-					int startIndex = text.getText().length();
 					fillValue(possibilities.get(0), false);
-					text.setSelectionRange(startIndex, text.getText().length()
-							- startIndex);
 					return true;
 				}
 			}
@@ -364,7 +356,8 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder {
 	}
 
 	/**
-	 * fill a typed value override to check existing values change
+	 * Fills a "type safe" value (one of the available values in the list).
+	 * override to check existing values change
 	 * 
 	 * @param t
 	 *            the selected value
@@ -387,10 +380,29 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder {
 		}
 	}
 
+	/**
+	 * Called when a value is selected from the list, if the value is typed on
+	 * the keyboard and only one possible element corresponds, this method will
+	 * be called immediately only if <code>multipleChangeEvent</code> is true.
+	 * Otherwise it will wait until a blur event occurs Notice that if
+	 * <code>multipleChangeEvent</code> is true, this method will be called also
+	 * each time the enter key is typed
+	 * 
+	 * @param value
+	 */
 	public void valueSelected(T value) {
 		fireChange(true);
 	}
 
+	/**
+	 * Called when a typed value is confirmed whether by pressing the key enter,
+	 * or on blur (losing the focus) of the element. Notice that this method
+	 * behavior also can be changed thanks to the property
+	 * <code>multipleChangeEvent</code> which specifies if the method has to be
+	 * called on each enter key press or only on the first one.
+	 * 
+	 * @param value
+	 */
 	public void valueTyped(String value) {
 		selected = null;
 		if (defautText != null && defautText.equals(value))
@@ -422,8 +434,13 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder {
 
 	@Override
 	protected ChangeEvent changedValue() {
-		return new ChangeEvent() {// FIXME should save the last change event
-			// instead
+		// FIXME should save the last change event
+		// instead
+		return new ChangeEvent() {
+			@Override
+			public Object getSource() {
+				return text;
+			}
 		};
 	}
 
@@ -513,6 +530,21 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder {
 
 	public void setCaseSensitive(boolean caseSensitive) {
 		this.caseSensitive = caseSensitive;
+	}
+
+	/**
+	 * Controls whether the method {@link #valueSelected(Object)} expressing a
+	 * change event will be called each time a value is selected or if it has to
+	 * wait until a blur occurs.
+	 * 
+	 * @return
+	 */
+	public boolean isMultipleChangeEvent() {
+		return multipleChangeEvent;
+	}
+
+	public void setMultipleChangeEvent(boolean multipleChangeEvent) {
+		this.multipleChangeEvent = multipleChangeEvent;
 	}
 
 }

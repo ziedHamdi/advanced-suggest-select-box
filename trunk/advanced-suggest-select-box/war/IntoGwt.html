@@ -32,7 +32,7 @@
   <!-- you can leave the body empty if you want  -->
   <!-- to create a completely dynamic UI.        -->
   <!--                                           -->
-  <body>
+  <body style="width: 100%;">
 
     <!-- OPTIONAL: include this if you want history support -->
     <iframe src="javascript:''" id="__gwt_historyFrame" tabIndex='-1' style="position:absolute;width:0;height:0;border:0"></iframe>
@@ -47,17 +47,17 @@
 
     <h1>Advanced Suggest Select Box Project</h1>
 
-    <table align="center">
+    <table align="center" style="width: 400px">
       <tr>
-        <td style="font-weight:bold;width: 70%;">Please type or select a value:</td>        
-        <td style="font-weight:bold;">Please select options:</td>        
+        <td style="font-weight:bold;width: 70%;">Type or select a Value:</td>        
+        <td style="font-weight:bold;">Options:</td>        
       </tr>
       <tr>
         <td id="suggestBoxContainer"></td>
         <td id="options"></td>
       </tr>
       <tr>
-        <td colspan="2" style="color:red;" id="errorLabelContainer"></td>
+        <td style="color:green;padding-top: 30px;" id="infoContainer"></td>
       </tr>
     </table>
   </body>
