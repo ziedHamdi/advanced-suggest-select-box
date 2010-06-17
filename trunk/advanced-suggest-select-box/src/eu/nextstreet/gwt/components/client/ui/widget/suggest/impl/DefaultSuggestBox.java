@@ -86,17 +86,21 @@ public class DefaultSuggestBox<T> extends AbstractSuggestBox<T> {
 	}
 
 	@Override
-	protected void fillValue(T t, boolean commit) {
+	protected boolean fillValue(T t, boolean commit) {
 		// get the typed text length before updating the field with the selected
 		// value
 		int startIndex = text.getText().length();
 		// now safely update the value
-		super.fillValue(t, commit);
-		if (startsWith) {
-			text.setSelectionRange(startIndex, text.getText().length()
-					- startIndex);
+		if (startsWith || commit) {
+			super.fillValue(t, commit);
+			if (!commit) {
+				text.setSelectionRange(startIndex, text.getText().length()
+						- startIndex);
+			}
+			return true;
 		} else {
-			text.setSelectionRange(0, text.getText().length());
+			// text.setSelectionRange(0, text.getText().length());
+			return false;
 		}
 	}
 
