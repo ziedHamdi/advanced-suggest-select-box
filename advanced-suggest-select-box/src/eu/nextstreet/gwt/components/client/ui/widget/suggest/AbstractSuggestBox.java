@@ -254,8 +254,8 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder {
 				if (keyCode != KeyCodes.KEY_BACKSPACE
 						&& keyCode != KeyCodes.KEY_LEFT
 						&& keyCode != KeyCodes.KEY_RIGHT) {
-					fillValue(possibilities.get(0), false);
-					return true;
+					if (fillValue(possibilities.get(0), false))
+						return true;
 				}
 			}
 
@@ -364,8 +364,12 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder {
 	 * @param commit
 	 *            consider a value changed only if commit is true (otherwise you
 	 *            can have duplicate events)
+	 * @return true if the suggest box has to be hidden. Subclasses can override
+	 *         this method and return false to force the suggest widget to
+	 *         remain open even if there's only one element remaining in the
+	 *         list of choices
 	 */
-	protected void fillValue(final T t, boolean commit) {
+	protected boolean fillValue(final T t, boolean commit) {
 		text.setText(toString(t));
 		hideSuggest();
 		text.setFocus(true);
@@ -378,6 +382,7 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder {
 			// value t. We keep a flag to know there was no notification
 			fireChangeOnBlur = true;
 		}
+		return true;
 	}
 
 	/**

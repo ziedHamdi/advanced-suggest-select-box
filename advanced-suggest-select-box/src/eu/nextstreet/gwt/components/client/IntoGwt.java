@@ -27,6 +27,7 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.DefaultSuggestBox;
@@ -102,9 +103,9 @@ public class IntoGwt implements EntryPoint {
 			public void onChange(ChangeEvent event) {
 				if (infoContainer.getWidgetCount() > 3)
 					infoContainer.remove(3);
-				infoContainer.insert(new Label(dateTimeFormat
-						.format(new Date())
-						+ " : " + box.getText()), 0);
+				infoContainer.insert(new Label("At "
+						+ dateTimeFormat.format(new Date()) + " you chose "
+						+ ((TextBox) event.getSource()).getText()), 0);
 			}
 		});
 	}

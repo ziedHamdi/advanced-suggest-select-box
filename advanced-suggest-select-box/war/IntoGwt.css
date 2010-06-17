@@ -31,7 +31,7 @@ h1 {
 	margin: 15px 6px 6px;
 }
 
-/* la suggest box STANDARD */
+/* la suggest box STANDARD 
 
 .eu-nextstreet-SuggestFieldPanel {
   border-collapse: collapse ;
@@ -69,9 +69,6 @@ h1 {
 
 .eu-nextstreet-SuggestMatchingString {
 	font-weight: bold;
-	/*
-	background-color: #ffff9b;
-	*/
 	color: #1aae1d ;
 }
 
@@ -90,36 +87,46 @@ h1 {
 
 
 
-/* la suggest box CUSTOM 
+/* la suggest box CUSTOM */
 
 .eu-nextstreet-SuggestFieldPanel {
   border-collapse: collapse ;
   border: none ;
 }
 
+.eu-nextstreet-SuggestFieldPanel table tr { 
+  height: 22px ;
+}
+
 .eu-nextstreet-SuggestFieldPanel .eu-nextstreet-SuggestFieldPanel-left {
-  background: transparent url('img/bg-left.') right top no-repeat; 
-  width: 9px;
+  background: transparent url('img/bg-left.png') right top no-repeat; 
 }
 .eu-nextstreet-SuggestFieldPanel .eu-nextstreet-SuggestFieldPanel-left .eu-nextstreet-SuggestFieldPanel-leftInner {
   width: 9px;
+  height: 22px ;
 }
 
 .eu-nextstreet-SuggestFieldPanel .eu-nextstreet-SuggestFieldPanel-content {
-  background-color: #eaeff7 ;
-  padding: 6px 0 6px 0;
+  background: transparent url('img/bg-content.png') left top repeat-x; 
+  height: 22px ;
 }
 
 .eu-nextstreet-SuggestFieldPanel .eu-nextstreet-SuggestFieldPanel-right {
-  background: transparent url('img/bg-right.') left top no-repeat; 
-  width: 9px;
+  background: transparent url('img/bg-right.png') left top no-repeat; 
 }
 .eu-nextstreet-SuggestFieldPanel .eu-nextstreet-SuggestFieldPanel-right .eu-nextstreet-SuggestFieldPanel-rightInner {
   width: 9px;
+  height: 22px ;
+}
+
+.eu-nextstreet-SuggestItem {
+  font-size: 0.9em ;
+  padding: 0 3px ;
 }
 
 .eu-nextstreet-SuggestItemSelected {
-	background-color: #c9dcfe;
+	background-color: #ffffff;
+	border: 1px #c7c7c7 dotted ;
 	color: black;
 	font-weight: bold;
 }
@@ -130,20 +137,25 @@ h1 {
 
 .eu-nextstreet-SuggestMatchingString {
 	font-weight: bold;
-	background-color: #ffff9b;
+	color: #1aae1d ;
 }
 
 .eu-nextstreet-SuggestField {
-	background: white url('img/arrow.png') no-repeat right 5px;
+  margin: 2px 0 0 0 ;
+	background: transparent url('img/arrow.png') no-repeat right 5px;
+	border: none ;
+	height: 16px ;
 }
 
 .eu-nextstreet-SuggestPopup {
-  background-color: #eaeff7 ;
+  background-color: #f3f3f3 ;
 	border-top: 0px;
-	border-left: 1px solid #c9dcfe;
-	border-bottom: 1px solid #c9dcfe;
-	border-right: 1px solid #c9dcfe;
+	border-left: 2px solid #1c1cd5;
+	border-bottom: 2px solid #1c1cd5;
+	border-right: 2px solid #1c1cd5;
 	padding: 5px;
 }
 
-*/
+.eu-nextstreet-SuggestPopup table {
+  width:120px;
+}
