@@ -31,9 +31,35 @@ h1 {
 	margin: 15px 6px 6px;
 }
 
+/* la suggest box STANDARD */
+
+.eu-nextstreet-SuggestFieldPanel {
+  border-collapse: collapse ;
+  border: none ;
+}
+
+.eu-nextstreet-SuggestFieldPanel .eu-nextstreet-SuggestFieldPanel-left {
+  background-color: #eaeff7 ;
+}
+.eu-nextstreet-SuggestFieldPanel .eu-nextstreet-SuggestFieldPanel-left .eu-nextstreet-SuggestFieldPanel-leftInner {
+  padding: 6px 0 6px 6px;
+}
+
+.eu-nextstreet-SuggestFieldPanel .eu-nextstreet-SuggestFieldPanel-content {
+  background-color: #eaeff7 ;
+  padding: 6px 0 6px 0;
+}
+
+.eu-nextstreet-SuggestFieldPanel .eu-nextstreet-SuggestFieldPanel-right {
+  background-color: #eaeff7 ;
+}
+.eu-nextstreet-SuggestFieldPanel .eu-nextstreet-SuggestFieldPanel-right .eu-nextstreet-SuggestFieldPanel-rightInner {
+  padding: 6px 6px 6px 0 ;
+}
+
 .eu-nextstreet-SuggestItemSelected {
-	background-color: #DDDDDD;
-	color: blue;
+	background-color: #c9dcfe;
+	color: black;
 	font-weight: bold;
 }
 
@@ -43,17 +69,81 @@ h1 {
 
 .eu-nextstreet-SuggestMatchingString {
 	font-weight: bold;
-	background-color: yellow;
+	/*
+	background-color: #ffff9b;
+	*/
+	color: #1aae1d ;
 }
 
 .eu-nextstreet-SuggestField {
-	background: url('img/arr_btm.png') no-repeat right top;
-}
-
-.eu.nextstreet.SuggestFieldPanel {
+	background: white url('img/arrow.png') no-repeat right 5px;
 }
 
 .eu-nextstreet-SuggestPopup {
-	border: 2px solid #C3D9FF;
-	padding: 0px;
+  background-color: #eaeff7 ;
+	border-top: 0px;
+	border-left: 1px solid #c9dcfe;
+	border-bottom: 1px solid #c9dcfe;
+	border-right: 1px solid #c9dcfe;
+	padding: 5px;
 }
+
+
+
+/* la suggest box CUSTOM 
+
+.eu-nextstreet-SuggestFieldPanel {
+  border-collapse: collapse ;
+  border: none ;
+}
+
+.eu-nextstreet-SuggestFieldPanel .eu-nextstreet-SuggestFieldPanel-left {
+  background: transparent url('img/bg-left.') right top no-repeat; 
+  width: 9px;
+}
+.eu-nextstreet-SuggestFieldPanel .eu-nextstreet-SuggestFieldPanel-left .eu-nextstreet-SuggestFieldPanel-leftInner {
+  width: 9px;
+}
+
+.eu-nextstreet-SuggestFieldPanel .eu-nextstreet-SuggestFieldPanel-content {
+  background-color: #eaeff7 ;
+  padding: 6px 0 6px 0;
+}
+
+.eu-nextstreet-SuggestFieldPanel .eu-nextstreet-SuggestFieldPanel-right {
+  background: transparent url('img/bg-right.') left top no-repeat; 
+  width: 9px;
+}
+.eu-nextstreet-SuggestFieldPanel .eu-nextstreet-SuggestFieldPanel-right .eu-nextstreet-SuggestFieldPanel-rightInner {
+  width: 9px;
+}
+
+.eu-nextstreet-SuggestItemSelected {
+	background-color: #c9dcfe;
+	color: black;
+	font-weight: bold;
+}
+
+.eu-nextstreet-SuggestItemHover {
+	font-weight: bold;
+}
+
+.eu-nextstreet-SuggestMatchingString {
+	font-weight: bold;
+	background-color: #ffff9b;
+}
+
+.eu-nextstreet-SuggestField {
+	background: white url('img/arrow.png') no-repeat right 5px;
+}
+
+.eu-nextstreet-SuggestPopup {
+  background-color: #eaeff7 ;
+	border-top: 0px;
+	border-left: 1px solid #c9dcfe;
+	border-bottom: 1px solid #c9dcfe;
+	border-right: 1px solid #c9dcfe;
+	padding: 5px;
+}
+
+*/

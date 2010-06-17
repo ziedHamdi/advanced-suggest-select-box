@@ -38,15 +38,16 @@ public class DefaultValueRenderer<T> extends HTML implements
 					+ "'>" + filterText + "</span>");
 
 		} else {
-			String temp = html.toLowerCase().replace(
-					filterText.toLowerCase(),
-					"<span class='" + MATCHING_STRING + "'>" + filterText
-							+ "</span>");
-			int firstIndex = temp.indexOf("<span");
-			int lastIndex = temp.indexOf("</span") + "</span>".length();
+			String startSequence = "###start###";
+			String endSequence = "###end###";
+			String temp = html.toLowerCase().replace(filterText.toLowerCase(),
+					startSequence + filterText + endSequence);
+			int firstIndex = temp.indexOf(startSequence);
+			int lastIndex = temp.indexOf(endSequence) - startSequence.length();
 			if (firstIndex > -1) {
-				html = html.substring(0, firstIndex)
-						+ temp.substring(firstIndex, lastIndex)
+				html = html.substring(0, firstIndex) + "<span class='"
+						+ MATCHING_STRING + "'>"
+						+ html.substring(firstIndex, lastIndex) + "</span>"
 						+ html.substring(firstIndex + filterText.length());
 			}
 

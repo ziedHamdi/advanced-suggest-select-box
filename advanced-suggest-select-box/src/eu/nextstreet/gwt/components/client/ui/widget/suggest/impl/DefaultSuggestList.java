@@ -21,20 +21,21 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.SuggestWidget;
 
-public class DefaultSuggestList<T> extends PopupPanel implements SuggestWidget<T> {
+public class DefaultSuggestList<T> extends PopupPanel implements
+		SuggestWidget<T> {
 	private static final String POPUP_STYLE = "eu-nextstreet-SuggestPopup";
 
 	public DefaultSuggestList() {
 		this(true, false);
 	}
 
+	public DefaultSuggestList(boolean autoHide) {
+		this(autoHide, false);
+	}
+
 	public DefaultSuggestList(boolean autoHide, boolean modal) {
 		super(autoHide, modal);
 		setStylePrimaryName(POPUP_STYLE);
-	}
-
-	public DefaultSuggestList(boolean autoHide) {
-		this(autoHide, false);
 	}
 
 	@Override
