@@ -36,6 +36,10 @@ import eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.DefaultSuggest
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class IntoGwt implements EntryPoint {
+	public static native void changeCss(String styleFile) /*-{
+		$doc.getElementById("cssFile").href=styleFile;
+	}-*/;
+
 	private boolean test = true;
 
 	/**
@@ -87,9 +91,22 @@ public class IntoGwt implements EntryPoint {
 			}
 		});
 
+		final CheckBox style = new CheckBox("Design Rounded");
+		style.setValue(true);
+		style.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+
+			@Override
+			public void onValueChange(ValueChangeEvent<Boolean> event) {
+				changeCss(style.getValue() ? "IntoGwt.css"
+						: "IntoGwtClassic.css");
+			}
+
+		});
+
 		VerticalPanel options = new VerticalPanel();
 		options.add(startsWith);
 		options.add(caseSensitive);
+		options.add(style);
 
 		RootPanel.get("options").add(options);
 
