@@ -371,6 +371,15 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder {
 		return currentLabel;
 	}
 
+	/**
+	 * Returns the string representation of a value, this method is very
+	 * important since it determines the equality of elements typed by hand with
+	 * the ones in the list.
+	 * 
+	 * @param t
+	 *            the value
+	 * @return the string representation of a value
+	 */
 	protected String toString(final T t) {
 		return t.toString();
 	}
