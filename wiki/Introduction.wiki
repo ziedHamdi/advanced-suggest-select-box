@@ -158,3 +158,41 @@ AbstractSuggestBox.setSuggestWidget(SuggestWidget<T> SuggestWidget)
 on your suggest box to provide your instance. 
 
 Notice that you can change the list box at runtime, however you will have to handle the cleaning of the old box your self.
+
+=Listening to events=
+To listen to value change events you have two choices:
+  * Get a notification the simple way by adding a `ChangeHandler`
+  * Get a more evolved notification that tells you whether a value was selected or typed. Keeping a type safe linking when a value was selected.
+
+==Simple notification==
+You can listen to the change events by adding an instance of the standard gwt class `ChangeHandler` to your SuggestBox 
+{{{
+		box.addChangeHandler(new ChangeHandler() {
+
+			@Override
+			public void onChange(ChangeEvent event) {
+//			((TextBox) event.getSource()).getText();
+// a coming version will add type safety handling also in this option
+			}
+		});
+}}}
+
+You will receive the event at the moment you expect it:
+  # If an item is clicked in the list (immediately)
+  # If an item is selected in the list with the keyboard (immediately)
+  # When the user types a text and validates it with enter (immediately) including for a text that is not in the list
+  # When a value is selected automatically because it's the only matching value (on blur)
+
+*Note:* when a user types a value that's text matches exactly the text of a value in the list, the value is considered as selected (in opposition to typed). See the method `protected String toString(final T t)` for more details about this section.
+
+==Advanced notification==
+You can get into more details about whether the user selected a value or typed one that is not in the list by extending `AbstractSuggestBox<T>` or one of its descendants and overriding the methods:
+  # `public void valueSelected(T value)`
+  # `public void valueTyped(String value)`
+As you can see, the method `valueSelected()` receives directly the element that was selected in the list instead of a String value. This method is called each time a value is selected from the list in any of the situations 1, 2, 4 described in the section above.
+
+In opposition the method `valueTyped()` is called only when a value is typed manually.
+
+*in both cases don't forget to call the super implementation to accomplish the standard handling*
+
+If you want to catch the event even earlier, consider overriding the method `protected boolean fillValue(final T t, boolean commit)` which handles the SuggestList closing, the text filling of the value inside the text box (via the method `protected String toString(final T t)`) and the decision of firing an event immediately or on blur.
