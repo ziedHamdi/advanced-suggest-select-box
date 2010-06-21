@@ -23,10 +23,12 @@ import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.DoubleClickEvent;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
@@ -36,7 +38,6 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -55,6 +56,7 @@ import eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.DefaultValueRe
 public abstract class AbstractSuggestBox<T> extends EventHandlerHolder {
 
 	private static final String SUGGEST_FIELD = "eu-nextstreet-SuggestField";
+	private static final String SUGGEST_FIELD_HOVER = "eu-nextstreet-SuggestFieldHover";
 	private static final String ITEM = "eu-nextstreet-SuggestItem";
 	private static SuggestBoxUiBinder uiBinder = GWT
 			.create(SuggestBoxUiBinder.class);
@@ -71,7 +73,7 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder {
 	}
 
 	protected @UiField
-	TextBox text;
+	SuggestTextBox text;
 
 	SuggestWidget<T> suggestWidget = new DefaultSuggestList<T>();
 	ScrollPanel scrollPanel = new ScrollPanel();
@@ -94,6 +96,31 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder {
 		scrollPanel.add(suggestPanel);
 		text.setStyleName(SUGGEST_FIELD);
 		suggestWidget.setWidget(scrollPanel);
+	}
+
+	// unused
+	// @UiHandler("text")
+	// public void onMouseOver(MouseOverEvent event) {
+	// }
+	//	
+	// @UiHandler("text")
+	// public void onMouseOut(MouseOutEvent event) {
+	// }
+
+	@UiHandler("text")
+	public void onMouseMove(MouseMoveEvent event) {
+		int mousePosition = event.getX();
+		if (mousePosition > (text.getOffsetWidth() - buttonWidth)) {
+			text.addStyleName(SUGGEST_FIELD_HOVER);
+		} else {
+			text.removeStyleName(SUGGEST_FIELD_HOVER);
+		}
+	}
+
+	@UiHandler("text")
+	public void onDoubleClick(DoubleClickEvent event) {
+		this.text.setSelectionRange(0, getText().length());
+		recomputePopupContent(KeyCodes.KEY_RIGHT);
 	}
 
 	@UiHandler("text")
@@ -149,7 +176,8 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder {
 
 		if (keyCode == KeyCodes.KEY_TAB || keyCode == KeyCodes.KEY_ALT
 				|| keyCode == KeyCodes.KEY_CTRL
-				|| keyCode == KeyCodes.KEY_SHIFT)
+				|| keyCode == KeyCodes.KEY_SHIFT
+				|| keyCode == KeyCodes.KEY_HOME || keyCode == KeyCodes.KEY_END)
 			return;
 
 		if (keyCode == KeyCodes.KEY_DOWN || keyCode == KeyCodes.KEY_UP
