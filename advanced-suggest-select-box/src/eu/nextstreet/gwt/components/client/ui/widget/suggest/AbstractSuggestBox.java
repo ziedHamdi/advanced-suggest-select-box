@@ -50,6 +50,9 @@ import eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.DefaultValueRe
  * 
  * @author Zied Hamdi
  * 
+ *         bugs: when a selection is directly replaced by characters, the enter
+ *         button doesn't fire the event (it's postponed to the blur event).
+ * 
  * @param <T>
  */
 public abstract class AbstractSuggestBox<T> extends
