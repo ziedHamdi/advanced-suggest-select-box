@@ -38,11 +38,21 @@ public class DefaultSuggestBox<T> extends AbstractSuggestBox<T> {
 	}
 
 	public DefaultSuggestBox(boolean caseSensitive, boolean startsWith) {
-		this(new ArrayList<T>(), caseSensitive, startsWith);
+		this(null, new ArrayList<T>(), caseSensitive, startsWith);
 	}
 
-	public DefaultSuggestBox(List<T> possiblilities, boolean caseSensitive,
+	public DefaultSuggestBox(String defaultText) {
+		this(defaultText, false, true);
+	}
+
+	public DefaultSuggestBox(String defaultText, boolean caseSensitive,
 			boolean startsWith) {
+		this(defaultText, new ArrayList<T>(), caseSensitive, startsWith);
+	}
+
+	public DefaultSuggestBox(String defaultText, List<T> possiblilities,
+			boolean caseSensitive, boolean startsWith) {
+		super(defaultText);
 		this.possiblilities = possiblilities;
 		this.startsWith = startsWith;
 		super.setCaseSensitive(caseSensitive);

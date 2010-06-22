@@ -21,15 +21,20 @@ import java.util.Date;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.event.dom.client.DoubleClickEvent;
+import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import eu.nextstreet.gwt.components.client.ui.widget.AdvancedTextBox;
+import eu.nextstreet.gwt.components.client.ui.widget.suggest.AbstractSuggestBox;
+import eu.nextstreet.gwt.components.client.ui.widget.suggest.SuggestChangeEvent;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.DefaultSuggestBox;
 
 /**
@@ -65,7 +70,8 @@ public class IntoGwt implements EntryPoint {
 
 		}
 
-		final DefaultSuggestBox<Value> box = new DefaultSuggestBox<Value>();
+		final DefaultSuggestBox<Value> box = new DefaultSuggestBox<Value>(
+				"select or type value");
 		box.add(new Value("01 - ABCD"));
 		box.add(new Value("02 - CDEF"));
 		box.add(new Value("03 - CFGHIJ"));
@@ -116,14 +122,31 @@ public class IntoGwt implements EntryPoint {
 				.getFormat("HH:mm:ss");
 		box.addChangeHandler(new ChangeHandler() {
 
+			@SuppressWarnings("unchecked")
 			@Override
 			public void onChange(ChangeEvent event) {
 				if (infoContainer.getWidgetCount() > 3)
 					infoContainer.remove(3);
-				infoContainer.insert(new Label("At "
-						+ dateTimeFormat.format(new Date()) + " you chose "
-						+ ((TextBox) event.getSource()).getText()), 0);
+				infoContainer.insert(new Label(
+						"At "
+								+ dateTimeFormat.format(new Date())
+								+ " you "
+								+ (((SuggestChangeEvent<String>) event)
+										.isSelected() ? "selected " : "typed ")
+								+ ((AbstractSuggestBox<String>) event
+										.getSource()).getText()), 0);
 			}
 		});
+
+		AdvancedTextBox advancedTextBox = new AdvancedTextBox(
+				"Please type a value");
+		advancedTextBox.addDoubleClickHandler(new DoubleClickHandler() {
+
+			@Override
+			public void onDoubleClick(DoubleClickEvent event) {
+				Window.alert("Double clicked");
+			}
+		});
+		RootPanel.get("advancedTextBox").add(advancedTextBox);
 	}
 }

@@ -112,3 +112,7 @@ h1 {
 .eu-nextstreet-SuggestFieldHover {
 	cursor: pointer;
 }
+
+.eu-nextstreet-AdvancedTextBoxDefaultText {
+	color: #999999;
+}
