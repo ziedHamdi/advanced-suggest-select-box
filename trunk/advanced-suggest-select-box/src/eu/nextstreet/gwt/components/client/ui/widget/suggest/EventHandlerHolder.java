@@ -23,7 +23,8 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.user.client.ui.Composite;
 
-public abstract class EventHandlerHolder extends Composite {
+public abstract class EventHandlerHolder<P, E extends ChangeEvent> extends
+		Composite {
 	protected List<ChangeHandler> changeHandlerList = new ArrayList<ChangeHandler>();
 
 	public void addChangeHandler(ChangeHandler changeHandler) {
@@ -34,7 +35,7 @@ public abstract class EventHandlerHolder extends Composite {
 		changeHandlerList.remove(changeHandler);
 	}
 
-	private void onChange(ChangeEvent changeEvent) {
+	private void onChange(E changeEvent) {
 		for (ChangeHandler changeHandler : changeHandlerList) {
 			changeHandler.onChange(changeEvent);
 		}
@@ -43,13 +44,18 @@ public abstract class EventHandlerHolder extends Composite {
 	/**
 	 * fires an event of change
 	 * 
-	 * @param fromList
-	 *            true if the value is from list
+	 * @param param
+	 *            a parameter specifying more details an=bout the change
 	 */
-	protected void fireChange(boolean fromList) {
-		ChangeEvent changeEvent = changedValue();
+	protected void fireChange(P param) {
+		E changeEvent = changedValue(param);
 		onChange(changeEvent);
 	}
 
-	protected abstract ChangeEvent changedValue();
+	/**
+	 * Leaves the opportunity to construct a specific event
+	 * 
+	 * @return an event representative of the change.
+	 */
+	protected abstract E changedValue(P param);
 }

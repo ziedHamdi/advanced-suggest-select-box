@@ -20,11 +20,9 @@ import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.BlurEvent;
-import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.DoubleClickEvent;
-import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.MouseDownEvent;
@@ -42,6 +40,7 @@ import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import eu.nextstreet.gwt.components.client.ui.widget.AdvancedTextBox;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.DefaultSuggestList;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.DefaultValueRendererFactory;
 
@@ -53,7 +52,8 @@ import eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.DefaultValueRe
  * 
  * @param <T>
  */
-public abstract class AbstractSuggestBox<T> extends EventHandlerHolder {
+public abstract class AbstractSuggestBox<T> extends
+		EventHandlerHolder<Boolean, SuggestChangeEvent<T>> {
 
 	private static final String SUGGEST_FIELD = "eu-nextstreet-SuggestField";
 	private static final String SUGGEST_FIELD_HOVER = "eu-nextstreet-SuggestFieldHover";
@@ -62,9 +62,20 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder {
 			.create(SuggestBoxUiBinder.class);
 	protected T selected;
 	protected String typed;
-	protected String defautText;
 	protected int buttonWidth = 16;
 	protected boolean caseSensitive;
+	protected SuggestWidget<T> suggestWidget = new DefaultSuggestList<T>();
+	protected ScrollPanel scrollPanel = new ScrollPanel();
+	protected VerticalPanel suggestPanel = new VerticalPanel();
+
+	protected int selectedIndex = -1;
+	private boolean recomputePopupContent = true;
+	/**
+	 * Specifies if enter is hit multiple times with same value, whether it
+	 * generates a change event for each
+	 */
+	private boolean multipleChangeEvent;
+	private boolean fireChangeOnBlur;
 
 	protected ValueRendererFactory<T, ? extends ValueHolderLabel<T>> valueRendererFactory = new DefaultValueRendererFactory<T>();
 
@@ -73,28 +84,18 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder {
 	}
 
 	protected @UiField
-	SuggestTextBox text;
-
-	SuggestWidget<T> suggestWidget = new DefaultSuggestList<T>();
-	ScrollPanel scrollPanel = new ScrollPanel();
-	VerticalPanel suggestPanel = new VerticalPanel();
-
-	protected int selectedIndex = 0;
-	private boolean recomputePopupContent = true;
-	/**
-	 * Specifies if enter is hit multiple times with same value, whether it
-	 * generates a change event for each
-	 */
-	private boolean multipleChangeEvent;
-	private boolean fireChangeOnBlur;
-	private int maxPopupHeight = 500;
-	private int maxPopupWidth = 500;
+	AdvancedTextBox text;
 
 	public AbstractSuggestBox() {
+		this(null);
+	}
+
+	public AbstractSuggestBox(String defaultText) {
 		initWidget(uiBinder.createAndBindUi(this));
 		suggestPanel.setSpacing(0);
 		scrollPanel.add(suggestPanel);
 		text.setStyleName(SUGGEST_FIELD);
+		text.setDefautText(defaultText);
 		suggestWidget.setWidget(scrollPanel);
 	}
 
@@ -124,13 +125,6 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder {
 	}
 
 	@UiHandler("text")
-	public void onFocus(FocusEvent focusEvent) {
-		if (defautText != null) {
-			this.text.setSelectionRange(0, getText().length());
-		}
-	}
-
-	@UiHandler("text")
 	public void onMouseDown(MouseDownEvent event) {
 		int interval = text.getAbsoluteLeft() + text.getOffsetWidth()
 				- event.getClientX();
@@ -149,7 +143,7 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder {
 		new Timer() {
 			@Override
 			public void run() {
-				String currentText = text.getText();
+				String currentText = getText();
 				if (typed == null || !typed.equals(currentText)) {
 					valueTyped(currentText);
 				} else if (fireChangeOnBlur) {
@@ -157,7 +151,7 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder {
 					fireChangeOnBlur = false;
 				}
 				if (currentText.trim().length() == 0)
-					setText(defautText);
+					setText("");
 			}
 		}.schedule(200);
 		if (suggestWidget.isShowing()) {
@@ -182,9 +176,13 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder {
 
 		if (keyCode == KeyCodes.KEY_DOWN || keyCode == KeyCodes.KEY_UP
 				|| keyCode == KeyCodes.KEY_LEFT
-				|| keyCode == KeyCodes.KEY_RIGHT) {
+				|| keyCode == KeyCodes.KEY_RIGHT
+				|| keyCode == KeyCodes.KEY_DELETE
+				|| keyCode == KeyCodes.KEY_BACKSPACE) {
 			recomputePopupContent = !suggestWidget.isShowing();
 		}
+		if (keyCode == KeyCodes.KEY_DELETE || keyCode == KeyCodes.KEY_BACKSPACE)
+			selectedIndex = -1;
 
 		if (recomputePopupContent) {
 			if (recomputePopupContent(keyCode))
@@ -192,7 +190,7 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder {
 
 		}
 
-		ValueHolderLabel<T> popupWidget = getSuggestBox();
+		ValueHolderLabel<T> popupWidget = getSelectedItem();
 		if (popupWidget != null && selectedIndex != -1)
 			popupWidget.setFocused(false);
 		int widgetCount = suggestPanel.getWidgetCount();
@@ -218,6 +216,7 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder {
 					// value not in list, this enter means OK.
 					valueTyped(getText());
 				}
+				hideSuggestList();
 			} else {
 				if (multipleChangeEvent) {
 					// popup is not visible, this enter means OK (check if the
@@ -229,7 +228,7 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder {
 				}
 			}
 		} else if (keyCode == KeyCodes.KEY_ESCAPE) {
-			hideSuggest();
+			hideSuggestList();
 		} else if (keyCode == KeyCodes.KEY_TAB) {
 
 		} else {
@@ -242,7 +241,7 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder {
 	 * 
 	 */
 	protected void highlightSelectedValue() {
-		ValueHolderLabel<T> popupWidget = getSuggestBox();
+		ValueHolderLabel<T> popupWidget = getSelectedItem();
 		if (popupWidget != null) {
 			popupWidget.setFocused(true);
 			scrollPanel.ensureVisible((UIObject) popupWidget);
@@ -252,7 +251,7 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder {
 	/**
 	 * Orders the suggest widget to be hidden
 	 */
-	protected void hideSuggest() {
+	protected void hideSuggestList() {
 		suggestWidget.hide();
 		selectedIndex = -1;
 	}
@@ -266,9 +265,9 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder {
 	 * @param keyCode
 	 * @return
 	 */
-	private boolean recomputePopupContent(int keyCode) {
+	protected boolean recomputePopupContent(int keyCode) {
 		List<T> possibilities;
-		String textValue = getTextValue();
+		String textValue = getText();
 		// to show all possible values if a value is already selected and a up
 		// or down key is pressed
 		if (keyCode == KeyCodes.KEY_DOWN || keyCode == KeyCodes.KEY_UP)
@@ -289,41 +288,18 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder {
 
 			constructPopupContent(possibilities);
 
-			showPopup();
+			showSuggestList();
 		} else {
-			hideSuggest();
+			hideSuggestList();
 		}
 		return false;
 	}
 
-	private void showPopup() {
+	protected void showSuggestList() {
 		suggestWidget.adjustPosition(text.getAbsoluteLeft(), text
 				.getAbsoluteTop()
 				+ text.getOffsetHeight());
 		suggestWidget.show();
-	}
-
-	public int getMaxPopupHeight() {
-		return maxPopupHeight;
-	}
-
-	public void setMaxPopupHeight(int maxPopupHeight) {
-		this.maxPopupHeight = maxPopupHeight;
-	}
-
-	public int getMaxPopupWidth() {
-		return maxPopupWidth;
-	}
-
-	public void setMaxPopupWidth(int maxPopupWidth) {
-		this.maxPopupWidth = maxPopupWidth;
-	}
-
-	protected String getTextValue() {
-		String text = getText();
-		if (text.equals(defautText))
-			return "";
-		return text;
 	}
 
 	protected void constructPopupContent(List<T> possibilities) {
@@ -385,7 +361,7 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder {
 	}
 
 	@SuppressWarnings("unchecked")
-	private ValueHolderLabel<T> getSuggestBox() {
+	private ValueHolderLabel<T> getSelectedItem() {
 		if (selectedIndex != -1
 				&& suggestPanel.getWidgetCount() > selectedIndex)
 			return (ValueHolderLabel<T>) suggestPanel.getWidget(selectedIndex);
@@ -408,7 +384,7 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder {
 	 */
 	protected boolean fillValue(final T t, boolean commit) {
 		text.setText(toString(t));
-		hideSuggest();
+		hideSuggestList();
 		text.setFocus(true);
 		selected = t;
 		typed = toString(t);
@@ -447,8 +423,8 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder {
 	 */
 	public void valueTyped(String value) {
 		selected = null;
-		if (defautText != null && defautText.equals(value))
-			value = "";
+		// if (defautText != null && defautText.equals(value))
+		// value = "";
 		typed = value;
 		fireChange(false);
 	}
@@ -475,40 +451,26 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder {
 	}
 
 	@Override
-	protected ChangeEvent changedValue() {
-		// FIXME should save the last change event
-		// instead
-		return new ChangeEvent() {
-			@Override
-			public Object getSource() {
-				return text;
-			}
-		};
+	protected SuggestChangeEvent<T> changedValue(Boolean selected) {
+		if (selected)
+			return new SuggestChangeEvent<T>(this, getSelected());
+		return new SuggestChangeEvent<T>(this, getText());
 	}
 
+	/**
+	 * Returns the text currently in the text field, this method can have
+	 * different results before and after the call of
+	 * {@link #recomputePopupContent(int)} which auto completes the text
+	 * automatically if only one result remains.
+	 * 
+	 * @return the text fiel
+	 */
 	public String getText() {
-		return text.getText();
+		return text.getTextValue();
 	}
 
 	public void setText(String str) {
 		text.setText(str);
-	}
-
-	public void setDefautText(String text) {
-		defautText = text;
-	}
-
-	@Override
-	protected void onLoad() {
-		super.onLoad();
-		String text = getText();
-		if (defautText != null && (text == null || text.trim().length() == 0)) {
-			setText(defautText);
-		}
-	}
-
-	public String getDefautText() {
-		return defautText;
 	}
 
 	public boolean isEmpty() {
