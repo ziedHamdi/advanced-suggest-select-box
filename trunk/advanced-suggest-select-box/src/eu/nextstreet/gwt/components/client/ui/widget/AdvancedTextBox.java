@@ -29,17 +29,15 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.TextBox;
 
 /**
- * A text box that handles additional events like the double click and supports
- * the default text feature
+ * A text box that handles additional events like the double click and supports the default text feature
  * 
- * NOTE: You should use {@link #getTextValue()} instead of {@link #getText()} to
- * avoid getting the default text instead of an empty one.
+ * NOTE: You should use {@link #getTextValue()} instead of {@link #getText()} to avoid getting the default text instead
+ * of an empty one.
  * 
  * <BR/>
  * This class has the following styles:
  * <ul>
- * <li><b>eu-nextstreet-AdvancedTextBoxDefaultText</b> defines the style of the
- * default text</li>
+ * <li><b>eu-nextstreet-AdvancedTextBoxDefaultText</b> defines the style of the default text</li>
  * </ul>
  * 
  * @author Zied Hamdi founder of http://into-i.fr
@@ -54,15 +52,17 @@ public class AdvancedTextBox extends TextBox implements HasDoubleClickHandlers {
 		this(null);
 	}
 
-	public AdvancedTextBox(String defautText) {
+	public AdvancedTextBox(final String defautText) {
 		this.defautText = defautText;
 		addFocusHandler(new FocusHandler() {
 
 			@Override
 			public void onFocus(FocusEvent event) {
-				if (AdvancedTextBox.this.defautText != null) {
-					setSelectionRange(0, AdvancedTextBox.super.getText()
-							.length());
+				String text = AdvancedTextBox.this.getText();
+				if (AdvancedTextBox.this.defautText == null || !AdvancedTextBox.this.defautText.equals(text)) {
+					setSelectionRange(0, text.length());
+				} else {
+					AdvancedTextBox.super.setText("");
 				}
 			}
 		});
@@ -85,8 +85,7 @@ public class AdvancedTextBox extends TextBox implements HasDoubleClickHandlers {
 	}
 
 	@Override
-	public HandlerRegistration addDoubleClickHandler(
-			final DoubleClickHandler handler) {
+	public HandlerRegistration addDoubleClickHandler(final DoubleClickHandler handler) {
 		return addDomHandler(handler, DoubleClickEvent.getType());
 	}
 
@@ -127,12 +126,11 @@ public class AdvancedTextBox extends TextBox implements HasDoubleClickHandlers {
 	 * Returns the current text or an empty text if default value
 	 * 
 	 * <BR/>
-	 * <b>Note:</b> {@link #getText()} cannot be overriden since many other
-	 * parent functions use it (like {@link #setSelectionRange(int, int)}).
+	 * <b>Note:</b> {@link #getText()} cannot be overriden since many other parent functions use it (like
+	 * {@link #setSelectionRange(int, int)}).
 	 * 
 	 * 
-	 * @return an empty string if the current text is the default value or the
-	 *         contained text
+	 * @return an empty string if the current text is the default value or the contained text
 	 */
 	public String getTextValue() {
 		String text = super.getText();
