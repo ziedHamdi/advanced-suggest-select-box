@@ -14,7 +14,7 @@ Now open the tree hierarchy to the node *trunk/advanced-suggest-select-box*, rig
 
 Select *Checkout as a new project*
 
-In the project name type : *IntoGwt*, and in the package name type *eu.nextstreet.gwt.components.client*
+In the project name type : *IntoGwt*, and in the package name type *eu.nextstreet.gwt.components*
 
 Select a gwt version 2.0 or higher.
 
