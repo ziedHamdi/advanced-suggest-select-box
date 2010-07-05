@@ -16,7 +16,7 @@ Select *Checkout as a project configured using the New Project Wizard* then pres
 
 In the project name type : *IntoGwt* , and in the package name type *eu.nextstreet.gwt.components* 
 
-Select a gwt version 2.0 or higher. And optionally uncheck the Google Web Application checkbox.
+Select a gwt version 2.0 or higher. And optionally uncheck the Google Web Application option checkbox.
 
 When prompted if the existing files can be overridden choose yes so that the gwt.xml original file overrides the one created by your project wizard.
 
