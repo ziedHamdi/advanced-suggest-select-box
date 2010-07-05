@@ -1,0 +1,17 @@
+#labels Phase-Deploy,Phase-Design
+#How to check out a valid project
+
+= Introduction =
+This page explains how to check out the project source for edition to have a ready to use GWT project.
+
+
+= Details =
+From your eclipse SVN Repository view right click and choose *New > Repository Location...*
+In the _Url_ field type 
+
+IntoGwt
+
+Add your content here.  Format your content with:
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
