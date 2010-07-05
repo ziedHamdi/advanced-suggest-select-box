@@ -12,7 +12,8 @@ In the _Url_ field type *http://advanced-suggest-select-box.googlecode.com/svn/*
 
 Now open the tree hierarchy to the node *trunk/advanced-suggest-select-box*, right click and choose the option *Checkout*
 
-Select *Checkout as a new project*
+Select *Checkout as a project configured using the New Project Wizard* then presse *Finish* and select *Google > Web Application Project*
+
 
 In the project name type : *IntoGwt*, and in the package name type *eu.nextstreet.gwt.components*
 
