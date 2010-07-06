@@ -56,6 +56,7 @@ import eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.DefaultValueRe
  */
 public abstract class AbstractSuggestBox<T> extends EventHandlerHolder<Boolean, SuggestChangeEvent<T>> {
 
+	private static final String SUGGEST_FIELD_COMP = "eu-nextstreet-SuggestFieldComp";
 	private static final String SUGGEST_FIELD = "eu-nextstreet-SuggestField";
 	private static final String SUGGEST_FIELD_HOVER = "eu-nextstreet-SuggestFieldHover";
 	private static final String ITEM = "eu-nextstreet-SuggestItem";
@@ -84,7 +85,7 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder<Boolean, 
 	}
 
 	protected @UiField
-	AdvancedTextBox text;
+	AdvancedTextBox textField;
 
 	public AbstractSuggestBox() {
 		this(null);
@@ -92,10 +93,11 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder<Boolean, 
 
 	public AbstractSuggestBox(String defaultText) {
 		initWidget(uiBinder.createAndBindUi(this));
+		setStyleName(SUGGEST_FIELD_COMP);
 		suggestPanel.setSpacing(0);
 		scrollPanel.add(suggestPanel);
-		text.setStyleName(SUGGEST_FIELD);
-		text.setDefautText(defaultText);
+		textField.setStyleName(SUGGEST_FIELD);
+		textField.setDefautText(defaultText);
 		suggestWidget.setWidget(scrollPanel);
 	}
 
@@ -108,25 +110,25 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder<Boolean, 
 	// public void onMouseOut(MouseOutEvent event) {
 	// }
 
-	@UiHandler("text")
+	@UiHandler("textField")
 	public void onMouseMove(MouseMoveEvent event) {
 		int mousePosition = event.getX();
-		if (mousePosition > (text.getOffsetWidth() - buttonWidth)) {
-			text.addStyleName(SUGGEST_FIELD_HOVER);
+		if (mousePosition > (textField.getOffsetWidth() - buttonWidth)) {
+			textField.addStyleName(SUGGEST_FIELD_HOVER);
 		} else {
-			text.removeStyleName(SUGGEST_FIELD_HOVER);
+			textField.removeStyleName(SUGGEST_FIELD_HOVER);
 		}
 	}
 
-	@UiHandler("text")
+	@UiHandler("textField")
 	public void onDoubleClick(DoubleClickEvent event) {
-		this.text.setSelectionRange(0, getText().length());
+		this.textField.setSelectionRange(0, getText().length());
 		recomputePopupContent(KeyCodes.KEY_RIGHT);
 	}
 
-	@UiHandler("text")
+	@UiHandler("textField")
 	public void onMouseDown(MouseDownEvent event) {
-		int interval = text.getAbsoluteLeft() + text.getOffsetWidth() - event.getClientX();
+		int interval = textField.getAbsoluteLeft() + textField.getOffsetWidth() - event.getClientX();
 		if (interval < buttonWidth) {
 			if (suggestWidget.isShowing()) {
 				suggestWidget.hide();
@@ -137,7 +139,7 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder<Boolean, 
 		}
 	}
 
-	@UiHandler("text")
+	@UiHandler("textField")
 	public void onBlur(BlurEvent event) {
 		new Timer() {
 			@Override
@@ -167,7 +169,7 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder<Boolean, 
 		}
 	}
 
-	@UiHandler("text")
+	@UiHandler("textField")
 	public void onKeyUp(KeyUpEvent keyUpEvent) {
 		int keyCode = keyUpEvent.getNativeKeyCode();
 
@@ -305,7 +307,8 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder<Boolean, 
 	}
 
 	protected void showSuggestList() {
-		suggestWidget.adjustPosition(text.getAbsoluteLeft(), text.getAbsoluteTop() + text.getOffsetHeight());
+		suggestWidget.adjustPosition(textField.getAbsoluteLeft(), textField.getAbsoluteTop()
+			+ textField.getOffsetHeight());
 		suggestWidget.show();
 	}
 
@@ -381,9 +384,9 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder<Boolean, 
 	 *         the suggest widget to remain open even if there's only one element remaining in the list of choices
 	 */
 	protected boolean fillValue(final T t, boolean commit) {
-		text.setText(toString(t));
+		textField.setText(toString(t));
 		hideSuggestList();
-		text.setFocus(true);
+		textField.setFocus(true);
 		selected = t;
 		typed = toString(t);
 		if (commit) {
@@ -456,11 +459,11 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder<Boolean, 
 	 * @return the text fiel
 	 */
 	public String getText() {
-		return text.getTextValue();
+		return textField.getTextValue();
 	}
 
 	public void setText(String str) {
-		text.setText(str);
+		textField.setText(str);
 	}
 
 	public boolean isEmpty() {
@@ -468,11 +471,11 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder<Boolean, 
 	}
 
 	public void setEnabled(boolean enabled) {
-		text.setEnabled(enabled);
+		textField.setEnabled(enabled);
 	}
 
 	public void setFocus(boolean focus) {
-		text.setFocus(focus);
+		textField.setFocus(focus);
 	}
 
 	protected abstract List<T> getFiltredPossibilities(String text);
@@ -545,6 +548,22 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder<Boolean, 
 
 	public void setStrictMode(boolean strictMode) {
 		this.strictMode = strictMode;
+	}
+
+	public String getDefautText() {
+		return textField.getDefautText();
+	}
+
+	public void setDefautText(String text) {
+		this.textField.setDefautText(text);
+	}
+
+	public AdvancedTextBox getTextField() {
+		return textField;
+	}
+
+	public void setTextField(AdvancedTextBox textField) {
+		this.textField = textField;
 	}
 
 }

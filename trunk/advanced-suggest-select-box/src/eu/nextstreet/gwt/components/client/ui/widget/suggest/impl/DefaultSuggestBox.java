@@ -94,12 +94,12 @@ public class DefaultSuggestBox<T> extends AbstractSuggestBox<T> {
 	protected boolean fillValue(T t, boolean commit) {
 		// get the typed text length before updating the field with the selected
 		// value
-		int startIndex = text.getText().length();
+		int startIndex = textField.getText().length();
 		// now safely update the value
 		if (startsWith || commit || strictMode) {
 			super.fillValue(t, commit);
 			if (!commit && !strictMode) {
-				text.setSelectionRange(startIndex, text.getText().length() - startIndex);
+				textField.setSelectionRange(startIndex, textField.getText().length() - startIndex);
 			}
 			return true;
 		} else {
