@@ -45,24 +45,21 @@ import eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.DefaultSuggest
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.DefaultValueRendererFactory;
 
 /**
- * Suggest box (or select box) with many possibilities either in behavior and in
- * presentation.
+ * Suggest box (or select box) with many possibilities either in behavior and in presentation.
  * 
  * @author Zied Hamdi
  * 
- *         bugs: when a selection is directly replaced by characters, the enter
- *         button doesn't fire the event (it's postponed to the blur event).
+ *         bugs: when a selection is directly replaced by characters, the enter button doesn't fire the event (it's
+ *         postponed to the blur event).
  * 
  * @param <T>
  */
-public abstract class AbstractSuggestBox<T> extends
-		EventHandlerHolder<Boolean, SuggestChangeEvent<T>> {
+public abstract class AbstractSuggestBox<T> extends EventHandlerHolder<Boolean, SuggestChangeEvent<T>> {
 
 	private static final String SUGGEST_FIELD = "eu-nextstreet-SuggestField";
 	private static final String SUGGEST_FIELD_HOVER = "eu-nextstreet-SuggestFieldHover";
 	private static final String ITEM = "eu-nextstreet-SuggestItem";
-	private static SuggestBoxUiBinder uiBinder = GWT
-			.create(SuggestBoxUiBinder.class);
+	private static SuggestBoxUiBinder uiBinder = GWT.create(SuggestBoxUiBinder.class);
 	protected T selected;
 	protected String typed;
 	protected int buttonWidth = 16;
@@ -70,12 +67,12 @@ public abstract class AbstractSuggestBox<T> extends
 	protected SuggestWidget<T> suggestWidget = new DefaultSuggestList<T>();
 	protected ScrollPanel scrollPanel = new ScrollPanel();
 	protected VerticalPanel suggestPanel = new VerticalPanel();
+	protected boolean strictMode;
 
 	protected int selectedIndex = -1;
 	private boolean recomputePopupContent = true;
 	/**
-	 * Specifies if enter is hit multiple times with same value, whether it
-	 * generates a change event for each
+	 * Specifies if enter is hit multiple times with same value, whether it generates a change event for each
 	 */
 	private boolean multipleChangeEvent;
 	private boolean fireChangeOnBlur;
@@ -129,8 +126,7 @@ public abstract class AbstractSuggestBox<T> extends
 
 	@UiHandler("text")
 	public void onMouseDown(MouseDownEvent event) {
-		int interval = text.getAbsoluteLeft() + text.getOffsetWidth()
-				- event.getClientX();
+		int interval = text.getAbsoluteLeft() + text.getOffsetWidth() - event.getClientX();
 		if (interval < buttonWidth) {
 			if (suggestWidget.isShowing()) {
 				suggestWidget.hide();
@@ -148,7 +144,11 @@ public abstract class AbstractSuggestBox<T> extends
 			public void run() {
 				String currentText = getText();
 				if (typed == null || !typed.equals(currentText)) {
-					valueTyped(currentText);
+					if (strictMode) {
+						setText("");
+					} else {
+						valueTyped(currentText);
+					}
 				} else if (fireChangeOnBlur) {
 					valueSelected(selected);
 					fireChangeOnBlur = false;
@@ -171,24 +171,22 @@ public abstract class AbstractSuggestBox<T> extends
 	public void onKeyUp(KeyUpEvent keyUpEvent) {
 		int keyCode = keyUpEvent.getNativeKeyCode();
 
-		if (keyCode == KeyCodes.KEY_TAB || keyCode == KeyCodes.KEY_ALT
-				|| keyCode == KeyCodes.KEY_CTRL
-				|| keyCode == KeyCodes.KEY_SHIFT
-				|| keyCode == KeyCodes.KEY_HOME || keyCode == KeyCodes.KEY_END)
+		if (keyCode == KeyCodes.KEY_TAB || keyCode == KeyCodes.KEY_ALT || keyCode == KeyCodes.KEY_CTRL
+			|| keyCode == KeyCodes.KEY_SHIFT || keyCode == KeyCodes.KEY_HOME || keyCode == KeyCodes.KEY_END)
 			return;
 
-		if (keyCode == KeyCodes.KEY_DOWN || keyCode == KeyCodes.KEY_UP
-				|| keyCode == KeyCodes.KEY_LEFT
-				|| keyCode == KeyCodes.KEY_RIGHT
-				|| keyCode == KeyCodes.KEY_DELETE
-				|| keyCode == KeyCodes.KEY_BACKSPACE) {
+		if (keyCode == KeyCodes.KEY_DOWN || keyCode == KeyCodes.KEY_UP || keyCode == KeyCodes.KEY_LEFT
+			|| keyCode == KeyCodes.KEY_RIGHT) {
 			recomputePopupContent = !suggestWidget.isShowing();
 		}
+		if (keyCode == KeyCodes.KEY_DELETE || keyCode == KeyCodes.KEY_BACKSPACE)
+			recomputePopupContent = true;
+
 		if (keyCode == KeyCodes.KEY_DELETE || keyCode == KeyCodes.KEY_BACKSPACE)
 			selectedIndex = -1;
 
 		if (recomputePopupContent) {
-			if (recomputePopupContent(keyCode))
+			if (recomputePopupContent(keyCode).size() == 1)
 				return;
 
 		}
@@ -198,7 +196,6 @@ public abstract class AbstractSuggestBox<T> extends
 			popupWidget.setFocused(false);
 		int widgetCount = suggestPanel.getWidgetCount();
 
-		// TODO verifier si ca n'introduit pas un bug
 		if (widgetCount == 0)
 			return;
 
@@ -236,6 +233,18 @@ public abstract class AbstractSuggestBox<T> extends
 
 		} else {
 			recomputePopupContent = true;
+			if (strictMode) {
+				StringBuffer reducingText = new StringBuffer(getText());
+				while (reducingText.length() > 1) {
+					List<T> inserted = recomputePopupContent(keyCode);
+					if (inserted.size() > 0) {
+						break;
+					} else {
+						reducingText.setLength(reducingText.length() - 1);
+						setText(reducingText.toString());
+					}
+				}
+			}
 		}
 
 	}
@@ -260,15 +269,15 @@ public abstract class AbstractSuggestBox<T> extends
 	}
 
 	/**
-	 * Recomputes the content of the popup. Returns true to show there's no need
-	 * to do more processing. Special cases are when one of the keys
-	 * {@link KeyCodes#KEY_DOWN}, {@link KeyCodes#KEY_UP} is pressed: all
-	 * possible values are presented
+	 * Recomputes the content of the popup. Returns true to show there's no need to do more processing. Special cases
+	 * are when one of the keys {@link KeyCodes#KEY_DOWN}, {@link KeyCodes#KEY_UP} is pressed: all possible values are
+	 * presented
 	 * 
 	 * @param keyCode
-	 * @return
+	 * @return true if there is no more need for computing (when only one value remains, the value is inserted into the
+	 *         text box and the processing is informed that the popup is now hidden)
 	 */
-	protected boolean recomputePopupContent(int keyCode) {
+	protected List<T> recomputePopupContent(int keyCode) {
 		List<T> possibilities;
 		String textValue = getText();
 		// to show all possible values if a value is already selected and a up
@@ -281,11 +290,8 @@ public abstract class AbstractSuggestBox<T> extends
 			suggestPanel.clear();
 			if (possibilities.size() == 1) {
 				// laisse l'utilisateur effacer les valeurs
-				if (keyCode != KeyCodes.KEY_BACKSPACE
-						&& keyCode != KeyCodes.KEY_LEFT
-						&& keyCode != KeyCodes.KEY_RIGHT) {
-					if (fillValue(possibilities.get(0), false))
-						return true;
+				if (keyCode != KeyCodes.KEY_BACKSPACE && keyCode != KeyCodes.KEY_LEFT && keyCode != KeyCodes.KEY_RIGHT) {
+					fillValue(possibilities.get(0), false);
 				}
 			}
 
@@ -295,13 +301,11 @@ public abstract class AbstractSuggestBox<T> extends
 		} else {
 			hideSuggestList();
 		}
-		return false;
+		return possibilities;
 	}
 
 	protected void showSuggestList() {
-		suggestWidget.adjustPosition(text.getAbsoluteLeft(), text
-				.getAbsoluteTop()
-				+ text.getOffsetHeight());
+		suggestWidget.adjustPosition(text.getAbsoluteLeft(), text.getAbsoluteTop() + text.getOffsetHeight());
 		suggestWidget.show();
 	}
 
@@ -313,8 +317,7 @@ public abstract class AbstractSuggestBox<T> extends
 			if (value.equals(currentText))
 				selectedIndex = i;
 
-			final ValueHolderLabel<T> currentLabel = createValueRenderer(t,
-					currentText);
+			final ValueHolderLabel<T> currentLabel = createValueRenderer(t, currentText);
 			currentLabel.setStyleName(ITEM);
 			suggestPanel.add((Widget) currentLabel);
 			currentLabel.addClickHandler(new ClickHandler() {
@@ -324,8 +327,7 @@ public abstract class AbstractSuggestBox<T> extends
 				}
 			});
 
-			class MouseHoverhandler implements MouseOverHandler,
-					MouseOutHandler {
+			class MouseHoverhandler implements MouseOverHandler, MouseOutHandler {
 
 				@Override
 				public void onMouseOver(MouseOverEvent event) {
@@ -345,15 +347,13 @@ public abstract class AbstractSuggestBox<T> extends
 	}
 
 	private ValueHolderLabel<T> createValueRenderer(final T t, String value) {
-		final ValueHolderLabel<T> currentLabel = valueRendererFactory
-				.createValueRenderer(t, value, caseSensitive);
+		final ValueHolderLabel<T> currentLabel = valueRendererFactory.createValueRenderer(t, value, caseSensitive);
 		return currentLabel;
 	}
 
 	/**
-	 * Returns the string representation of a value, this method is very
-	 * important since it determines the equality of elements typed by hand with
-	 * the ones in the list.
+	 * Returns the string representation of a value, this method is very important since it determines the equality of
+	 * elements typed by hand with the ones in the list.
 	 * 
 	 * @param t
 	 *            the value
@@ -365,25 +365,20 @@ public abstract class AbstractSuggestBox<T> extends
 
 	@SuppressWarnings("unchecked")
 	private ValueHolderLabel<T> getSelectedItem() {
-		if (selectedIndex != -1
-				&& suggestPanel.getWidgetCount() > selectedIndex)
+		if (selectedIndex != -1 && suggestPanel.getWidgetCount() > selectedIndex)
 			return (ValueHolderLabel<T>) suggestPanel.getWidget(selectedIndex);
 		return null;
 	}
 
 	/**
-	 * Fills a "type safe" value (one of the available values in the list).
-	 * override to check existing values change
+	 * Fills a "type safe" value (one of the available values in the list). override to check existing values change
 	 * 
 	 * @param t
 	 *            the selected value
 	 * @param commit
-	 *            consider a value changed only if commit is true (otherwise you
-	 *            can have duplicate events)
-	 * @return true if the suggest box has to be hidden. Subclasses can override
-	 *         this method and return false to force the suggest widget to
-	 *         remain open even if there's only one element remaining in the
-	 *         list of choices
+	 *            consider a value changed only if commit is true (otherwise you can have duplicate events)
+	 * @return true if the suggest box has to be hidden. Subclasses can override this method and return false to force
+	 *         the suggest widget to remain open even if there's only one element remaining in the list of choices
 	 */
 	protected boolean fillValue(final T t, boolean commit) {
 		text.setText(toString(t));
@@ -402,12 +397,10 @@ public abstract class AbstractSuggestBox<T> extends
 	}
 
 	/**
-	 * Called when a value is selected from the list, if the value is typed on
-	 * the keyboard and only one possible element corresponds, this method will
-	 * be called immediately only if <code>multipleChangeEvent</code> is true.
-	 * Otherwise it will wait until a blur event occurs Notice that if
-	 * <code>multipleChangeEvent</code> is true, this method will be called also
-	 * each time the enter key is typed
+	 * Called when a value is selected from the list, if the value is typed on the keyboard and only one possible
+	 * element corresponds, this method will be called immediately only if <code>multipleChangeEvent</code> is true.
+	 * Otherwise it will wait until a blur event occurs Notice that if <code>multipleChangeEvent</code> is true, this
+	 * method will be called also each time the enter key is typed
 	 * 
 	 * @param value
 	 */
@@ -416,11 +409,10 @@ public abstract class AbstractSuggestBox<T> extends
 	}
 
 	/**
-	 * Called when a typed value is confirmed whether by pressing the key enter,
-	 * or on blur (losing the focus) of the element. Notice that this method
-	 * behavior also can be changed thanks to the property
-	 * <code>multipleChangeEvent</code> which specifies if the method has to be
-	 * called on each enter key press or only on the first one.
+	 * Called when a typed value is confirmed whether by pressing the key enter, or on blur (losing the focus) of the
+	 * element. Notice that this method behavior also can be changed thanks to the property
+	 * <code>multipleChangeEvent</code> which specifies if the method has to be called on each enter key press or only
+	 * on the first one.
 	 * 
 	 * @param value
 	 */
@@ -433,11 +425,9 @@ public abstract class AbstractSuggestBox<T> extends
 	}
 
 	/**
-	 * returns the value selected from list, if a text was typed then returns
-	 * null
+	 * returns the value selected from list, if a text was typed then returns null
 	 * 
-	 * @return the value selected from list, if a text was typed then returns
-	 *         null
+	 * @return the value selected from list, if a text was typed then returns null
 	 */
 	public T getSelected() {
 		return selected;
@@ -445,9 +435,8 @@ public abstract class AbstractSuggestBox<T> extends
 
 	/**
 	 * 
-	 * @return the typed value, this can also be the selected one from list: to
-	 *         check if the value belongs to the list check if
-	 *         {@link #getSelected()} returns null
+	 * @return the typed value, this can also be the selected one from list: to check if the value belongs to the list
+	 *         check if {@link #getSelected()} returns null
 	 */
 	public String getTyped() {
 		return typed;
@@ -461,10 +450,8 @@ public abstract class AbstractSuggestBox<T> extends
 	}
 
 	/**
-	 * Returns the text currently in the text field, this method can have
-	 * different results before and after the call of
-	 * {@link #recomputePopupContent(int)} which auto completes the text
-	 * automatically if only one result remains.
+	 * Returns the text currently in the text field, this method can have different results before and after the call of
+	 * {@link #recomputePopupContent(int)} which auto completes the text automatically if only one result remains.
 	 * 
 	 * @return the text fiel
 	 */
@@ -500,13 +487,12 @@ public abstract class AbstractSuggestBox<T> extends
 	}
 
 	/**
-	 * Sets the items renderer factory: you can define your own item factory to
-	 * control the way items are shown in the suggest list
+	 * Sets the items renderer factory: you can define your own item factory to control the way items are shown in the
+	 * suggest list
 	 * 
 	 * @param valueRendererFactory
 	 */
-	public void setValueRendererFactory(
-			ValueRendererFactory<T, ? extends ValueHolderLabel<T>> valueRendererFactory) {
+	public void setValueRendererFactory(ValueRendererFactory<T, ? extends ValueHolderLabel<T>> valueRendererFactory) {
 		this.valueRendererFactory = valueRendererFactory;
 	}
 
@@ -540,9 +526,8 @@ public abstract class AbstractSuggestBox<T> extends
 	}
 
 	/**
-	 * Controls whether the method {@link #valueSelected(Object)} expressing a
-	 * change event will be called each time a value is selected or if it has to
-	 * wait until a blur occurs.
+	 * Controls whether the method {@link #valueSelected(Object)} expressing a change event will be called each time a
+	 * value is selected or if it has to wait until a blur occurs.
 	 * 
 	 * @return
 	 */
@@ -552,6 +537,14 @@ public abstract class AbstractSuggestBox<T> extends
 
 	public void setMultipleChangeEvent(boolean multipleChangeEvent) {
 		this.multipleChangeEvent = multipleChangeEvent;
+	}
+
+	public boolean isStrictMode() {
+		return strictMode;
+	}
+
+	public void setStrictMode(boolean strictMode) {
+		this.strictMode = strictMode;
 	}
 
 }
