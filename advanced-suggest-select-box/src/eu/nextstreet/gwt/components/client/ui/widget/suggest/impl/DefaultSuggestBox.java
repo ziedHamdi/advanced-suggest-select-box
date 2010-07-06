@@ -22,8 +22,8 @@ import java.util.List;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.AbstractSuggestBox;
 
 /**
- * Implements a simple value holding suggest box, more advanced implementations
- * can have a type safe model to hold and manage items.
+ * Implements a simple value holding suggest box, more advanced implementations can have a type safe model to hold and
+ * manage items.
  * 
  * @author Zied Hamdi
  * 
@@ -45,13 +45,11 @@ public class DefaultSuggestBox<T> extends AbstractSuggestBox<T> {
 		this(defaultText, false, true);
 	}
 
-	public DefaultSuggestBox(String defaultText, boolean caseSensitive,
-			boolean startsWith) {
+	public DefaultSuggestBox(String defaultText, boolean caseSensitive, boolean startsWith) {
 		this(defaultText, new ArrayList<T>(), caseSensitive, startsWith);
 	}
 
-	public DefaultSuggestBox(String defaultText, List<T> possiblilities,
-			boolean caseSensitive, boolean startsWith) {
+	public DefaultSuggestBox(String defaultText, List<T> possiblilities, boolean caseSensitive, boolean startsWith) {
 		super(defaultText);
 		this.possiblilities = possiblilities;
 		this.startsWith = startsWith;
@@ -77,19 +75,16 @@ public class DefaultSuggestBox<T> extends AbstractSuggestBox<T> {
 	}
 
 	/**
-	 * used to define the filtering strategy, override and check in the inner
-	 * list if this element should appear
+	 * used to define the filtering strategy, override and check in the inner list if this element should appear
 	 * 
 	 * @param text
 	 * @param t
 	 * @return
 	 */
 	protected boolean accept(String text, T t) {
-		String stringValue = caseSensitive ? toString(t) : toString(t)
-				.toUpperCase();
+		String stringValue = caseSensitive ? toString(t) : toString(t).toUpperCase();
 		String textValue = caseSensitive ? text : text.toUpperCase();
-		if (startsWith ? stringValue.startsWith(textValue) : (stringValue
-				.indexOf(textValue) != -1)) {
+		if (startsWith ? stringValue.startsWith(textValue) : (stringValue.indexOf(textValue) != -1)) {
 			return true;
 		}
 		return false;
@@ -101,11 +96,10 @@ public class DefaultSuggestBox<T> extends AbstractSuggestBox<T> {
 		// value
 		int startIndex = text.getText().length();
 		// now safely update the value
-		if (startsWith || commit) {
+		if (startsWith || commit || strictMode) {
 			super.fillValue(t, commit);
-			if (!commit) {
-				text.setSelectionRange(startIndex, text.getText().length()
-						- startIndex);
+			if (!commit && !strictMode) {
+				text.setSelectionRange(startIndex, text.getText().length() - startIndex);
 			}
 			return true;
 		} else {
