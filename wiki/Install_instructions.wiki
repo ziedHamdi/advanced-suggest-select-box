@@ -6,10 +6,10 @@ The component is a very standard GWT component, used GWT users will not need to 
 Here we describe how to integrate the jar in an eclipse development environment.
 
 = Details =
-  #  Download the current jar file
+  #  Download the current WikiSyntax jar file
   #  Put it in your library folder (next to your other jars: a good practice is to put it inside the project so it can be referenced through a relative url that will avoid additional configuration when getting versions from your svn or other source repository)
   #  Add the jar in your classpath : right click projet > Properties > Java Build Path > Libraries > Ad JARs
-  #  In your project's gwt.xml fils add the line
+  #  In your project's *___.gwt.xml* file add the line
 {{{
 	<inherits name='eu.nextstreet.gwt.components.IntoGwt' />
 }}}
