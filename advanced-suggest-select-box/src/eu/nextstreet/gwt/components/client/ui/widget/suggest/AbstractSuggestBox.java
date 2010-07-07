@@ -113,17 +113,12 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder<Boolean, 
 	@UiHandler("textField")
 	public void onMouseMove(MouseMoveEvent event) {
 		int mousePosition = event.getX();
-		if (mousePosition > (textField.getOffsetWidth() - buttonWidth)) {
-			textField.addStyleName(SUGGEST_FIELD_HOVER);
-		} else {
-			textField.removeStyleName(SUGGEST_FIELD_HOVER);
-		}
+		mouseOnButton(mousePosition > (textField.getOffsetWidth() - buttonWidth));
 	}
 
 	@UiHandler("textField")
 	public void onDoubleClick(DoubleClickEvent event) {
-		this.textField.setSelectionRange(0, getText().length());
-		recomputePopupContent(KeyCodes.KEY_RIGHT);
+		doubleClicked(event);
 	}
 
 	@UiHandler("textField")
@@ -326,7 +321,7 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder<Boolean, 
 			currentLabel.addClickHandler(new ClickHandler() {
 				@Override
 				public void onClick(ClickEvent clickEvent) {
-					fillValue(t, true);
+					itemClicked(t);
 				}
 			});
 
@@ -566,4 +561,34 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder<Boolean, 
 		this.textField = textField;
 	}
 
+	/**
+	 * action when the mouse hovers the arrow button
+	 * 
+	 * @param onButton
+	 */
+	protected void mouseOnButton(boolean onButton) {
+		if (onButton)
+			textField.addStyleName(SUGGEST_FIELD_HOVER);
+		else
+			textField.removeStyleName(SUGGEST_FIELD_HOVER);
+	}
+
+	/**
+	 * action when the suggest box is double clicked
+	 * 
+	 * @param event
+	 */
+	protected void doubleClicked(DoubleClickEvent event) {
+		this.textField.setSelectionRange(0, getText().length());
+		recomputePopupContent(KeyCodes.KEY_RIGHT);
+	}
+
+	/**
+	 * action on an item click
+	 * 
+	 * @param t
+	 */
+	protected void itemClicked(T t) {
+		fillValue(t, true);
+	}
 }
