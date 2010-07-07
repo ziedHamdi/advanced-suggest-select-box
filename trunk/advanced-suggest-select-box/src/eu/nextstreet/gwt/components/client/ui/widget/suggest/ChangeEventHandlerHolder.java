@@ -23,19 +23,29 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.user.client.ui.Composite;
 
-public abstract class EventHandlerHolder<P, E extends ChangeEvent> extends
-		Composite {
+/**
+ * The idea behind this handler is to have our own logical events that are handled by a common interface
+ * EventHandlerHolder now implemented only for the change event
+ * 
+ * These events can be used separately from the native ones
+ * 
+ * @author Zied Hamdi
+ * 
+ * @param <P>
+ * @param <E>
+ */
+public abstract class ChangeEventHandlerHolder<P, E extends ChangeEvent> extends Composite {
 	protected List<ChangeHandler> changeHandlerList = new ArrayList<ChangeHandler>();
 
-	public void addChangeHandler(ChangeHandler changeHandler) {
+	public void addHandler(ChangeHandler changeHandler) {
 		changeHandlerList.add(changeHandler);
 	}
 
-	public void removeChangeHandler(ChangeHandler changeHandler) {
+	public void removeHandler(ChangeHandler changeHandler) {
 		changeHandlerList.remove(changeHandler);
 	}
 
-	private void onChange(E changeEvent) {
+	private void changeOccured(E changeEvent) {
 		for (ChangeHandler changeHandler : changeHandlerList) {
 			changeHandler.onChange(changeEvent);
 		}
@@ -47,9 +57,9 @@ public abstract class EventHandlerHolder<P, E extends ChangeEvent> extends
 	 * @param param
 	 *            a parameter specifying more details an=bout the change
 	 */
-	protected void fireChange(P param) {
+	protected void fireChangeOccured(P param) {
 		E changeEvent = changedValue(param);
-		onChange(changeEvent);
+		changeOccured(changeEvent);
 	}
 
 	/**

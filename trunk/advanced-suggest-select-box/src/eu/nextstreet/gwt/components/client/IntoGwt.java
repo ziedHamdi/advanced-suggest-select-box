@@ -129,7 +129,7 @@ public class IntoGwt implements EntryPoint {
 		final VerticalPanel infoContainer = new VerticalPanel();
 		RootPanel.get("infoContainer").add(infoContainer);
 		final DateTimeFormat dateTimeFormat = DateTimeFormat.getFormat("HH:mm:ss");
-		box.addChangeHandler(new ChangeHandler() {
+		box.addHandler(new ChangeHandler() {
 
 			@SuppressWarnings("unchecked")
 			@Override

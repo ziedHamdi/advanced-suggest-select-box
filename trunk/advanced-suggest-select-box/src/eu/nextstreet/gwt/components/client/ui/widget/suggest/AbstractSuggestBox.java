@@ -54,7 +54,7 @@ import eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.DefaultValueRe
  * 
  * @param <T>
  */
-public abstract class AbstractSuggestBox<T> extends EventHandlerHolder<Boolean, SuggestChangeEvent<T>> {
+public abstract class AbstractSuggestBox<T> extends ChangeEventHandlerHolder<Boolean, SuggestChangeEvent<T>> {
 
 	private static final String SUGGEST_FIELD_COMP = "eu-nextstreet-SuggestFieldComp";
 	private static final String SUGGEST_FIELD = "eu-nextstreet-SuggestField";
@@ -403,7 +403,7 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder<Boolean, 
 	 * @param value
 	 */
 	public void valueSelected(T value) {
-		fireChange(true);
+		fireChangeOccured(true);
 	}
 
 	/**
@@ -419,7 +419,7 @@ public abstract class AbstractSuggestBox<T> extends EventHandlerHolder<Boolean, 
 		// if (defautText != null && defautText.equals(value))
 		// value = "";
 		typed = value;
-		fireChange(false);
+		fireChangeOccured(false);
 	}
 
 	/**
