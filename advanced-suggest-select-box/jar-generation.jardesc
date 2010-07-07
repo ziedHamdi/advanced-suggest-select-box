@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<jardesc>
+    <jar path="C:/temp/IntoGwt.jar"/>
+    <options buildIfNeeded="true" compress="true" descriptionLocation="/IntoGwt/jar-generation.jardesc" exportErrors="true" exportWarnings="true" includeDirectoryEntries="true" overwrite="true" saveDescription="true" storeRefactorings="false" useSourceFolders="false"/>
+    <storedRefactorings deprecationInfo="true" structuralOnly="false"/>
+    <selectedProjects/>
+    <manifest generateManifest="true" manifestLocation="" manifestVersion="1.0" reuseManifest="false" saveManifest="false" usesManifest="true">
+        <sealing sealJar="false">
+            <packagesToSeal/>
+            <packagesToUnSeal/>
+        </sealing>
+    </manifest>
+    <selectedElements exportClassFiles="true" exportJavaFiles="true" exportOutputFolder="false">
+        <javaElement handleIdentifier="=IntoGwt/src"/>
+        <file path="/IntoGwt/war/IntoGwt.html"/>
+        <folder path="/IntoGwt/war/img"/>
+        <file path="/IntoGwt/war/IntoGwt.css"/>
+        <folder path="/IntoGwt/war/WEB-INF"/>
+        <file path="/IntoGwt/war/IntoGwtClassic.css"/>
+    </selectedElements>
+</jardesc>
