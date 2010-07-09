@@ -93,3 +93,12 @@ h1 {
 .eu-nextstreet-AdvancedTextBoxDefaultText {
 	color: #9999BB;
 }
+
+.eu-nextstreet-AdvancedTextBoxErrorText {
+	background-color: #ff4444;
+	border: red;
+}
+
+.eu-nextstreet-AdvancedTextBoxMandatoryText {
+	background-color: #aa9999;
+}
