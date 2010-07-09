@@ -45,7 +45,7 @@ public class IntoGwt implements EntryPoint {
 		$doc.getElementById("cssFile").href=styleFile;
 	}-*/;
 
-	private boolean test = false;
+	private boolean test = true;
 
 	/**
 	 * This is the entry point method.
@@ -96,7 +96,7 @@ public class IntoGwt implements EntryPoint {
 			}
 		});
 
-		final CheckBox style = new CheckBox("Design Rounded");
+		final CheckBox style = new CheckBox("Rounded");
 		style.setValue(box.isStartsWith());
 		style.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
 
@@ -118,11 +118,23 @@ public class IntoGwt implements EntryPoint {
 
 		});
 
+		final CheckBox mandatory = new CheckBox("Mandatory");
+		mandatory.setValue(box.getTextField().isMandatory());
+		mandatory.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+
+			@Override
+			public void onValueChange(ValueChangeEvent<Boolean> event) {
+				box.getTextField().setMandatory(event.getValue());
+			}
+
+		});
+
 		VerticalPanel options = new VerticalPanel();
 		options.add(startsWith);
 		options.add(caseSensitive);
 		options.add(style);
 		options.add(strict);
+		options.add(mandatory);
 
 		RootPanel.get("options").add(options);
 

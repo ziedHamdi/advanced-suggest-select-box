@@ -28,6 +28,9 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.TextBox;
 
+import eu.nextstreet.gwt.components.shared.ValidationException;
+import eu.nextstreet.gwt.components.shared.ValidatorList;
+
 /**
  * A text box that handles additional events like the double click and supports the default text feature
  * 
@@ -44,9 +47,15 @@ import com.google.gwt.user.client.ui.TextBox;
  * 
  */
 public class AdvancedTextBox extends TextBox implements HasDoubleClickHandlers {
-	private static final String SUGGEST_FIELD_DEFAULT_TEXT = "eu-nextstreet-AdvancedTextBoxDefaultText";
-
+	private static final String DEFAULT_TEXT_STYLE = "eu-nextstreet-AdvancedTextBoxDefaultText";
+	private static final String MANDATORY_DEFAULT_TEXT_STYLE = "eu-nextstreet-AdvancedTextBoxMandatoryText";
+	private static final String ERROR_TEXT_STYLE = "eu-nextstreet-AdvancedTextBoxErrorText";
+	protected ValidatorList<String> validator = null;
 	protected String defautText;
+	protected String defaultTextStyle;
+	protected String errorTextStyle;
+	protected String mandatoryTextStyle;
+	protected boolean mandatory;
 
 	public AdvancedTextBox() {
 		this(null);
@@ -79,7 +88,7 @@ public class AdvancedTextBox extends TextBox implements HasDoubleClickHandlers {
 
 			@Override
 			public void onKeyUp(KeyUpEvent event) {
-				handleDefaultTextStyles();
+				handleTextStyles();
 			}
 		});
 	}
@@ -101,25 +110,69 @@ public class AdvancedTextBox extends TextBox implements HasDoubleClickHandlers {
 	 * @param text
 	 */
 	protected void handleDefaultText() {
-		String text = getText();
-		if (text == null || text.trim().length() == 0) {
+		boolean empty = isEmptyTextField();
+		if (empty) {
 			super.setText(defautText);
 		}
+		handleTextStyles();
+	}
 
-		handleDefaultTextStyles();
+	/**
+	 * true if and only if the value is empty after trimming (if the value is the default text, returns false)
+	 * 
+	 * @return true if and only if the value is empty after trimming (if the value is the default text, returns false)
+	 * @see #isEmpty() to integrate the test of having the default text in.
+	 */
+	protected boolean isEmptyTextField() {
+		String text = getText();
+		return text == null || text.trim().length() == 0;
+	}
+
+	/**
+	 * returns true if the current text is empty or equal to the default text
+	 * 
+	 * @return
+	 */
+	public boolean isEmpty() {
+		return isEmptyTextField() || (defautText == null ? true : defautText.equals(getText()));
 	}
 
 	/**
 	 * Adds or removes the default text style depending on the value
 	 * 
+	 * @param empty
+	 * 
 	 * @param text
 	 */
-	protected void handleDefaultTextStyles() {
+	protected void handleTextStyles() {
 		String text = getText();
-		if (defautText != null && text != null && defautText.equals(text))
-			addStyleName(SUGGEST_FIELD_DEFAULT_TEXT);
-		else
-			removeStyleName(SUGGEST_FIELD_DEFAULT_TEXT);
+		ValidationException error = null;
+		if (validator != null) {
+			try {
+				validator.validate(getText());
+			} catch (ValidationException ex) {
+				error = ex;
+			}
+		}
+		if (error == null) {
+			if (isEmptyTextField() || getTextValue().trim().length() == 0) {
+				addStyleName(getTextStyle());
+			} else {
+				removeStyleName(getTextStyle());
+			}
+		} else {
+			addStyleName(getErrorTextStyle());
+		}
+	}
+
+	protected String getTextStyle() {
+		return mandatory ? getMandatoryTextStyle() : getDefaultTextStyle();
+	}
+
+	protected String getDefaultTextStyle() {
+		if (defaultTextStyle == null)
+			return DEFAULT_TEXT_STYLE;
+		return defaultTextStyle;
 	}
 
 	/**
@@ -146,14 +199,51 @@ public class AdvancedTextBox extends TextBox implements HasDoubleClickHandlers {
 	@Override
 	protected void onLoad() {
 		super.onLoad();
-		String text = getText();
-		if (defautText != null && (text == null || text.trim().length() == 0)) {
+		if (defautText != null && isEmptyTextField()) {
 			setText(defautText);
 		}
 	}
 
 	public String getDefautText() {
 		return defautText;
+	}
+
+	public boolean isMandatory() {
+		return mandatory;
+	}
+
+	public void setMandatory(boolean mandatory) {
+		removeStyleName(getTextStyle());
+		this.mandatory = mandatory;
+		handleTextStyles();
+	}
+
+	public String getMandatoryTextStyle() {
+		if (mandatoryTextStyle == null)
+			return MANDATORY_DEFAULT_TEXT_STYLE;
+		return mandatoryTextStyle;
+	}
+
+	public void setMandatoryTextStyle(String defaultMandatoryTextStyle) {
+		this.mandatoryTextStyle = defaultMandatoryTextStyle;
+	}
+
+	public void setDefaultTextStyle(String defaultTextStyle) {
+		removeStyleName(getTextStyle());
+		this.defaultTextStyle = defaultTextStyle;
+		handleTextStyles();
+	}
+
+	public String getErrorTextStyle() {
+		if (errorTextStyle == null)
+			return ERROR_TEXT_STYLE;
+		return errorTextStyle;
+	}
+
+	public void setErrorTextStyle(String errorTextStyle) {
+		removeStyleName(getErrorTextStyle());
+		this.errorTextStyle = errorTextStyle;
+		handleTextStyles();
 	}
 
 }
