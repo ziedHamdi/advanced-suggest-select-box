@@ -98,6 +98,7 @@ public abstract class AbstractSuggestBox<T> extends ChangeEventHandlerHolder<Boo
 		setStyleName(SUGGEST_FIELD_COMP);
 		suggestPanel.setSpacing(0);
 		scrollPanel.add(suggestPanel);
+		textField.setRepresenter(this);
 		textField.setStyleName(SUGGEST_FIELD);
 		textField.setDefaultText(defaultText);
 		suggestWidget.setWidget(scrollPanel);
