@@ -29,7 +29,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.TextBox;
 
 import eu.nextstreet.gwt.components.shared.ValidationException;
-import eu.nextstreet.gwt.components.shared.ValidatorList;
+import eu.nextstreet.gwt.components.shared.Validator;
 
 /**
  * A text box that handles additional events like the double click and supports the default text feature
@@ -50,7 +50,7 @@ public class AdvancedTextBox extends TextBox implements HasDoubleClickHandlers {
 	private static final String DEFAULT_TEXT_STYLE = "eu-nextstreet-AdvancedTextBoxDefaultText";
 	private static final String MANDATORY_DEFAULT_TEXT_STYLE = "eu-nextstreet-AdvancedTextBoxMandatoryText";
 	private static final String ERROR_TEXT_STYLE = "eu-nextstreet-AdvancedTextBoxErrorText";
-	protected ValidatorList<String> validator = null;
+	protected Validator<String> validator;
 	protected String defautText;
 	protected String defaultTextStyle;
 	protected String errorTextStyle;
@@ -160,9 +160,32 @@ public class AdvancedTextBox extends TextBox implements HasDoubleClickHandlers {
 			} else {
 				removeStyleName(getTextStyle());
 			}
+			removeStyleName(getErrorTextStyle());
+			removeError();
 		} else {
+			removeStyleName(getTextStyle());
 			addStyleName(getErrorTextStyle());
+			handleError(error);
 		}
+	}
+
+	/**
+	 * By default sets the title of the field to the message of the validator exception
+	 * 
+	 * @param error
+	 */
+	protected void handleError(ValidationException error) {
+		setTitle(error.getMessage());
+	}
+
+	/**
+	 * By default removes the title of the field (in case it was previously set by
+	 * {@link #handleError(ValidationException)})
+	 * 
+	 * @param error
+	 */
+	protected void removeError() {
+		setTitle("");
 	}
 
 	protected String getTextStyle() {
@@ -244,6 +267,14 @@ public class AdvancedTextBox extends TextBox implements HasDoubleClickHandlers {
 		removeStyleName(getErrorTextStyle());
 		this.errorTextStyle = errorTextStyle;
 		handleTextStyles();
+	}
+
+	public Validator<String> getValidator() {
+		return validator;
+	}
+
+	public void setValidator(Validator<String> validator) {
+		this.validator = validator;
 	}
 
 }

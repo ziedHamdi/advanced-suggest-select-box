@@ -16,6 +16,7 @@
  */
 package eu.nextstreet.gwt.components.shared;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -26,14 +27,25 @@ import java.util.List;
  * 
  * @param <T>
  */
-public class ValidatorList<T> implements Validator<T> {
-	protected List<Validator<T>> validators;
+public class BasicListValidator<T> implements Validator<T> {
+	protected List<Validator<T>> validators = new ArrayList<Validator<T>>();
 
 	@Override
 	public void validate(T value) throws ValidationException {
 		for (Validator<T> validator : validators) {
-			validator.validate(value);
+			validateCurrent(value, validator);
 		}
+	}
+
+	/**
+	 * validates one of the validators in the list and gives the opportunity to handle the exception differently
+	 * 
+	 * @param value
+	 * @param validator
+	 * @throws ValidationException
+	 */
+	protected void validateCurrent(T value, Validator<T> validator) throws ValidationException {
+		validator.validate(value);
 	}
 
 	public void add(int index, Validator<T> element) {

@@ -95,7 +95,8 @@ h1 {
 }
 
 .eu-nextstreet-AdvancedTextBoxErrorText {
-	background-color: #ff4444;
+	background-color: #ee4444;
+	color: white;
 	border: red;
 }
 

@@ -43,6 +43,7 @@ import com.google.gwt.user.client.ui.Widget;
 import eu.nextstreet.gwt.components.client.ui.widget.AdvancedTextBox;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.DefaultSuggestList;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.DefaultValueRendererFactory;
+import eu.nextstreet.gwt.components.shared.Validator;
 
 /**
  * Suggest box (or select box) with many possibilities either in behavior and in presentation.
@@ -590,5 +591,13 @@ public abstract class AbstractSuggestBox<T> extends ChangeEventHandlerHolder<Boo
 	 */
 	protected void itemClicked(T t) {
 		fillValue(t, true);
+	}
+
+	public Validator<String> getValidator() {
+		return textField.getValidator();
+	}
+
+	public void setValidator(Validator<String> validator) {
+		textField.setValidator(validator);
 	}
 }
