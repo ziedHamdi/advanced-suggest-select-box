@@ -36,6 +36,9 @@ import eu.nextstreet.gwt.components.client.ui.widget.AdvancedTextBox;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.AbstractSuggestBox;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.SuggestChangeEvent;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.DefaultSuggestBox;
+import eu.nextstreet.gwt.components.shared.BasicListValidator;
+import eu.nextstreet.gwt.components.shared.ValidationException;
+import eu.nextstreet.gwt.components.shared.Validator;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -128,6 +131,17 @@ public class IntoGwt implements EntryPoint {
 			}
 
 		});
+		BasicListValidator<String> listValidator = new BasicListValidator<String>();
+		listValidator.add(new Validator<String>() {
+
+			@Override
+			public void validate(String value) throws ValidationException {
+				if (value.length() < 3 && value.length() > 0)
+					throw new ValidationException("Text is too short");
+
+			}
+		});
+		box.setValidator(listValidator);
 
 		VerticalPanel options = new VerticalPanel();
 		options.add(startsWith);
