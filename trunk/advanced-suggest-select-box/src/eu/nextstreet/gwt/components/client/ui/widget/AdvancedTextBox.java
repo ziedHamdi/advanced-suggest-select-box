@@ -28,6 +28,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.TextBox;
 
+import eu.nextstreet.gwt.components.client.ui.common.event.UIHandler;
 import eu.nextstreet.gwt.components.shared.ValidationException;
 import eu.nextstreet.gwt.components.shared.Validator;
 
@@ -58,6 +59,34 @@ public class AdvancedTextBox extends TextBox implements HasDoubleClickHandlers {
 	protected String mandatoryTextStyle;
 	protected String readOnlyTextStyle;
 	protected boolean mandatory;
+	protected UIHandler uiHandler = new UIHandler() {
+
+		@Override
+		public void removeStyleName(String style) {
+		}
+
+		@Override
+		public void removeError() {
+			setTitle("");
+		}
+
+		@Override
+		public void handleTextStyles() {
+		}
+
+		@Override
+		public void handleError(ValidationException error) {
+			setTitle(error.getMessage());
+		}
+
+		@Override
+		public void handleDefaultText() {
+		}
+
+		@Override
+		public void addStyleName(String style) {
+		}
+	};
 
 	public AdvancedTextBox() {
 		this(null);
@@ -118,6 +147,9 @@ public class AdvancedTextBox extends TextBox implements HasDoubleClickHandlers {
 				super.setText(defaultText);
 			}
 		}
+		if (uiHandler != null)
+			uiHandler.handleDefaultText();
+
 		handleTextStyles();
 	}
 
@@ -175,6 +207,9 @@ public class AdvancedTextBox extends TextBox implements HasDoubleClickHandlers {
 				handleError(error);
 			}
 		}
+		if (uiHandler != null)
+			uiHandler.handleTextStyles();
+
 	}
 
 	/**
@@ -183,7 +218,8 @@ public class AdvancedTextBox extends TextBox implements HasDoubleClickHandlers {
 	 * @param error
 	 */
 	protected void handleError(ValidationException error) {
-		setTitle(error.getMessage());
+		if (uiHandler != null)
+			uiHandler.handleError(error);
 	}
 
 	/**
@@ -193,7 +229,8 @@ public class AdvancedTextBox extends TextBox implements HasDoubleClickHandlers {
 	 * @param error
 	 */
 	protected void removeError() {
-		setTitle("");
+		if (uiHandler != null)
+			uiHandler.removeError();
 	}
 
 	protected String getTextStyle() {
@@ -307,6 +344,28 @@ public class AdvancedTextBox extends TextBox implements HasDoubleClickHandlers {
 		} else {
 			handleDefaultText();
 		}
+	}
+
+	@Override
+	public void removeStyleName(String style) {
+		super.removeStyleName(style);
+		if (uiHandler != null)
+			uiHandler.removeStyleName(style);
+	}
+
+	@Override
+	public void addStyleName(String style) {
+		super.addStyleName(style);
+		if (uiHandler != null)
+			uiHandler.addStyleName(style);
+	}
+
+	public UIHandler getUiHandler() {
+		return uiHandler;
+	}
+
+	public void setUiHandler(UIHandler uiHandler) {
+		this.uiHandler = uiHandler;
 	}
 
 }
