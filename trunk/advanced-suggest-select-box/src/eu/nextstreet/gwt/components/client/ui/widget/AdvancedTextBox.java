@@ -192,7 +192,7 @@ public class AdvancedTextBox extends TextBox implements HasDoubleClickHandlers {
 		return mandatory ? getMandatoryTextStyle() : getDefaultTextStyle();
 	}
 
-	protected String getDefaultTextStyle() {
+	public String getDefaultTextStyle() {
 		if (defaultTextStyle == null)
 			return DEFAULT_TEXT_STYLE;
 		return defaultTextStyle;
