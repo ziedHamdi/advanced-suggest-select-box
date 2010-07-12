@@ -27,6 +27,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.Widget;
 
 import eu.nextstreet.gwt.components.client.ui.common.event.UIHandler;
 import eu.nextstreet.gwt.components.shared.ValidationException;
@@ -59,6 +60,7 @@ public class AdvancedTextBox extends TextBox implements HasDoubleClickHandlers {
 	protected String mandatoryTextStyle;
 	protected String readOnlyTextStyle;
 	protected boolean mandatory;
+	protected Widget representer;
 	protected UIHandler uiHandler = new UIHandler() {
 
 		@Override
@@ -366,6 +368,19 @@ public class AdvancedTextBox extends TextBox implements HasDoubleClickHandlers {
 
 	public void setUiHandler(UIHandler uiHandler) {
 		this.uiHandler = uiHandler;
+	}
+
+	/**
+	 * Returns the component that is holding this text box (for example the SuggestBox)
+	 * 
+	 * @return
+	 */
+	public Widget getRepresenter() {
+		return representer;
+	}
+
+	public void setRepresenter(Widget representer) {
+		this.representer = representer;
 	}
 
 }
