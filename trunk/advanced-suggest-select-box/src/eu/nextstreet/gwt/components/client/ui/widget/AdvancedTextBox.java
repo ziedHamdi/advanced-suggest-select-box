@@ -48,13 +48,15 @@ import eu.nextstreet.gwt.components.shared.Validator;
  */
 public class AdvancedTextBox extends TextBox implements HasDoubleClickHandlers {
 	private static final String DEFAULT_TEXT_STYLE = "eu-nextstreet-AdvancedTextBoxDefaultText";
-	private static final String MANDATORY_DEFAULT_TEXT_STYLE = "eu-nextstreet-AdvancedTextBoxMandatoryText";
+	private static final String MANDATORY_TEXT_STYLE = "eu-nextstreet-AdvancedTextBoxMandatoryText";
 	private static final String ERROR_TEXT_STYLE = "eu-nextstreet-AdvancedTextBoxErrorText";
+	private static final String READ_ONLY_TEXT_STYLE = "eu-nextstreet-AdvancedTextBoxReadOnlyText";
 	protected Validator<String> validator;
-	protected String defautText;
+	protected String defaultText;
 	protected String defaultTextStyle;
 	protected String errorTextStyle;
 	protected String mandatoryTextStyle;
+	protected String readOnlyTextStyle;
 	protected boolean mandatory;
 
 	public AdvancedTextBox() {
@@ -62,13 +64,13 @@ public class AdvancedTextBox extends TextBox implements HasDoubleClickHandlers {
 	}
 
 	public AdvancedTextBox(final String defautText) {
-		this.defautText = defautText;
+		this.defaultText = defautText;
 		addFocusHandler(new FocusHandler() {
 
 			@Override
 			public void onFocus(FocusEvent event) {
 				String text = AdvancedTextBox.this.getText();
-				if (AdvancedTextBox.this.defautText == null || !AdvancedTextBox.this.defautText.equals(text)) {
+				if (AdvancedTextBox.this.defaultText == null || !AdvancedTextBox.this.defaultText.equals(text)) {
 					setSelectionRange(0, text.length());
 				} else {
 					AdvancedTextBox.super.setText("");
@@ -110,9 +112,11 @@ public class AdvancedTextBox extends TextBox implements HasDoubleClickHandlers {
 	 * @param text
 	 */
 	protected void handleDefaultText() {
-		boolean empty = isEmptyTextField();
-		if (empty) {
-			super.setText(defautText);
+		if (defaultText != null && defaultText.length() > 0) {
+			boolean empty = isEmptyTextField();
+			if (empty && !isReadOnly()) {
+				super.setText(defaultText);
+			}
 		}
 		handleTextStyles();
 	}
@@ -134,7 +138,7 @@ public class AdvancedTextBox extends TextBox implements HasDoubleClickHandlers {
 	 * @return
 	 */
 	public boolean isEmpty() {
-		return isEmptyTextField() || (defautText == null ? true : defautText.equals(getText()));
+		return isEmptyTextField() || (defaultText == null ? true : defaultText.equals(getText()));
 	}
 
 	/**
@@ -145,27 +149,31 @@ public class AdvancedTextBox extends TextBox implements HasDoubleClickHandlers {
 	 * @param text
 	 */
 	protected void handleTextStyles() {
-		String text = getText();
-		ValidationException error = null;
-		if (validator != null) {
-			try {
-				validator.validate(getText());
-			} catch (ValidationException ex) {
-				error = ex;
+		if (isReadOnly()) {
+			addStyleName(getReadOnlyTextStyle());
+		} else {
+			String text = getText();
+			ValidationException error = null;
+			if (validator != null) {
+				try {
+					validator.validate(getText());
+				} catch (ValidationException ex) {
+					error = ex;
+				}
 			}
-		}
-		if (error == null) {
-			if (isEmptyTextField() || getTextValue().trim().length() == 0) {
-				addStyleName(getTextStyle());
+			if (error == null) {
+				if (isEmptyTextField() || getTextValue().trim().length() == 0) {
+					addStyleName(getTextStyle());
+				} else {
+					removeStyleName(getTextStyle());
+				}
+				removeStyleName(getErrorTextStyle());
+				removeError();
 			} else {
 				removeStyleName(getTextStyle());
+				addStyleName(getErrorTextStyle());
+				handleError(error);
 			}
-			removeStyleName(getErrorTextStyle());
-			removeError();
-		} else {
-			removeStyleName(getTextStyle());
-			addStyleName(getErrorTextStyle());
-			handleError(error);
 		}
 	}
 
@@ -210,25 +218,25 @@ public class AdvancedTextBox extends TextBox implements HasDoubleClickHandlers {
 	 */
 	public String getTextValue() {
 		String text = super.getText();
-		if (text.trim().equals(defautText))
+		if (text.trim().equals(defaultText))
 			return "";
 		return text;
 	}
 
-	public void setDefautText(String text) {
-		defautText = text;
+	public void setDefaultText(String text) {
+		defaultText = text;
 	}
 
 	@Override
 	protected void onLoad() {
 		super.onLoad();
-		if (defautText != null && isEmptyTextField()) {
-			setText(defautText);
+		if (defaultText != null && isEmptyTextField()) {
+			setText(defaultText);
 		}
 	}
 
-	public String getDefautText() {
-		return defautText;
+	public String getDefaultText() {
+		return defaultText;
 	}
 
 	public boolean isMandatory() {
@@ -243,7 +251,7 @@ public class AdvancedTextBox extends TextBox implements HasDoubleClickHandlers {
 
 	public String getMandatoryTextStyle() {
 		if (mandatoryTextStyle == null)
-			return MANDATORY_DEFAULT_TEXT_STYLE;
+			return MANDATORY_TEXT_STYLE;
 		return mandatoryTextStyle;
 	}
 
@@ -275,6 +283,30 @@ public class AdvancedTextBox extends TextBox implements HasDoubleClickHandlers {
 
 	public void setValidator(Validator<String> validator) {
 		this.validator = validator;
+	}
+
+	public String getReadOnlyTextStyle() {
+		if (readOnlyTextStyle == null)
+			return READ_ONLY_TEXT_STYLE;
+		return readOnlyTextStyle;
+	}
+
+	public void setReadOnlyTextStyle(String readOnlyTextStyle) {
+		this.readOnlyTextStyle = readOnlyTextStyle;
+	}
+
+	@Override
+	public void setReadOnly(boolean readOnly) {
+		removeStyleName(getReadOnlyTextStyle());
+		super.setReadOnly(readOnly);
+		handleTextStyles();
+		if (readOnly) {
+			String text = getText();
+			if (defaultText != null && text != null && defaultText.equals(text))
+				setText("");
+		} else {
+			handleDefaultText();
+		}
 	}
 
 }

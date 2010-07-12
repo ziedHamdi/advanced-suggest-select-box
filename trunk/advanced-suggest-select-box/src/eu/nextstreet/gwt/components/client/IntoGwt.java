@@ -122,12 +122,22 @@ public class IntoGwt implements EntryPoint {
 		});
 
 		final CheckBox mandatory = new CheckBox("Mandatory");
-		mandatory.setValue(box.getTextField().isMandatory());
+		mandatory.setValue(box.isMandatory());
 		mandatory.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
 
 			@Override
 			public void onValueChange(ValueChangeEvent<Boolean> event) {
-				box.getTextField().setMandatory(event.getValue());
+				box.setMandatory(event.getValue());
+			}
+
+		});
+		final CheckBox readOnly = new CheckBox("Read Only");
+		readOnly.setValue(box.isReadOnly());
+		readOnly.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+
+			@Override
+			public void onValueChange(ValueChangeEvent<Boolean> event) {
+				box.setReadOnly(event.getValue());
 			}
 
 		});
@@ -149,6 +159,7 @@ public class IntoGwt implements EntryPoint {
 		options.add(style);
 		options.add(strict);
 		options.add(mandatory);
+		options.add(readOnly);
 
 		RootPanel.get("options").add(options);
 
