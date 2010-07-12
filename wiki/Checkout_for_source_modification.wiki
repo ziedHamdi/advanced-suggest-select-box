@@ -10,7 +10,7 @@ From your eclipse SVN Repository view right click and choose *New > Repository L
 
 In the _Url_ field type *http://advanced-suggest-select-box.googlecode.com/svn/
 
-Now open the tree hierarchy to the node *trunk/advanced-suggest-select-box*, right click and choose the option *Checkout*
+Now open the tree hierarchy to the node *trunk/advanced-suggest-select-box*, right click and choose the option *Find/Check out as...*
 
 Select *Checkout as a project configured using the New Project Wizard* then presse *Finish* and select *Google > Web Application Project*
 
