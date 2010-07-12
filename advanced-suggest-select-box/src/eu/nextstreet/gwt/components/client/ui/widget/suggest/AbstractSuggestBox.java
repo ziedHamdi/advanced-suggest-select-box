@@ -40,6 +40,7 @@ import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import eu.nextstreet.gwt.components.client.ui.common.event.UIHandler;
 import eu.nextstreet.gwt.components.client.ui.widget.AdvancedTextBox;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.DefaultSuggestList;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.DefaultValueRendererFactory;
@@ -649,5 +650,13 @@ public abstract class AbstractSuggestBox<T> extends ChangeEventHandlerHolder<Boo
 
 	public void setReadOnlyTextStyle(String readOnlyTextStyle) {
 		textField.setReadOnlyTextStyle(readOnlyTextStyle);
+	}
+
+	public UIHandler getUiHandler() {
+		return textField.getUiHandler();
+	}
+
+	public void setUiHandler(UIHandler uiHandler) {
+		textField.setUiHandler(uiHandler);
 	}
 }
