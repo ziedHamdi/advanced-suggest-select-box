@@ -98,7 +98,7 @@ public abstract class AbstractSuggestBox<T> extends ChangeEventHandlerHolder<Boo
 		suggestPanel.setSpacing(0);
 		scrollPanel.add(suggestPanel);
 		textField.setStyleName(SUGGEST_FIELD);
-		textField.setDefautText(defaultText);
+		textField.setDefaultText(defaultText);
 		suggestWidget.setWidget(scrollPanel);
 	}
 
@@ -276,6 +276,8 @@ public abstract class AbstractSuggestBox<T> extends ChangeEventHandlerHolder<Boo
 	 *         text box and the processing is informed that the popup is now hidden)
 	 */
 	protected List<T> recomputePopupContent(int keyCode) {
+		if (isReadOnly())
+			return null;
 		List<T> possibilities;
 		String textValue = getText();
 		// to show all possible values if a value is already selected and a up
@@ -546,12 +548,12 @@ public abstract class AbstractSuggestBox<T> extends ChangeEventHandlerHolder<Boo
 		this.strictMode = strictMode;
 	}
 
-	public String getDefautText() {
-		return textField.getDefautText();
+	public String getDefaultText() {
+		return textField.getDefaultText();
 	}
 
-	public void setDefautText(String text) {
-		this.textField.setDefautText(text);
+	public void setDefaultText(String text) {
+		this.textField.setDefaultText(text);
 	}
 
 	public AdvancedTextBox getTextField() {
@@ -631,5 +633,21 @@ public abstract class AbstractSuggestBox<T> extends ChangeEventHandlerHolder<Boo
 
 	public String getDefaultTextStyle() {
 		return textField.getDefaultTextStyle();
+	}
+
+	public String getReadOnlyTextStyle() {
+		return textField.getReadOnlyTextStyle();
+	}
+
+	public boolean isReadOnly() {
+		return textField.isReadOnly();
+	}
+
+	public void setReadOnly(boolean readOnly) {
+		textField.setReadOnly(readOnly);
+	}
+
+	public void setReadOnlyTextStyle(String readOnlyTextStyle) {
+		textField.setReadOnlyTextStyle(readOnlyTextStyle);
 	}
 }

@@ -103,3 +103,8 @@ h1 {
 .eu-nextstreet-AdvancedTextBoxMandatoryText {
 	background-color: #aa9999;
 }
+
+.eu-nextstreet-AdvancedTextBoxReadOnlyText {
+	background-color: #dddddd;
+	color: gray;
+}
