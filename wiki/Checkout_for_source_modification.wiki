@@ -20,6 +20,6 @@ Select a gwt version 2.0 or higher. And optionally uncheck the Google Web Applic
 
 When prompted if the existing files can be overridden choose yes so that the gwt.xml original file overrides the one created by your project wizard.
 
-_To be sure the "new project wizard" didn't override the files on svn, redo a svn synchronize on the project and select "override and update" on the project root._
+_To be sure the "new project wizard" didn't override the files downloaded from svn, redo a svn synchronize on the project and select "override and update" on the project root._
 
 You're done! you can run the gwt project now.
