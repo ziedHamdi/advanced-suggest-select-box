@@ -48,7 +48,7 @@ public class IntoGwt implements EntryPoint {
 		$doc.getElementById("cssFile").href=styleFile;
 	}-*/;
 
-	private boolean test = false;
+	private boolean test = true;
 
 	/**
 	 * This is the entry point method.
@@ -78,6 +78,9 @@ public class IntoGwt implements EntryPoint {
 		box.add(new Value("02 - CDEF"));
 		box.add(new Value("03 - CFGHIJ"));
 		RootPanel.get("suggestBoxContainer").add(box);
+		box.setText("02 - CDEF");
+
+		System.out.println(box.getSelected());
 
 		CheckBox startsWith = new CheckBox("Starts With");
 		startsWith.setValue(box.isStartsWith());

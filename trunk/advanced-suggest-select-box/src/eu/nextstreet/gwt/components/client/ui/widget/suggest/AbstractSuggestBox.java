@@ -464,6 +464,17 @@ public abstract class AbstractSuggestBox<T> extends ChangeEventHandlerHolder<Boo
 
 	public void setText(String str) {
 		textField.setText(str);
+		typed = str;
+	}
+
+	public T computeSelected(String text) {
+		List<T> possibilities = getFiltredPossibilities(text);
+		if (possibilities.size() == 1) {
+			selected = possibilities.get(0);
+		} else {
+			selected = null;
+		}
+		return selected;
 	}
 
 	public boolean isEmpty() {
@@ -659,5 +670,10 @@ public abstract class AbstractSuggestBox<T> extends ChangeEventHandlerHolder<Boo
 
 	public void setUiHandler(UIHandler uiHandler) {
 		textField.setUiHandler(uiHandler);
+	}
+
+	public void setSelected(T selected) {
+		this.selected = selected;
+		setText(toString(selected));
 	}
 }
