@@ -600,4 +600,36 @@ public abstract class AbstractSuggestBox<T> extends ChangeEventHandlerHolder<Boo
 	public void setValidator(Validator<String> validator) {
 		textField.setValidator(validator);
 	}
+
+	public String getErrorTextStyle() {
+		return textField.getErrorTextStyle();
+	}
+
+	public String getMandatoryTextStyle() {
+		return textField.getMandatoryTextStyle();
+	}
+
+	public boolean isMandatory() {
+		return textField.isMandatory();
+	}
+
+	public void setDefaultTextStyle(String defaultTextStyle) {
+		textField.setDefaultTextStyle(defaultTextStyle);
+	}
+
+	public void setErrorTextStyle(String errorTextStyle) {
+		textField.setErrorTextStyle(errorTextStyle);
+	}
+
+	public void setMandatory(boolean mandatory) {
+		textField.setMandatory(mandatory);
+	}
+
+	public void setMandatoryTextStyle(String defaultMandatoryTextStyle) {
+		textField.setMandatoryTextStyle(defaultMandatoryTextStyle);
+	}
+
+	public String getDefaultTextStyle() {
+		return textField.getDefaultTextStyle();
+	}
 }
