@@ -19,7 +19,8 @@ package eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.table;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueRendererFactory.ListRenderer;
@@ -36,19 +37,32 @@ import eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueRendererFactor
  * 
  * @param <T>
  */
-public class SimpleTableListRenderer<T> extends HTML implements ListRenderer<T> {
+public class SimpleTableListRenderer<T> extends FlexTable implements ListRenderer<T> {
 	protected List<Widget> rows = new ArrayList<Widget>();
-	protected String tableStyle = "eu-nextstreet-SuggestFieldPopupSimpleTable";
+
+	public SimpleTableListRenderer() {
+		super();
+	}
 
 	@Override
 	public void add(Widget item) {
+		addRow(item);
+	}
+
+	protected void addRow(Widget item) {
 		rows.add(item);
-		setHTML(getHTML());
+		HorizontalPanel row = (HorizontalPanel) item;
+		int widgetCount = row.getWidgetCount();
+		int rowNumber = rows.size() - 1;
+		for (int i = 0; i < widgetCount; i++) {
+			setWidget(rowNumber, i, row.getWidget(i));
+		}
 	}
 
 	@Override
 	public void clear() {
 		rows.clear();
+		super.clear();
 	}
 
 	@Override
@@ -59,31 +73,6 @@ public class SimpleTableListRenderer<T> extends HTML implements ListRenderer<T> 
 	@Override
 	public int getWidgetCount() {
 		return rows.size();
-	}
-
-	@Override
-	public String getHTML() {
-		StringBuffer buffer = new StringBuffer("<table class='" + getTableStyle() + "'>");
-		for (Widget widget : rows) {
-			buffer.append("<tr>");
-			buffer.append(widget.toString());
-			buffer.append("</tr>");
-		}
-		buffer.append("</table>");
-		return buffer.toString();
-	}
-
-	@Override
-	public String toString() {
-		return getHTML();
-	}
-
-	public String getTableStyle() {
-		return tableStyle;
-	}
-
-	public void setTableStyle(String tableStyle) {
-		this.tableStyle = tableStyle;
 	}
 
 }

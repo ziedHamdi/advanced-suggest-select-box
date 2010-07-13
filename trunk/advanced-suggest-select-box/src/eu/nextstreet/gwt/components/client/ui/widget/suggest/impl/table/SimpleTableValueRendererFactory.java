@@ -17,7 +17,6 @@
 package eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.table;
 
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueRendererFactory;
-import eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.simple.DefaultValueRenderer;
 
 /**
  * 
@@ -25,11 +24,14 @@ import eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.simple.Default
  * 
  * @param <T>
  */
-public class SimpleTableValueRendererFactory<T> implements ValueRendererFactory<T, DefaultValueRenderer<T>> {
+public class SimpleTableValueRendererFactory<T> implements ValueRendererFactory<T, SimpleTableRowItemRenderer<T>> {
+	public String tableStyle = "eu-nextstreet-SuggestFieldPopupSimpleTable";
 
 	@Override
 	public SimpleTableListRenderer<T> createListRenderer() {
-		return new SimpleTableListRenderer<T>();
+		SimpleTableListRenderer<T> simpleTableListRenderer = new SimpleTableListRenderer<T>();
+		simpleTableListRenderer.setStyleName(tableStyle);
+		return simpleTableListRenderer;
 	}
 
 	@Override
