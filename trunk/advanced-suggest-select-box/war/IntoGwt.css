@@ -132,3 +132,11 @@ h1 {
 	background-color: #dddddd;
 	color: gray;
 }
+
+.eu-nextstreet-SuggestFieldPopupSimpleTable {
+	padding: 0;
+}
+
+.eu-nextstreet-SuggestFieldPopupSimpleTable tr td {
+	border: 1px solid gray;
+}
