@@ -21,8 +21,13 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.SuggestWidget;
 
-public class DefaultSuggestList<T> extends PopupPanel implements
-		SuggestWidget<T> {
+/**
+ * 
+ * @author Zied Hamdi founder of http://into-i.fr
+ * 
+ * @param <T>
+ */
+public class DefaultSuggestList<T> extends PopupPanel implements SuggestWidget<T> {
 	private static final String POPUP_STYLE = "eu-nextstreet-SuggestPopup";
 
 	public DefaultSuggestList() {
@@ -46,6 +51,12 @@ public class DefaultSuggestList<T> extends PopupPanel implements
 	@Override
 	public void adjustPosition(int absoluteLeft, int absoluteTop) {
 		super.setPopupPosition(absoluteLeft, absoluteTop);
+	}
+
+	@Override
+	public void hide() {
+		//for comment on debugging
+		//		super.hide();
 	}
 
 }

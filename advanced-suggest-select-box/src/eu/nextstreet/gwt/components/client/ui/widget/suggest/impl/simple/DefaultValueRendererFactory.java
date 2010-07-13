@@ -14,17 +14,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package eu.nextstreet.gwt.components.client.ui.widget.suggest.impl;
+package eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.simple;
 
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueRendererFactory;
 
-public class DefaultValueRendererFactory<T> implements
-		ValueRendererFactory<T, DefaultValueRenderer<T>> {
+/**
+ * 
+ * @author Zied Hamdi founder of http://into-i.fr
+ * 
+ * @param <T>
+ */
+public class DefaultValueRendererFactory<T> implements ValueRendererFactory<T, DefaultValueRenderer<T>> {
 
 	@Override
-	public DefaultValueRenderer<T> createValueRenderer(T value,
-			String filterText, boolean caseSensitive) {
+	public DefaultValueRenderer<T> createValueRenderer(T value, String filterText, boolean caseSensitive) {
 		return new DefaultValueRenderer<T>(value, filterText, caseSensitive);
+	}
+
+	@Override
+	public ValueRendererFactory.ListRenderer<T> createListRenderer() {
+		DefaultListRenderer<T> defaultListRenderer = new DefaultListRenderer<T>();
+		defaultListRenderer.setSpacing(0);
+		return defaultListRenderer;
 	}
 
 }

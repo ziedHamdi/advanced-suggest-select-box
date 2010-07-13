@@ -16,6 +16,8 @@
  */
 package eu.nextstreet.gwt.components.client.ui.widget.suggest;
 
+import com.google.gwt.user.client.ui.Widget;
+
 /**
  * Isolates the creation of suggested items rendering widgets
  * 
@@ -27,6 +29,25 @@ package eu.nextstreet.gwt.components.client.ui.widget.suggest;
  *            the returned widget type
  */
 public interface ValueRendererFactory<T, W extends ValueHolderLabel<T>> {
+	/**
+	 * Holds the items of the suggest box
+	 * 
+	 * @author Zied Hamdi founder of http://into-i.fr
+	 * 
+	 * @param <T>
+	 *            the type of the value
+	 */
+	public static interface ListRenderer<T> {
+
+		int getWidgetCount();
+
+		void clear();
+
+		void add(Widget item);
+
+		Widget getWidget(int index);
+
+	}
 
 	/**
 	 * returns the widget representing an item in the suggest list
@@ -37,4 +58,6 @@ public interface ValueRendererFactory<T, W extends ValueHolderLabel<T>> {
 	 * @return
 	 */
 	W createValueRenderer(T value, String filterText, boolean caseSensitive);
+
+	ListRenderer<T> createListRenderer();
 }

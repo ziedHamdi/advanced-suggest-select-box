@@ -36,6 +36,9 @@ import eu.nextstreet.gwt.components.client.ui.widget.AdvancedTextBox;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.AbstractSuggestBox;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.SuggestChangeEvent;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.DefaultSuggestBox;
+import eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.simple.DefaultValueRendererFactory;
+import eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.table.SimpleTableRowItemRenderer;
+import eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.table.SimpleTableValueRendererFactory;
 import eu.nextstreet.gwt.components.shared.BasicListValidator;
 import eu.nextstreet.gwt.components.shared.ValidationException;
 import eu.nextstreet.gwt.components.shared.Validator;
@@ -80,7 +83,8 @@ public class IntoGwt implements EntryPoint {
 		RootPanel.get("suggestBoxContainer").add(box);
 		box.setText("02 - CDEF");
 
-		System.out.println(box.getSelected());
+		box.computeSelected(box.getText());
+		System.out.println("selected : " + box.getSelected());
 
 		CheckBox startsWith = new CheckBox("Starts With");
 		startsWith.setValue(box.isStartsWith());
@@ -144,6 +148,35 @@ public class IntoGwt implements EntryPoint {
 			}
 
 		});
+		final CheckBox multiColumn = new CheckBox("Table");
+		multiColumn.setValue(box.isReadOnly());
+		multiColumn.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+
+			@Override
+			public void onValueChange(ValueChangeEvent<Boolean> event) {
+				SimpleTableValueRendererFactory<Value> tableRendererFactory = new SimpleTableValueRendererFactory<Value>() {
+
+					@Override
+					public SimpleTableRowItemRenderer<Value> createValueRenderer(Value value, String filterText,
+							boolean caseSensitive) {
+						return new SimpleTableRowItemRenderer<Value>(value, filterText, caseSensitive) {
+
+							@Override
+							protected String[] explodeValueInColumns(Value value, String filterText,
+									boolean caseSensitive) {
+								if (value == null)
+									return new String[] { "", "" };
+								return value.toString().split("-");
+							}
+
+						};
+					}
+				};
+				box.setValueRendererFactory(event.getValue() ? tableRendererFactory
+					: new DefaultValueRendererFactory<Value>());
+			}
+
+		});
 		BasicListValidator<String> listValidator = new BasicListValidator<String>();
 		listValidator.add(new Validator<String>() {
 
@@ -163,6 +196,7 @@ public class IntoGwt implements EntryPoint {
 		options.add(strict);
 		options.add(mandatory);
 		options.add(readOnly);
+		options.add(multiColumn);
 
 		RootPanel.get("options").add(options);
 

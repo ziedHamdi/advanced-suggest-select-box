@@ -37,13 +37,13 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.UIObject;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import eu.nextstreet.gwt.components.client.ui.common.event.UIHandler;
 import eu.nextstreet.gwt.components.client.ui.widget.AdvancedTextBox;
+import eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueRendererFactory.ListRenderer;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.DefaultSuggestList;
-import eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.DefaultValueRendererFactory;
+import eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.simple.DefaultValueRendererFactory;
 import eu.nextstreet.gwt.components.shared.Validator;
 
 /**
@@ -69,7 +69,7 @@ public abstract class AbstractSuggestBox<T> extends ChangeEventHandlerHolder<Boo
 	protected boolean caseSensitive;
 	protected SuggestWidget<T> suggestWidget = new DefaultSuggestList<T>();
 	protected ScrollPanel scrollPanel = new ScrollPanel();
-	protected VerticalPanel suggestPanel = new VerticalPanel();
+	protected ListRenderer<T> listRenderer;
 	protected boolean strictMode;
 
 	protected int selectedIndex = -1;
@@ -80,7 +80,7 @@ public abstract class AbstractSuggestBox<T> extends ChangeEventHandlerHolder<Boo
 	private boolean multipleChangeEvent;
 	private boolean fireChangeOnBlur;
 
-	protected ValueRendererFactory<T, ? extends ValueHolderLabel<T>> valueRendererFactory = new DefaultValueRendererFactory<T>();
+	protected ValueRendererFactory<T, ? extends ValueHolderLabel<T>> valueRendererFactory;
 
 	@SuppressWarnings("unchecked")
 	interface SuggestBoxUiBinder extends UiBinder<Widget, AbstractSuggestBox> {
@@ -96,12 +96,11 @@ public abstract class AbstractSuggestBox<T> extends ChangeEventHandlerHolder<Boo
 	public AbstractSuggestBox(String defaultText) {
 		initWidget(uiBinder.createAndBindUi(this));
 		setStyleName(SUGGEST_FIELD_COMP);
-		suggestPanel.setSpacing(0);
-		scrollPanel.add(suggestPanel);
 		textField.setRepresenter(this);
 		textField.setStyleName(SUGGEST_FIELD);
 		textField.setDefaultText(defaultText);
 		suggestWidget.setWidget(scrollPanel);
+		setValueRendererFactory(new DefaultValueRendererFactory<T>());
 	}
 
 	// unused
@@ -146,6 +145,7 @@ public abstract class AbstractSuggestBox<T> extends ChangeEventHandlerHolder<Boo
 				if (typed == null || !typed.equals(currentText)) {
 					if (strictMode) {
 						setText("");
+						valueTyped("");
 					} else {
 						valueTyped(currentText);
 					}
@@ -194,7 +194,7 @@ public abstract class AbstractSuggestBox<T> extends ChangeEventHandlerHolder<Boo
 		ValueHolderLabel<T> popupWidget = getSelectedItem();
 		if (popupWidget != null && selectedIndex != -1)
 			popupWidget.setFocused(false);
-		int widgetCount = suggestPanel.getWidgetCount();
+		int widgetCount = listRenderer.getWidgetCount();
 
 		if (widgetCount == 0)
 			return;
@@ -289,7 +289,7 @@ public abstract class AbstractSuggestBox<T> extends ChangeEventHandlerHolder<Boo
 
 		possibilities = getFiltredPossibilities(textValue);
 		if (possibilities.size() > 0) {
-			suggestPanel.clear();
+			listRenderer.clear();
 			if (possibilities.size() == 1) {
 				// laisse l'utilisateur effacer les valeurs
 				if (keyCode != KeyCodes.KEY_BACKSPACE && keyCode != KeyCodes.KEY_LEFT && keyCode != KeyCodes.KEY_RIGHT) {
@@ -322,7 +322,7 @@ public abstract class AbstractSuggestBox<T> extends ChangeEventHandlerHolder<Boo
 
 			final ValueHolderLabel<T> currentLabel = createValueRenderer(t, currentText);
 			currentLabel.setStyleName(ITEM);
-			suggestPanel.add((Widget) currentLabel);
+			listRenderer.add((Widget) currentLabel);
 			currentLabel.addClickHandler(new ClickHandler() {
 				@Override
 				public void onClick(ClickEvent clickEvent) {
@@ -368,8 +368,8 @@ public abstract class AbstractSuggestBox<T> extends ChangeEventHandlerHolder<Boo
 
 	@SuppressWarnings("unchecked")
 	private ValueHolderLabel<T> getSelectedItem() {
-		if (selectedIndex != -1 && suggestPanel.getWidgetCount() > selectedIndex)
-			return (ValueHolderLabel<T>) suggestPanel.getWidget(selectedIndex);
+		if (selectedIndex != -1 && listRenderer.getWidgetCount() > selectedIndex)
+			return (ValueHolderLabel<T>) listRenderer.getWidget(selectedIndex);
 		return null;
 	}
 
@@ -508,6 +508,13 @@ public abstract class AbstractSuggestBox<T> extends ChangeEventHandlerHolder<Boo
 	 */
 	public void setValueRendererFactory(ValueRendererFactory<T, ? extends ValueHolderLabel<T>> valueRendererFactory) {
 		this.valueRendererFactory = valueRendererFactory;
+		if (listRenderer != null) {
+			listRenderer.clear();
+			scrollPanel.clear();
+		}
+		listRenderer = valueRendererFactory.createListRenderer();
+		scrollPanel.add((Widget) listRenderer);
+		System.out.println();
 	}
 
 	public SuggestWidget<T> getSuggestWidget() {
