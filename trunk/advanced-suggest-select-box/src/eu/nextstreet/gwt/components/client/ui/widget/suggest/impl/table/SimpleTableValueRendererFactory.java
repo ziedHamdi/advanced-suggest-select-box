@@ -24,19 +24,23 @@ import eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueRendererFactor
  * 
  * @param <T>
  */
-public class SimpleTableValueRendererFactory<T> implements ValueRendererFactory<T, SimpleTableRowItemRenderer<T>> {
+public class SimpleTableValueRendererFactory<T, W extends SimpleTableRowItemRenderer<T>>
+		implements ValueRendererFactory<T, W> {
 	public String tableStyle = "eu-nextstreet-SuggestFieldPopupSimpleTable";
 
 	@Override
-	public SimpleTableListRenderer<T> createListRenderer() {
-		SimpleTableListRenderer<T> simpleTableListRenderer = new SimpleTableListRenderer<T>();
+	public SimpleTableListRenderer<T, W> createListRenderer() {
+		SimpleTableListRenderer<T, W> simpleTableListRenderer = new SimpleTableListRenderer<T, W>();
 		simpleTableListRenderer.setStyleName(tableStyle);
 		return simpleTableListRenderer;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public SimpleTableRowItemRenderer<T> createValueRenderer(T value, String filterText, boolean caseSensitive) {
-		return new SimpleTableRowItemRenderer<T>(value, filterText, caseSensitive);
+	public W createValueRenderer(T value, String filterText,
+			boolean caseSensitive) {
+		return (W) new SimpleTableRowItemRenderer<T>(value, filterText,
+				caseSensitive);
 	}
 
 }

@@ -18,6 +18,7 @@ package eu.nextstreet.gwt.components.client.ui.widget.suggest;
 
 import com.google.gwt.event.dom.client.HasAllMouseHandlers;
 import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.user.client.ui.UIObject;
 
 /**
  * Representation of an item in the suggest list
@@ -63,5 +64,13 @@ public interface ValueHolderLabel<T> extends HasAllMouseHandlers,
 	 * @param item
 	 */
 	public void setStyleName(String item);
+
+	/**
+	 * Returns a {@link UIObject} represented on the screen for this value
+	 * holder
+	 * 
+	 * @return
+	 */
+	public UIObject getUiObject();
 
 }

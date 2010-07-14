@@ -16,6 +16,7 @@
  */
 package eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.simple;
 
+import eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueHolderLabel;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueRendererFactory;
 
 /**
@@ -23,17 +24,26 @@ import eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueRendererFactor
  * @author Zied Hamdi founder of http://into-i.fr
  * 
  * @param <T>
+ *            the type of the values
+ * @param <W>
+ *            the type of the value holder label
+ * 
+ * @see ValueHolderLabel
+ * @see ValueRendererFactory
  */
-public class DefaultValueRendererFactory<T> implements ValueRendererFactory<T, DefaultValueRenderer<T>> {
+public class DefaultValueRendererFactory<T, W extends ValueHolderLabel<T>>
+		implements ValueRendererFactory<T, W> {
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public DefaultValueRenderer<T> createValueRenderer(T value, String filterText, boolean caseSensitive) {
-		return new DefaultValueRenderer<T>(value, filterText, caseSensitive);
+	public W createValueRenderer(T value, String filterText,
+			boolean caseSensitive) {
+		return (W) new DefaultValueRenderer<T>(value, filterText, caseSensitive);
 	}
 
 	@Override
-	public ValueRendererFactory.ListRenderer<T> createListRenderer() {
-		DefaultListRenderer<T> defaultListRenderer = new DefaultListRenderer<T>();
+	public ValueRendererFactory.ListRenderer<T, W> createListRenderer() {
+		DefaultListRenderer<T, W> defaultListRenderer = new DefaultListRenderer<T, W>();
 		defaultListRenderer.setSpacing(0);
 		return defaultListRenderer;
 	}

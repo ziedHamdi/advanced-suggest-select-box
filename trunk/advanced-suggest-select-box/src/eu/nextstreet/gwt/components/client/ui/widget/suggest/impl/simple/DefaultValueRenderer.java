@@ -17,17 +17,20 @@
 package eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.simple;
 
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.UIObject;
 
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueHolderLabel;
 
-public class DefaultValueRenderer<T> extends HTML implements ValueHolderLabel<T> {
+public class DefaultValueRenderer<T> extends HTML implements
+		ValueHolderLabel<T> {
 	private static final String ITEM_HOVER = "eu-nextstreet-SuggestItemHover";
 	private static final String MATCHING_STRING = "eu-nextstreet-SuggestMatchingString";
 	public static final String SELECTED = "eu-nextstreet-SuggestItemSelected";
 	protected T value;
 	protected boolean caseSensitive;
 
-	public DefaultValueRenderer(T value, String filterText, boolean caseSensitive) {
+	public DefaultValueRenderer(T value, String filterText,
+			boolean caseSensitive) {
 		this.value = value;
 		this.caseSensitive = caseSensitive;
 		fillHtml(value, filterText, caseSensitive);
@@ -39,21 +42,24 @@ public class DefaultValueRenderer<T> extends HTML implements ValueHolderLabel<T>
 		setHTML(html);
 	}
 
-	protected String highlightMatchingSequence(String html, String filterText, boolean caseSensitive) {
+	protected String highlightMatchingSequence(String html, String filterText,
+			boolean caseSensitive) {
 		if (caseSensitive) {
-			html = html.replace(filterText, "<span class='" + MATCHING_STRING + "'>" + filterText + "</span>");
+			html = html.replace(filterText, "<span class='" + MATCHING_STRING
+					+ "'>" + filterText + "</span>");
 
 		} else {
 			String startSequence = "###start###";
 			String endSequence = "###end###";
-			String temp = html.toLowerCase()
-				.replace(filterText.toLowerCase(), startSequence + filterText + endSequence);
+			String temp = html.toLowerCase().replace(filterText.toLowerCase(),
+					startSequence + filterText + endSequence);
 			int firstIndex = temp.indexOf(startSequence);
 			int lastIndex = temp.indexOf(endSequence) - startSequence.length();
 			if (firstIndex > -1) {
-				html = html.substring(0, firstIndex) + "<span class='" + MATCHING_STRING + "'>"
-					+ html.substring(firstIndex, lastIndex) + "</span>"
-					+ html.substring(firstIndex + filterText.length());
+				html = html.substring(0, firstIndex) + "<span class='"
+						+ MATCHING_STRING + "'>"
+						+ html.substring(firstIndex, lastIndex) + "</span>"
+						+ html.substring(firstIndex + filterText.length());
 			}
 
 		}
@@ -90,5 +96,10 @@ public class DefaultValueRenderer<T> extends HTML implements ValueHolderLabel<T>
 
 	public void setCaseSensitive(boolean caseSensitive) {
 		this.caseSensitive = caseSensitive;
+	}
+
+	@Override
+	public UIObject getUiObject() {
+		return this;
 	}
 }
