@@ -19,14 +19,21 @@ package eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.table;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueRendererFactory;
 
 /**
+ * The factory for the inclueded table popup content builder. You should
+ * override {@link #newInstance(Object, String, boolean)} to give your instance
+ * to the factory and have it handle the rest of the work
  * 
  * @author Zied Hamdi founder of http://into-i.fr
  * 
  * @param <T>
+ *            the value type (for each item)
+ * @param <W>
+ *            the view object representing the value row
  */
 public class SimpleTableValueRendererFactory<T, W extends SimpleTableRowItemRenderer<T>>
 		implements ValueRendererFactory<T, W> {
-	public String tableStyle = "eu-nextstreet-SuggestFieldPopupSimpleTable";
+	private String tableStyle = "eu-nextstreet-SuggestFieldPopupSimpleTable";
+	private String cellStyle = "eu-nextstreet-SuggestFieldPopupSimpleTableCell";
 
 	@Override
 	public SimpleTableListRenderer<T, W> createListRenderer() {
@@ -35,12 +42,34 @@ public class SimpleTableValueRendererFactory<T, W extends SimpleTableRowItemRend
 		return simpleTableListRenderer;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public W createValueRenderer(T value, String filterText,
 			boolean caseSensitive) {
-		return (W) new SimpleTableRowItemRenderer<T>(value, filterText,
-				caseSensitive);
+		W toReturn = newInstance(value, filterText, caseSensitive);
+		toReturn.setStyleName(cellStyle);
+		return toReturn;
 	}
 
+	@SuppressWarnings("unchecked")
+	protected W newInstance(T value, String filterText, boolean caseSensitive) {
+		W toReturn = (W) new SimpleTableRowItemRenderer<T>(value, filterText,
+				caseSensitive);
+		return toReturn;
+	}
+
+	public String getTableStyle() {
+		return tableStyle;
+	}
+
+	public void setTableStyle(String tableStyle) {
+		this.tableStyle = tableStyle;
+	}
+
+	public String getCellStyle() {
+		return cellStyle;
+	}
+
+	public void setCellStyle(String cellStyle) {
+		this.cellStyle = cellStyle;
+	}
 }

@@ -165,11 +165,11 @@ public class IntoGwt implements EntryPoint {
 				SimpleTableValueRendererFactory<Value, SimpleTableRowItemRenderer<Value>> tableRendererFactory = new SimpleTableValueRendererFactory<Value, SimpleTableRowItemRenderer<Value>>() {
 
 					@Override
-					public SimpleTableRowItemRenderer<Value> createValueRenderer(
+					protected SimpleTableRowItemRenderer<Value> newInstance(
 							Value value, String filterText,
 							boolean caseSensitive) {
-						return new SimpleTableRowItemRenderer<Value>(value,
-								filterText, caseSensitive) {
+						SimpleTableRowItemRenderer<Value> simpleTableRowItemRenderer = new SimpleTableRowItemRenderer<Value>(
+								value, filterText, caseSensitive) {
 
 							@Override
 							protected String[] explodeValueInColumns(
@@ -181,6 +181,7 @@ public class IntoGwt implements EntryPoint {
 							}
 
 						};
+						return simpleTableRowItemRenderer;
 					}
 				};
 				// box.setValueRendererFactory(tableRendererFactory)

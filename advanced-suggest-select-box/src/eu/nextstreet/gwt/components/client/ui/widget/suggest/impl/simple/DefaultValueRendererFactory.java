@@ -38,7 +38,10 @@ public class DefaultValueRendererFactory<T, W extends ValueHolderLabel<T>>
 	@Override
 	public W createValueRenderer(T value, String filterText,
 			boolean caseSensitive) {
-		return (W) new DefaultValueRenderer<T>(value, filterText, caseSensitive);
+		W toReturn = (W) new DefaultValueRenderer<T>(value, filterText,
+				caseSensitive);
+		toReturn.setStyleName(ValueHolderLabel.ITEM_DEFAULT_STYLE);
+		return toReturn;
 	}
 
 	@Override
