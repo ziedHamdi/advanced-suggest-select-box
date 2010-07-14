@@ -35,6 +35,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import eu.nextstreet.gwt.components.client.ui.widget.AdvancedTextBox;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.AbstractSuggestBox;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.SuggestChangeEvent;
+import eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueHolderLabel;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.DefaultSuggestBox;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.simple.DefaultValueRendererFactory;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.table.SimpleTableRowItemRenderer;
@@ -75,8 +76,14 @@ public class IntoGwt implements EntryPoint {
 			}
 
 		}
-
-		final DefaultSuggestBox<Value> box = new DefaultSuggestBox<Value>("select or type value");
+		// Can't use generics in this example since we switch between a table
+		// and a label view so the second argument is ? extends
+		// ValueHolderLabel<Value>
+		// final DefaultSuggestBox<Value,ValueHolderLabel<Value>> box = new
+		// DefaultSuggestBox<Value,
+		// ValueHolderLabel<Value>>("select or type value");
+		final DefaultSuggestBox box = new DefaultSuggestBox<Value, ValueHolderLabel<Value>>(
+				"select or type value");
 		box.add(new Value("01 - ABCD"));
 		box.add(new Value("02 - CDEF"));
 		box.add(new Value("03 - CFGHIJ"));
@@ -112,7 +119,8 @@ public class IntoGwt implements EntryPoint {
 
 			@Override
 			public void onValueChange(ValueChangeEvent<Boolean> event) {
-				changeCss(style.getValue() ? "IntoGwt.css" : "IntoGwtClassic.css");
+				changeCss(style.getValue() ? "IntoGwt.css"
+						: "IntoGwtClassic.css");
 			}
 
 		});
@@ -154,15 +162,18 @@ public class IntoGwt implements EntryPoint {
 
 			@Override
 			public void onValueChange(ValueChangeEvent<Boolean> event) {
-				SimpleTableValueRendererFactory<Value> tableRendererFactory = new SimpleTableValueRendererFactory<Value>() {
+				SimpleTableValueRendererFactory<Value, SimpleTableRowItemRenderer<Value>> tableRendererFactory = new SimpleTableValueRendererFactory<Value, SimpleTableRowItemRenderer<Value>>() {
 
 					@Override
-					public SimpleTableRowItemRenderer<Value> createValueRenderer(Value value, String filterText,
+					public SimpleTableRowItemRenderer<Value> createValueRenderer(
+							Value value, String filterText,
 							boolean caseSensitive) {
-						return new SimpleTableRowItemRenderer<Value>(value, filterText, caseSensitive) {
+						return new SimpleTableRowItemRenderer<Value>(value,
+								filterText, caseSensitive) {
 
 							@Override
-							protected String[] explodeValueInColumns(Value value, String filterText,
+							protected String[] explodeValueInColumns(
+									Value value, String filterText,
 									boolean caseSensitive) {
 								if (value == null)
 									return new String[] { "", "" };
@@ -172,8 +183,10 @@ public class IntoGwt implements EntryPoint {
 						};
 					}
 				};
-				box.setValueRendererFactory(event.getValue() ? tableRendererFactory
-					: new DefaultValueRendererFactory<Value>());
+				// box.setValueRendererFactory(tableRendererFactory)
+				box
+						.setValueRendererFactory((event.getValue() ? tableRendererFactory
+								: new DefaultValueRendererFactory<Value, SimpleTableRowItemRenderer<Value>>()));
 			}
 
 		});
@@ -202,7 +215,8 @@ public class IntoGwt implements EntryPoint {
 
 		final VerticalPanel infoContainer = new VerticalPanel();
 		RootPanel.get("infoContainer").add(infoContainer);
-		final DateTimeFormat dateTimeFormat = DateTimeFormat.getFormat("HH:mm:ss");
+		final DateTimeFormat dateTimeFormat = DateTimeFormat
+				.getFormat("HH:mm:ss");
 		box.addHandler(new ChangeHandler() {
 
 			@SuppressWarnings("unchecked")
@@ -210,13 +224,21 @@ public class IntoGwt implements EntryPoint {
 			public void onChange(ChangeEvent event) {
 				if (infoContainer.getWidgetCount() > 3)
 					infoContainer.remove(3);
-				infoContainer.insert(new Label("At " + dateTimeFormat.format(new Date()) + " you "
-					+ (((SuggestChangeEvent<String>) event).isSelected() ? "selected " : "typed ")
-					+ ((AbstractSuggestBox<String>) event.getSource()).getText()), 0);
+				infoContainer.insert(
+						new Label(
+								"At "
+										+ dateTimeFormat.format(new Date())
+										+ " you "
+										+ (((SuggestChangeEvent) event)
+												.isSelected() ? "selected "
+												: "typed ")
+										+ ((AbstractSuggestBox) event
+												.getSource()).getText()), 0);
 			}
 		});
 
-		AdvancedTextBox advancedTextBox = new AdvancedTextBox("Please type a value");
+		AdvancedTextBox advancedTextBox = new AdvancedTextBox(
+				"Please type a value");
 		advancedTextBox.addDoubleClickHandler(new DoubleClickHandler() {
 
 			@Override

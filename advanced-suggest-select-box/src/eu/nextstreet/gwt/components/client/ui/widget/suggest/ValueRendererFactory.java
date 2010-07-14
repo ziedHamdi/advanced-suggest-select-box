@@ -16,8 +16,6 @@
  */
 package eu.nextstreet.gwt.components.client.ui.widget.suggest;
 
-import com.google.gwt.user.client.ui.Widget;
-
 /**
  * Isolates the creation of suggested items rendering widgets
  * 
@@ -37,15 +35,15 @@ public interface ValueRendererFactory<T, W extends ValueHolderLabel<T>> {
 	 * @param <T>
 	 *            the type of the value
 	 */
-	public static interface ListRenderer<T> {
+	public static interface ListRenderer<T, W> {
 
 		int getWidgetCount();
 
 		void clear();
 
-		void add(Widget item);
+		void add(W item);
 
-		Widget getWidget(int index);
+		W getRow(int index);
 
 	}
 
@@ -59,5 +57,5 @@ public interface ValueRendererFactory<T, W extends ValueHolderLabel<T>> {
 	 */
 	W createValueRenderer(T value, String filterText, boolean caseSensitive);
 
-	ListRenderer<T> createListRenderer();
+	ListRenderer<T, W> createListRenderer();
 }

@@ -20,8 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueRendererFactory.ListRenderer;
 
@@ -37,25 +35,25 @@ import eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueRendererFactor
  * 
  * @param <T>
  */
-public class SimpleTableListRenderer<T> extends FlexTable implements ListRenderer<T> {
-	protected List<Widget> rows = new ArrayList<Widget>();
+public class SimpleTableListRenderer<T, W extends SimpleTableRowItemRenderer<T>>
+		extends FlexTable implements ListRenderer<T, W> {
+	protected List<W> rows = new ArrayList<W>();
 
 	public SimpleTableListRenderer() {
 		super();
 	}
 
 	@Override
-	public void add(Widget item) {
+	public void add(W item) {
 		addRow(item);
 	}
 
-	protected void addRow(Widget item) {
-		rows.add(item);
-		HorizontalPanel row = (HorizontalPanel) item;
-		int widgetCount = row.getWidgetCount();
+	protected void addRow(W row) {
+		rows.add(row);
+		int columnCount = row.size();
 		int rowNumber = rows.size() - 1;
-		for (int i = 0; i < widgetCount; i++) {
-			setWidget(rowNumber, i, row.getWidget(i));
+		for (int i = 0; i < columnCount; i++) {
+			setWidget(rowNumber, i, row.get(i));
 		}
 	}
 
@@ -66,7 +64,7 @@ public class SimpleTableListRenderer<T> extends FlexTable implements ListRendere
 	}
 
 	@Override
-	public Widget getWidget(int index) {
+	public W getRow(int index) {
 		return rows.get(index);
 	}
 

@@ -17,16 +17,29 @@
 package eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.simple;
 
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
+import eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueHolderLabel;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueRendererFactory.ListRenderer;
 
 /**
- * The default list renderer has all needed methods implemented by its parent class
+ * The default list renderer has all needed methods implemented by its parent
+ * class
  * 
  * @author Zied Hamdi founder of http://into-i.fr
  * 
  * @param <T>
  */
-public class DefaultListRenderer<T> extends VerticalPanel implements ListRenderer<T> {
+public class DefaultListRenderer<T, W extends ValueHolderLabel<T>> extends
+		VerticalPanel implements ListRenderer<T, W> {
 
+	@Override
+	public void add(W item) {
+		super.add((Widget) item);
+	}
+
+	@SuppressWarnings("unchecked")
+	public W getRow(int index) {
+		return (W) super.getWidget(index);
+	}
 }

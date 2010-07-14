@@ -26,19 +26,20 @@ import com.google.gwt.event.dom.client.ChangeEvent;
  * 
  * @param <T>
  */
-public class SuggestChangeEvent<T> extends ChangeEvent {
-	protected AbstractSuggestBox<T> source;
+public class SuggestChangeEvent<T, W extends ValueHolderLabel<T>> extends
+		ChangeEvent {
+	protected AbstractSuggestBox<T, W> source;
 	protected T selection;
 	protected boolean selected;
 	protected String text;
 
-	public SuggestChangeEvent(AbstractSuggestBox<T> suggestBox, T selection) {
+	public SuggestChangeEvent(AbstractSuggestBox<T, W> suggestBox, T selection) {
 		this.source = suggestBox;
 		this.selection = selection;
 		this.selected = true;
 	}
 
-	public SuggestChangeEvent(AbstractSuggestBox<T> suggestBox, String text) {
+	public SuggestChangeEvent(AbstractSuggestBox<T, W> suggestBox, String text) {
 		this.source = suggestBox;
 		this.text = text;
 		this.selected = false;
@@ -52,11 +53,11 @@ public class SuggestChangeEvent<T> extends ChangeEvent {
 		this.selection = selection;
 	}
 
-	public AbstractSuggestBox<T> getSource() {
+	public AbstractSuggestBox<T, W> getSource() {
 		return source;
 	}
 
-	public void setSource(AbstractSuggestBox<T> source) {
+	public void setSource(AbstractSuggestBox<T, W> source) {
 		this.source = source;
 	}
 
