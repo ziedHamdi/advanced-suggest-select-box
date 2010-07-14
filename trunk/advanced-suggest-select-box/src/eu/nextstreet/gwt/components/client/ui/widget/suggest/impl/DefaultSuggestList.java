@@ -27,7 +27,8 @@ import eu.nextstreet.gwt.components.client.ui.widget.suggest.SuggestWidget;
  * 
  * @param <T>
  */
-public class DefaultSuggestList<T> extends PopupPanel implements SuggestWidget<T> {
+public class DefaultSuggestList<T> extends PopupPanel implements
+		SuggestWidget<T> {
 	private static final String POPUP_STYLE = "eu-nextstreet-SuggestPopup";
 
 	public DefaultSuggestList() {
@@ -55,8 +56,8 @@ public class DefaultSuggestList<T> extends PopupPanel implements SuggestWidget<T
 
 	@Override
 	public void hide() {
-		//for comment on debugging
-		//		super.hide();
+		// for comment on debugging
+		super.hide();
 	}
 
 }

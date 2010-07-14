@@ -63,7 +63,6 @@ public abstract class AbstractSuggestBox<T, W extends ValueHolderLabel<T>>
 	private static final String SUGGEST_FIELD_COMP = "eu-nextstreet-SuggestFieldComp";
 	private static final String SUGGEST_FIELD = "eu-nextstreet-SuggestField";
 	private static final String SUGGEST_FIELD_HOVER = "eu-nextstreet-SuggestFieldHover";
-	private static final String ITEM = "eu-nextstreet-SuggestItem";
 	private static SuggestBoxUiBinder uiBinder = GWT
 			.create(SuggestBoxUiBinder.class);
 	protected T selected;
@@ -201,7 +200,7 @@ public abstract class AbstractSuggestBox<T, W extends ValueHolderLabel<T>>
 
 		ValueHolderLabel<T> popupWidget = getSelectedItem();
 		if (popupWidget != null && selectedIndex != -1)
-			popupWidget.setFocused(false);
+			popupWidget.setSelected(false);
 		int widgetCount = listRenderer.getWidgetCount();
 
 		if (widgetCount == 0)
@@ -263,7 +262,7 @@ public abstract class AbstractSuggestBox<T, W extends ValueHolderLabel<T>>
 	protected void highlightSelectedValue() {
 		ValueHolderLabel<T> popupWidget = getSelectedItem();
 		if (popupWidget != null) {
-			popupWidget.setFocused(true);
+			popupWidget.setSelected(true);
 			UIObject uiObject = popupWidget.getUiObject();
 			assert (uiObject != null);
 			scrollPanel.ensureVisible(uiObject);
@@ -336,7 +335,6 @@ public abstract class AbstractSuggestBox<T, W extends ValueHolderLabel<T>>
 				selectedIndex = i;
 
 			final W currentLabel = createValueRenderer(t, currentText);
-			currentLabel.setStyleName(ITEM);
 			listRenderer.add(currentLabel);
 			currentLabel.addClickHandler(new ClickHandler() {
 				@Override

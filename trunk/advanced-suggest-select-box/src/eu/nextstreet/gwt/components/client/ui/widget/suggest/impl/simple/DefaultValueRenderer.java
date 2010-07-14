@@ -83,7 +83,7 @@ public class DefaultValueRenderer<T> extends HTML implements
 	}
 
 	@Override
-	public void setFocused(boolean focused) {
+	public void setSelected(boolean focused) {
 		if (focused)
 			addStyleName(SELECTED);
 		else

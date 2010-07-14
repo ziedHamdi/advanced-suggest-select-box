@@ -29,6 +29,8 @@ import com.google.gwt.user.client.ui.UIObject;
  */
 public interface ValueHolderLabel<T> extends HasAllMouseHandlers,
 		HasClickHandlers {
+	public static final String ITEM_DEFAULT_STYLE = "eu-nextstreet-SuggestItem";
+
 	/**
 	 * returns the value it represents
 	 * 
@@ -49,7 +51,7 @@ public interface ValueHolderLabel<T> extends HasAllMouseHandlers,
 	 * 
 	 * @param focused
 	 */
-	public void setFocused(boolean focused);
+	public void setSelected(boolean selected);
 
 	/**
 	 * Highlights the item if it's the one hovered
