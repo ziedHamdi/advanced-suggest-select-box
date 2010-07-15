@@ -52,7 +52,7 @@ public class IntoGwt implements EntryPoint {
 		$doc.getElementById("cssFile").href=styleFile;
 	}-*/;
 
-	private boolean test = true;
+	private boolean test = false;
 
 	/**
 	 * This is the entry point method.
@@ -82,8 +82,8 @@ public class IntoGwt implements EntryPoint {
 		// final DefaultSuggestBox<Value,ValueHolderLabel<Value>> box = new
 		// DefaultSuggestBox<Value,
 		// ValueHolderLabel<Value>>("select or type value");
-		final DefaultSuggestBox box = new DefaultSuggestBox<Value, ValueHolderLabel<Value>>(
-				"select or type value");
+		final DefaultSuggestBox box = new DefaultSuggestBox<Value, ValueHolderLabel<Value>>("select or type value");
+		box.setStartsWith(false);
 		box.add(new Value("01 - ABCD"));
 		box.add(new Value("02 - CDEF"));
 		box.add(new Value("03 - CFGHIJ"));
@@ -119,8 +119,7 @@ public class IntoGwt implements EntryPoint {
 
 			@Override
 			public void onValueChange(ValueChangeEvent<Boolean> event) {
-				changeCss(style.getValue() ? "IntoGwt.css"
-						: "IntoGwtClassic.css");
+				changeCss(style.getValue() ? "IntoGwt.css" : "IntoGwtClassic.css");
 			}
 
 		});
@@ -156,7 +155,7 @@ public class IntoGwt implements EntryPoint {
 			}
 
 		});
-		final CheckBox multiColumn = new CheckBox("Table");
+		final CheckBox multiColumn = new CheckBox("Table Renderer");
 		multiColumn.setValue(box.isReadOnly());
 		multiColumn.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
 
@@ -165,15 +164,13 @@ public class IntoGwt implements EntryPoint {
 				SimpleTableValueRendererFactory<Value, SimpleTableRowItemRenderer<Value>> tableRendererFactory = new SimpleTableValueRendererFactory<Value, SimpleTableRowItemRenderer<Value>>() {
 
 					@Override
-					protected SimpleTableRowItemRenderer<Value> newInstance(
-							Value value, String filterText,
+					protected SimpleTableRowItemRenderer<Value> newInstance(Value value, String filterText,
 							boolean caseSensitive) {
 						SimpleTableRowItemRenderer<Value> simpleTableRowItemRenderer = new SimpleTableRowItemRenderer<Value>(
-								value, filterText, caseSensitive) {
+							value, filterText, caseSensitive) {
 
 							@Override
-							protected String[] explodeValueInColumns(
-									Value value, String filterText,
+							protected String[] explodeValueInColumns(Value value, String filterText,
 									boolean caseSensitive) {
 								if (value == null)
 									return new String[] { "", "" };
@@ -185,9 +182,8 @@ public class IntoGwt implements EntryPoint {
 					}
 				};
 				// box.setValueRendererFactory(tableRendererFactory)
-				box
-						.setValueRendererFactory((event.getValue() ? tableRendererFactory
-								: new DefaultValueRendererFactory<Value, SimpleTableRowItemRenderer<Value>>()));
+				box.setValueRendererFactory((event.getValue() ? tableRendererFactory
+					: new DefaultValueRendererFactory<Value, SimpleTableRowItemRenderer<Value>>()));
 			}
 
 		});
@@ -216,8 +212,7 @@ public class IntoGwt implements EntryPoint {
 
 		final VerticalPanel infoContainer = new VerticalPanel();
 		RootPanel.get("infoContainer").add(infoContainer);
-		final DateTimeFormat dateTimeFormat = DateTimeFormat
-				.getFormat("HH:mm:ss");
+		final DateTimeFormat dateTimeFormat = DateTimeFormat.getFormat("HH:mm:ss");
 		box.addHandler(new ChangeHandler() {
 
 			@SuppressWarnings("unchecked")
@@ -225,21 +220,13 @@ public class IntoGwt implements EntryPoint {
 			public void onChange(ChangeEvent event) {
 				if (infoContainer.getWidgetCount() > 3)
 					infoContainer.remove(3);
-				infoContainer.insert(
-						new Label(
-								"At "
-										+ dateTimeFormat.format(new Date())
-										+ " you "
-										+ (((SuggestChangeEvent) event)
-												.isSelected() ? "selected "
-												: "typed ")
-										+ ((AbstractSuggestBox) event
-												.getSource()).getText()), 0);
+				infoContainer.insert(new Label("At " + dateTimeFormat.format(new Date()) + " you "
+					+ (((SuggestChangeEvent) event).isSelected() ? "selected " : "typed ")
+					+ ((AbstractSuggestBox) event.getSource()).getText()), 0);
 			}
 		});
 
-		AdvancedTextBox advancedTextBox = new AdvancedTextBox(
-				"Please type a value");
+		AdvancedTextBox advancedTextBox = new AdvancedTextBox("Please type a value");
 		advancedTextBox.addDoubleClickHandler(new DoubleClickHandler() {
 
 			@Override
