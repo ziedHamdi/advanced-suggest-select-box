@@ -35,8 +35,8 @@ import eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueRendererFactor
  * 
  * @param <T>
  */
-public class SimpleTableListRenderer<T, W extends SimpleTableRowItemRenderer<T>>
-		extends FlexTable implements ListRenderer<T, W> {
+public class SimpleTableListRenderer<T, W extends SimpleTableRowItemRenderer<T>> extends FlexTable implements
+		ListRenderer<T, W> {
 	protected List<W> rows = new ArrayList<W>();
 
 	public SimpleTableListRenderer() {
@@ -61,6 +61,7 @@ public class SimpleTableListRenderer<T, W extends SimpleTableRowItemRenderer<T>>
 	public void clear() {
 		rows.clear();
 		super.clear();
+		super.removeAllRows();
 	}
 
 	@Override
