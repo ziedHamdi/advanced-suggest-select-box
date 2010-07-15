@@ -113,13 +113,19 @@ h1 {
 	color: gray;
 }
 
-.eu-nextstreet-SuggestFieldPopupSimpleTableCell {	
+.eu-nextstreet-SuggestFieldPopupSimpleTableCell {
+	
 }
 
 .eu-nextstreet-SuggestFieldPopupSimpleTableCell-selected {
-	background-color: #aaffaa; 	
+	background-color: #aaffaa;
 }
 
 .eu-nextstreet-SuggestFieldPopupSimpleTableCell-hover {
-	font-weight: bold;		
+	font-weight: bold;
+}
+
+.eu-nextstreet-SuggestTableMatchingString {
+	background: transparent url( img/matching-str-bg.PNG ) repeat-x left top
+		;
 }

@@ -37,54 +37,48 @@ import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
 
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueHolderLabel;
+import eu.nextstreet.gwt.components.client.ui.widget.util.HtmlUtil;
 
 /**
- * represents a row in the suggest box when using the factory
- * {@link SimpleTableValueRendererFactory}
+ * represents a row in the suggest box when using the factory {@link SimpleTableValueRendererFactory}
  * 
- * Typically the methods {@link #explodeValueInColumns(Object, String, boolean)}
- * and probably {@link #createWidget(String, boolean, int, String)} will be
- * overridden to answer to your needs. By default
- * {@link #createWidget(String, boolean, int, String)} will create {@link HTML}
- * widgets with the String content you returned in
- * {@link #explodeValueInColumns(Object, String, boolean)}
+ * Typically the methods {@link #explodeValueInColumns(Object, String, boolean)} and probably
+ * {@link #createWidget(String, boolean, int, String)} will be overridden to answer to your needs. By default
+ * {@link #createWidget(String, boolean, int, String)} will create {@link HTML} widgets with the String content you
+ * returned in {@link #explodeValueInColumns(Object, String, boolean)}
  * 
  * @author Zied Hamdi founder of http://into-i.fr
  * 
  * @param <T>
  *            the value to be represented in this row's type
  */
-public class SimpleTableRowItemRenderer<T> extends BasicWidgetListHolder
-		implements ValueHolderLabel<T> {
+public class SimpleTableRowItemRenderer<T> extends BasicWidgetListHolder implements ValueHolderLabel<T> {
+	private static final String MATCHING_STRING = "eu-nextstreet-SuggestTableMatchingString";
 	public static final String SELECTED = "selected";
 	private static final long serialVersionUID = 1L;
 	protected T value;
 	protected boolean caseSensitive;
 	protected String styleName;
 
-	public SimpleTableRowItemRenderer(T value, String filterText,
-			boolean caseSensitive) {
+	public SimpleTableRowItemRenderer(T value, String filterText, boolean caseSensitive) {
 		this.value = value;
 		this.caseSensitive = caseSensitive;
 		fillHtml(value, filterText, caseSensitive);
 	}
 
 	/**
-	 * This method synchronizes all the method calls, you shouldn't override or
-	 * if you do, you should call it in your implementation to have the other
-	 * method calls done for you
+	 * This method synchronizes all the method calls, you shouldn't override or if you do, you should call it in your
+	 * implementation to have the other method calls done for you
 	 * 
 	 * @param value
 	 *            the row value
 	 * @param filterText
-	 *            the text written in the suggest box (to be highlighted for
-	 *            example)
+	 *            the text written in the suggest box (to be highlighted for example)
 	 * @param caseSensitive
 	 *            the case sensitive option of the suggest box
 	 */
 	protected void fillHtml(T value, String filterText, boolean caseSensitive) {
-		String[] valueInColumns = explodeValueInColumns(value, filterText,
-				caseSensitive);
+		String[] valueInColumns = explodeValueInColumns(value, filterText, caseSensitive);
 		for (int i = 0; i < valueInColumns.length; i++) {
 			String colText = valueInColumns[i];
 			add(createWidget(filterText, caseSensitive, i, colText));
@@ -92,12 +86,11 @@ public class SimpleTableRowItemRenderer<T> extends BasicWidgetListHolder
 	}
 
 	/**
-	 * Constructs the widget corresponding to the parameters information. This
-	 * is not typed by generics because widgets can be different fo each column
+	 * Constructs the widget corresponding to the parameters information. This is not typed by generics because widgets
+	 * can be different fo each column
 	 * 
 	 * @param filterText
-	 *            the text that was typed in the suggest box (to do the matching
-	 *            sequence highlighting)
+	 *            the text that was typed in the suggest box (to do the matching sequence highlighting)
 	 * @param caseSensitive
 	 *            true if the case sensitive option is enabled
 	 * @param col
@@ -107,10 +100,9 @@ public class SimpleTableRowItemRenderer<T> extends BasicWidgetListHolder
 	 * @return teh widgets to display
 	 * @see #explodeValueInColumns(Object, String, boolean)
 	 */
-	protected Widget createWidget(String filterText, boolean caseSensitive,
-			int col, String colText) {
-		return new HTML(highlightColumnText(col) ? highlightMatchingSequence(
-				colText, filterText, caseSensitive) : colText);
+	protected Widget createWidget(String filterText, boolean caseSensitive, int col, String colText) {
+		return new HTML(highlightColumnText(col) ? highlightMatchingSequence(colText, filterText, caseSensitive)
+			: colText);
 	}
 
 	/**
@@ -118,21 +110,18 @@ public class SimpleTableRowItemRenderer<T> extends BasicWidgetListHolder
 	 * 
 	 * 
 	 * @param filterText
-	 *            the text that was typed in the suggest box (to do the matching
-	 *            sequence highlighting)
+	 *            the text that was typed in the suggest box (to do the matching sequence highlighting)
 	 * @param caseSensitive
 	 *            true if the case sensitive option is enabled
 	 * @param colText
 	 *            the column text (can be an image url or any text) * @return
 	 */
-	protected String highlightMatchingSequence(String colText,
-			String filterText, boolean caseSensitive) {
-		return colText;
+	protected String highlightMatchingSequence(String colText, String filterText, boolean caseSensitive) {
+		return HtmlUtil.highlightMatchingSequence(colText, filterText, caseSensitive, MATCHING_STRING);
 	}
 
 	/**
-	 * Specifies whether you want the highlight function to be called on teh
-	 * column with index <code>i</code>
+	 * Specifies whether you want the highlight function to be called on teh column with index <code>i</code>
 	 * 
 	 * @param col
 	 *            the column index starting from 0
@@ -143,25 +132,20 @@ public class SimpleTableRowItemRenderer<T> extends BasicWidgetListHolder
 	}
 
 	/**
-	 * Decomposes the current value in the different columns text value, this
-	 * text will be used after highlighting
-	 * {@link #highlightMatchingSequence(String, String, boolean)}, if enabled
-	 * {@link #highlightColumnText(int)}) to construct widgets
-	 * {@link #createWidget(String, boolean, int, String)}
+	 * Decomposes the current value in the different columns text value, this text will be used after highlighting
+	 * {@link #highlightMatchingSequence(String, String, boolean)}, if enabled {@link #highlightColumnText(int)}) to
+	 * construct widgets {@link #createWidget(String, boolean, int, String)}
 	 * 
-	 * you can return urls or any string value you will need after to create the
-	 * corresponding widget
+	 * you can return urls or any string value you will need after to create the corresponding widget
 	 * 
 	 * 
 	 * @param filterText
-	 *            the text that was typed in the suggest box (to do the matching
-	 *            sequence highlighting)
+	 *            the text that was typed in the suggest box (to do the matching sequence highlighting)
 	 * @param caseSensitive
 	 *            true if the case sensitive option is enabled
 	 * @return the row columns text representations
 	 */
-	protected String[] explodeValueInColumns(T value, String filterText,
-			boolean caseSensitive) {
+	protected String[] explodeValueInColumns(T value, String filterText, boolean caseSensitive) {
 		return new String[] { value.toString() };
 	}
 
@@ -204,8 +188,7 @@ public class SimpleTableRowItemRenderer<T> extends BasicWidgetListHolder
 		MultipleHandlerRegistration toReturn = new MultipleHandlerRegistration();
 		for (Widget widget : this) {
 			if (widget instanceof HasMouseDownHandlers)
-				toReturn.add(((HasMouseDownHandlers) widget)
-						.addMouseDownHandler(handler));
+				toReturn.add(((HasMouseDownHandlers) widget).addMouseDownHandler(handler));
 		}
 		return toReturn;
 	}
@@ -223,8 +206,7 @@ public class SimpleTableRowItemRenderer<T> extends BasicWidgetListHolder
 		MultipleHandlerRegistration toReturn = new MultipleHandlerRegistration();
 		for (Widget widget : this) {
 			if (widget instanceof HasMouseUpHandlers)
-				toReturn.add(((HasMouseUpHandlers) widget)
-						.addMouseUpHandler(handler));
+				toReturn.add(((HasMouseUpHandlers) widget).addMouseUpHandler(handler));
 		}
 		return toReturn;
 	}
@@ -234,8 +216,7 @@ public class SimpleTableRowItemRenderer<T> extends BasicWidgetListHolder
 		MultipleHandlerRegistration toReturn = new MultipleHandlerRegistration();
 		for (Widget widget : this) {
 			if (widget instanceof HasMouseOutHandlers)
-				toReturn.add(((HasMouseOutHandlers) widget)
-						.addMouseOutHandler(handler));
+				toReturn.add(((HasMouseOutHandlers) widget).addMouseOutHandler(handler));
 		}
 		return toReturn;
 	}
@@ -245,8 +226,7 @@ public class SimpleTableRowItemRenderer<T> extends BasicWidgetListHolder
 		MultipleHandlerRegistration toReturn = new MultipleHandlerRegistration();
 		for (Widget widget : this) {
 			if (widget instanceof HasMouseOverHandlers)
-				toReturn.add(((HasMouseOverHandlers) widget)
-						.addMouseOverHandler(handler));
+				toReturn.add(((HasMouseOverHandlers) widget).addMouseOverHandler(handler));
 		}
 		return toReturn;
 	}
@@ -256,8 +236,7 @@ public class SimpleTableRowItemRenderer<T> extends BasicWidgetListHolder
 		MultipleHandlerRegistration toReturn = new MultipleHandlerRegistration();
 		for (Widget widget : this) {
 			if (widget instanceof HasMouseMoveHandlers)
-				toReturn.add(((HasMouseMoveHandlers) widget)
-						.addMouseMoveHandler(handler));
+				toReturn.add(((HasMouseMoveHandlers) widget).addMouseMoveHandler(handler));
 		}
 		return toReturn;
 	}
@@ -267,8 +246,7 @@ public class SimpleTableRowItemRenderer<T> extends BasicWidgetListHolder
 		MultipleHandlerRegistration toReturn = new MultipleHandlerRegistration();
 		for (Widget widget : this) {
 			if (widget instanceof HasMouseWheelHandlers)
-				toReturn.add(((HasMouseWheelHandlers) widget)
-						.addMouseWheelHandler(handler));
+				toReturn.add(((HasMouseWheelHandlers) widget).addMouseWheelHandler(handler));
 		}
 		return toReturn;
 	}
@@ -278,8 +256,7 @@ public class SimpleTableRowItemRenderer<T> extends BasicWidgetListHolder
 		MultipleHandlerRegistration toReturn = new MultipleHandlerRegistration();
 		for (Widget widget : this) {
 			if (widget instanceof HasClickHandlers)
-				toReturn.add(((HasClickHandlers) widget)
-						.addClickHandler(handler));
+				toReturn.add(((HasClickHandlers) widget).addClickHandler(handler));
 		}
 		return toReturn;
 	}
