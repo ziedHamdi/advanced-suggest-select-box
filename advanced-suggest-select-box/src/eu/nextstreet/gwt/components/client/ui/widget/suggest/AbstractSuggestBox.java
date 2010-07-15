@@ -614,7 +614,7 @@ public abstract class AbstractSuggestBox<T, W extends ValueHolderLabel<T>> exten
 	 * @param onButton
 	 */
 	protected void mouseOnButton(boolean onButton) {
-		if (onButton)
+		if (onButton && !isReadOnly())
 			textField.addStyleName(SUGGEST_FIELD_HOVER);
 		else
 			textField.removeStyleName(SUGGEST_FIELD_HOVER);
