@@ -311,6 +311,7 @@ public abstract class AbstractSuggestBox<T, W extends ValueHolderLabel<T>> exten
 	protected void showSuggestList() {
 		suggestWidget.adjustPosition(textField.getAbsoluteLeft(), textField.getAbsoluteTop()
 			+ textField.getOffsetHeight());
+		highlightSelectedValue();
 		suggestWidget.show();
 	}
 
@@ -318,9 +319,8 @@ public abstract class AbstractSuggestBox<T, W extends ValueHolderLabel<T>> exten
 		int size = possibilities.size();
 		for (int i = 0; i < size; i++) {
 			final T t = possibilities.get(i);
-			String value = toString(t);
 			String currentText = getText();
-			if (value.equals(currentText))
+			if (checkSelected(t, currentText))
 				selectedIndex = i;
 
 			final W currentLabel = createValueRenderer(t, currentText);
@@ -351,6 +351,21 @@ public abstract class AbstractSuggestBox<T, W extends ValueHolderLabel<T>> exten
 		}
 	}
 
+	/**
+	 * Override to use another strategy to determine if an item is selected
+	 * 
+	 * @param item
+	 *            item to test
+	 * @param currentText
+	 *            the current field text
+	 * @return true ifaoif <code>currentText</code> matches the item <code>t</code>
+	 */
+	protected boolean checkSelected(final T item, String currentText) {
+		String value = toString(item);
+		boolean found = value.equals(currentText);
+		return found;
+	}
+
 	private W createValueRenderer(final T t, String value) {
 		final W currentLabel = valueRendererFactory.createValueRenderer(t, value, caseSensitive);
 		return currentLabel;
@@ -368,7 +383,6 @@ public abstract class AbstractSuggestBox<T, W extends ValueHolderLabel<T>> exten
 		return t.toString();
 	}
 
-	@SuppressWarnings("unchecked")
 	private ValueHolderLabel<T> getSelectedItem() {
 		if (selectedIndex != -1 && listRenderer.getWidgetCount() > selectedIndex)
 			return (ValueHolderLabel<T>) listRenderer.getRow(selectedIndex);
@@ -469,6 +483,14 @@ public abstract class AbstractSuggestBox<T, W extends ValueHolderLabel<T>> exten
 		typed = str;
 	}
 
+	/**
+	 * Not used in the the library: utility method to get the typed item corresponding to a given text Warning! this
+	 * methods calls {@link #getFiltredPossibilities(String)} that could make a call to the server, you should avoid
+	 * calling it.
+	 * 
+	 * @param text
+	 * @return
+	 */
 	public T computeSelected(String text) {
 		List<T> possibilities = getFiltredPossibilities(text);
 		if (possibilities.size() == 1) {

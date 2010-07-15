@@ -52,7 +52,7 @@ public class IntoGwt implements EntryPoint {
 		$doc.getElementById("cssFile").href=styleFile;
 	}-*/;
 
-	private boolean test = false;
+	private boolean test = true;
 
 	/**
 	 * This is the entry point method.
