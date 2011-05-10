@@ -25,7 +25,7 @@ The simplest test case of this library is the following:
 
 		}
 
-		DefaultSuggestBox<Value> box = new DefaultSuggestBox<Value>();
+		DefaultSuggestBox<Value, ValueHolderLabel<Value>> box = new DefaultSuggestBox<Value, ValueHolderLabel<Value>>();
 		box.add(new Value("01 - ABCD"));
 		box.add(new Value("02 - CDEF"));
 		box.add(new Value("03 - GHIJ"));
