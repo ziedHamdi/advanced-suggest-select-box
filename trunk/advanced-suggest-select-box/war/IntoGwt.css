@@ -1,5 +1,5 @@
 /** Add css rules here for your application. */
-	/** Example rules used by the template application (remove for your app) */
+/** Example rules used by the template application (remove for your app) */
 h1 {
 	font-size: 2em;
 	font-weight: bold;
@@ -33,39 +33,41 @@ h1 {
 
 /* la suggest box CUSTOM */
 .eu-nextstreet-SuggestFieldPanel {
-	border-collapse: collapse;
-	border: none;
+	border: 1px solid blue;
+	-moz-border-radius: 8px;
+	border-radius: 8px;
+	
+	-webkit-box-shadow: 1px 1px 8px #9fa7eb;
+	-moz-box-shadow: 1px 1px 8px #9fa7eb;
+	box-shadow: 1px 1px 8px #414178;
 }
 
 .eu-nextstreet-SuggestFieldPanel table tr {
-	height: 22px;
+	
 }
 
 .eu-nextstreet-SuggestFieldPanel .eu-nextstreet-SuggestFieldPanel-left {
-	background: transparent url('img/bg-left.png') right top no-repeat;
+	
 }
 
 .eu-nextstreet-SuggestFieldPanel .eu-nextstreet-SuggestFieldPanel-left .eu-nextstreet-SuggestFieldPanel-leftInner
 	{
-	width: 9px;
-	height: 22px;
+	
 }
 
 .eu-nextstreet-SuggestFieldPanel .eu-nextstreet-SuggestFieldPanel-content
 	{
-	background: transparent url('img/bg-content.png') left top repeat-x;
-	height: 22px;
+	
 }
 
 .eu-nextstreet-SuggestFieldPanel .eu-nextstreet-SuggestFieldPanel-right
 	{
-	background: transparent url('img/bg-right.png') left top no-repeat;
+	
 }
 
 .eu-nextstreet-SuggestFieldPanel .eu-nextstreet-SuggestFieldPanel-right .eu-nextstreet-SuggestFieldPanel-rightInner
 	{
-	width: 9px;
-	height: 22px;
+	
 }
 
 .eu-nextstreet-SuggestItem {
@@ -74,10 +76,14 @@ h1 {
 }
 
 .eu-nextstreet-SuggestItemSelected {
-	background-color: #ffffff;
-	border: 1px #c7c7c7 dotted;
+	-moz-border-radius: 6px;
+	border-radius: 6px;	
+		
+	text-shadow: 1px 1px 1px #949dff;
+	filter: dropshadow(color=#949dff, offx=1, offy=1);
+	
+	background-color: #cbddfa;
 	color: black;
-	font-weight: bold;
 }
 
 .eu-nextstreet-SuggestItemHover {
@@ -85,8 +91,10 @@ h1 {
 }
 
 .eu-nextstreet-SuggestMatchingString {
-	font-weight: bold;
-	color: #1aae1d;
+	color: #0f8a04;
+
+	text-shadow: 1px 1px 1px #95ff8f;
+	filter: dropshadow(color=#95ff8f, offx=1, offy=1);
 }
 
 .eu-nextstreet-SuggestField {
@@ -94,15 +102,31 @@ h1 {
 	background: transparent url('img/arrow.png') no-repeat right 5px;
 	border: none;
 	height: 16px;
-	padding-right: 10px;/*for the arrow image on the right*/
+	padding-right: 10px; /*for the arrow image on the right*/
+
+	text-shadow: 1px 1px 1px #9fa7eb;
+	filter: dropshadow(color = #9fa7eb, offx = 1, offy = 1);
 }
 
 .eu-nextstreet-SuggestPopup {
 	background-color: #f3f3f3;
+	border: 1px solid blue;
 	border-top: 0px;
-	border-left: 2px solid #1c1cd5;
-	border-bottom: 2px solid #1c1cd5;
-	border-right: 2px solid #1c1cd5;
+
+	-moz-border-radius-topleft: 0px;
+	-moz-border-radius-topright: 0px;
+	-moz-border-radius-bottomright: 8px;
+	-moz-border-radius-bottomleft: 8px;
+	
+	border-top-left-radius: 0px;
+	border-top-right-radius: 0px;
+	border-bottom-right-radius: 8px;
+	border-bottom-left-radius: 8px;
+
+	-webkit-box-shadow: 1px 1px 8px #9fa7eb;
+	-moz-box-shadow: 1px 1px 8px #9fa7eb;
+	box-shadow: 1px 1px 8px #414178;
+
 	padding: 5px;
 }
 
@@ -112,6 +136,10 @@ h1 {
 
 .eu-nextstreet-SuggestFieldHover {
 	cursor: pointer;
+	
+	-webkit-box-shadow: 1px 1px 6px #dbe9ff;
+	-moz-box-shadow: 1px 1px 6px #dbe9ff;
+	box-shadow: 1px 1px 6px #dbe9ff;
 }
 
 .eu-nextstreet-AdvancedTextBoxDefaultText {
@@ -119,18 +147,38 @@ h1 {
 }
 
 .eu-nextstreet-AdvancedTextBoxErrorText {
-	background-color: #ee4444;
-	color: white;
-	border: red;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+	
+	text-shadow: 1px 1px 1px #a90329;
+	filter: dropshadow(color=#a90329, offx=1, offy=1);
+	
+	background-color: #ffc2c2;
+	color: black;
 }
 
 .eu-nextstreet-AdvancedTextBoxMandatoryText {
 	background-color: #ff9999;
-}
+	
+	border: 0px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+	
+	-webkit-box-shadow: 1px 1px 8px #ff9999;
+	-moz-box-shadow: 1px 1px 8px #ff9999;
+	box-shadow: 1px 1px 8px #ff9999;}
 
 .eu-nextstreet-AdvancedTextBoxReadOnlyText {
 	background-color: #dddddd;
 	color: gray;
+	
+	border: 0px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+	
+	-webkit-box-shadow: 1px 1px 8px #9fa7eb;
+	-moz-box-shadow: 1px 1px 8px #9fa7eb;
+	box-shadow: 1px 1px 8px #414178;
 }
 
 .eu-nextstreet-SuggestFieldPopupSimpleTable {
@@ -154,6 +202,5 @@ h1 {
 }
 
 .eu-nextstreet-SuggestTableMatchingString {
-	background: transparent url( img/matching-str-bg.PNG ) repeat-x left top
-		;
+	background: transparent url( img/matching-str-bg.PNG ) repeat-x left top;
 }
