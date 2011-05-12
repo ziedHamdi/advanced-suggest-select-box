@@ -28,7 +28,8 @@ import eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueHolderLabel;
  * 
  * @author Zied Hamdi
  * 
- * @param <T>
+ * @param <T> the class type of the items
+ * @param <W> the {@link ValueHolderLabel} implementation class
  */
 public class DefaultSuggestBox<T, W extends ValueHolderLabel<T>> extends
 		AbstractSuggestBox<T, W> {

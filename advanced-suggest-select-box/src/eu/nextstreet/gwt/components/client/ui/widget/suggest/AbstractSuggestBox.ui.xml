@@ -1,6 +1,6 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:into="urn:import:eu.nextstreet.gwt.components.client.ui.widget">
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:into="urn:import:eu.nextstreet.gwt.components.client.ui.widget.suggest">
 	<g:HTMLPanel>
 		<table cellspacing="0" cellpadding="0"
 			class="eu-nextstreet-SuggestFieldPanel">
@@ -14,7 +14,7 @@
 					<!-- permet de prévenir d'eventuel besoin du designer -->
 					<td align="left" style="vertical-align: top;" class="eu-nextstreet-SuggestFieldPanel-content">
 						<!-- le widget -->
-						<into:AdvancedTextBox ui:field="textField"></into:AdvancedTextBox>
+						<into:SuggestTextBoxWidget ui:field="textField"></into:SuggestTextBoxWidget>
 					</td>
 					<!-- cellule pour le bord droit -->
 					<td class="eu-nextstreet-SuggestFieldPanel-right">
