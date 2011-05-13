@@ -28,15 +28,17 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.CheckBox;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import eu.nextstreet.gwt.components.client.ui.common.data.ValueRepresentationTransformer;
 import eu.nextstreet.gwt.components.client.ui.widget.AdvancedTextBox;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.AbstractSuggestBox;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.SuggestChangeEvent;
-import eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueHolderLabel;
-import eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.DefaultSuggestBox;
+import eu.nextstreet.gwt.components.client.ui.widget.suggest.iconed.IconedValueHolderLabel;
+import eu.nextstreet.gwt.components.client.ui.widget.suggest.iconed.impl.DefaultIconedSuggestBox;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.simple.DefaultValueRendererFactory;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.table.SimpleTableRowItemRenderer;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.table.SimpleTableValueRendererFactory;
@@ -49,7 +51,7 @@ import eu.nextstreet.gwt.components.shared.Validator;
  */
 public class IntoGwt implements EntryPoint {
 	public static native void changeCss(String styleFile) /*-{
-		$doc.getElementById("cssFile").href=styleFile;
+		$doc.getElementById("cssFile").href = styleFile;
 	}-*/;
 
 	private boolean test = true;
@@ -82,11 +84,30 @@ public class IntoGwt implements EntryPoint {
 		// final DefaultSuggestBox<Value,ValueHolderLabel<Value>> box = new
 		// DefaultSuggestBox<Value,
 		// ValueHolderLabel<Value>>("select or type value");
-		final DefaultSuggestBox box = new DefaultSuggestBox<Value, ValueHolderLabel<Value>>("select or type value");
+		final DefaultIconedSuggestBox box = new DefaultIconedSuggestBox<Value, IconedValueHolderLabel<Value>>(
+				"select or type value");
 		box.setStartsWith(false);
 		box.add(new Value("01 - ABCD"));
 		box.add(new Value("02 - CDEF"));
 		box.add(new Value("03 - CFGHIJ"));
+		box.add(new Value("Blogger"));
+		box.add(new Value("Calendar"));
+		box.add(new Value("Chrome For a Cause"));
+		box.add(new Value("Chrome Toolbox"));
+		box.add(new Value("Google Documents"));
+		box.add(new Value("GWT Developer Plugin"));
+		box.add(new Value("Screen Capture"));
+		box.add(new Value("Send From Gmail"));
+		box.add(new Value("Similar Pages"));
+
+		box.setIconLinker(new ValueRepresentationTransformer<Value, Image>() {
+
+			@Override
+			public Image transform(Value value) {
+				return new Image("img/chrome_extentions/" + value.str + ".png");
+			}
+		});
+
 		RootPanel.get("suggestBoxContainer").add(box);
 		box.setText("02 - CDEF");
 
@@ -164,14 +185,14 @@ public class IntoGwt implements EntryPoint {
 				SimpleTableValueRendererFactory<Value, SimpleTableRowItemRenderer<Value>> tableRendererFactory = new SimpleTableValueRendererFactory<Value, SimpleTableRowItemRenderer<Value>>() {
 
 					@Override
-					protected SimpleTableRowItemRenderer<Value> newInstance(Value value, String filterText,
-							boolean caseSensitive) {
+					protected SimpleTableRowItemRenderer<Value> newInstance(Value value,
+							String filterText, boolean caseSensitive) {
 						SimpleTableRowItemRenderer<Value> simpleTableRowItemRenderer = new SimpleTableRowItemRenderer<Value>(
-							value, filterText, caseSensitive) {
+								value, filterText, caseSensitive) {
 
 							@Override
-							protected String[] explodeValueInColumns(Value value, String filterText,
-									boolean caseSensitive) {
+							protected String[] explodeValueInColumns(Value value,
+									String filterText, boolean caseSensitive) {
 								if (value == null)
 									return new String[] { "", "" };
 								return value.toString().split("-");
@@ -183,7 +204,7 @@ public class IntoGwt implements EntryPoint {
 				};
 				// box.setValueRendererFactory(tableRendererFactory)
 				box.setValueRendererFactory((event.getValue() ? tableRendererFactory
-					: new DefaultValueRendererFactory<Value, SimpleTableRowItemRenderer<Value>>()));
+						: new DefaultValueRendererFactory<Value, SimpleTableRowItemRenderer<Value>>()));
 			}
 
 		});
@@ -220,9 +241,13 @@ public class IntoGwt implements EntryPoint {
 			public void onChange(ChangeEvent event) {
 				if (infoContainer.getWidgetCount() > 3)
 					infoContainer.remove(3);
-				infoContainer.insert(new Label("At " + dateTimeFormat.format(new Date()) + " you "
-					+ (((SuggestChangeEvent) event).isSelected() ? "selected " : "typed ")
-					+ ((AbstractSuggestBox) event.getSource()).getText()), 0);
+				infoContainer.insert(
+						new Label("At "
+								+ dateTimeFormat.format(new Date())
+								+ " you "
+								+ (((SuggestChangeEvent) event).isSelected() ? "selected "
+										: "typed ")
+								+ ((AbstractSuggestBox) event.getSource()).getText()), 0);
 			}
 		});
 

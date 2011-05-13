@@ -22,9 +22,9 @@ package eu.nextstreet.gwt.components.client.ui.widget.suggest;
  * @author Zied Hamdi founder of http://into-i.fr
  * 
  * @param <T>
- *            the represented value type
+ *          the represented value type
  * @param <W>
- *            the returned widget type
+ *          the returned widget type
  */
 public interface ValueRendererFactory<T, W extends ValueHolderLabel<T>> {
 	/**
@@ -33,16 +33,37 @@ public interface ValueRendererFactory<T, W extends ValueHolderLabel<T>> {
 	 * @author Zied Hamdi founder of http://into-i.fr
 	 * 
 	 * @param <T>
-	 *            the type of the value
+	 *          the type of the value
 	 */
 	public static interface ListRenderer<T, W> {
 
+		/**
+		 * elements in list
+		 * 
+		 * @return count
+		 */
 		int getWidgetCount();
 
+		/**
+		 * Empties the list (for recomputing)
+		 */
 		void clear();
 
+		/**
+		 * adds an item to the list
+		 * 
+		 * @param item
+		 *          item
+		 */
 		void add(W item);
 
+		/**
+		 * returns the item at position index
+		 * 
+		 * @param index
+		 *          position
+		 * @return item
+		 */
 		W getRow(int index);
 
 	}
@@ -57,5 +78,10 @@ public interface ValueRendererFactory<T, W extends ValueHolderLabel<T>> {
 	 */
 	W createValueRenderer(T value, String filterText, boolean caseSensitive);
 
+	/**
+	 * Creates the widget responsible for displaying the list of possible items
+	 * 
+	 * @return
+	 */
 	ListRenderer<T, W> createListRenderer();
 }
