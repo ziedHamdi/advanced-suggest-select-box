@@ -18,7 +18,6 @@ package eu.nextstreet.gwt.components.client.ui.widget.suggest;
 
 import java.util.List;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -29,15 +28,13 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
-import com.google.gwt.uibinder.client.UiBinder;
-import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
 
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueRendererFactory.ListRenderer;
+import eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.DefaultSuggestBox;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.DefaultSuggestList;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.simple.DefaultValueRendererFactory;
 import eu.nextstreet.gwt.components.shared.Validator;
@@ -46,6 +43,11 @@ import eu.nextstreet.gwt.components.shared.Validator;
  * Suggest box (or select box) with many possibilities either in behavior and in
  * presentation.
  * 
+ * The default event handling behavior must be connected explicitly by adding
+ * the corresponding @UiHandler("textField") on your implementation: this
+ * approach makes the default behavior accessible but non intrusive
+ * 
+ * @see DefaultSuggestBox for an implementation exemple
  * @author Zied Hamdi
  * 
  *         bugs: when a selection is directly replaced by characters, the enter
@@ -59,8 +61,8 @@ public abstract class AbstractSuggestBox<T, W extends ValueHolderLabel<T>>
 	private static final String SUGGEST_FIELD_COMP = "eu-nextstreet-SuggestFieldComp";
 	private static final String SUGGEST_FIELD = "eu-nextstreet-SuggestFieldDetail";
 	private static final String SUGGEST_FIELD_HOVER = "eu-nextstreet-SuggestFieldHover";
-	private static SuggestBoxUiBinder uiBinder = GWT
-			.create(SuggestBoxUiBinder.class);
+	// private static SuggestBoxUiBinder uiBinder = GWT
+	// .create(SuggestBoxUiBinder.class);
 	protected T selected;
 	protected String typed;
 	protected boolean caseSensitive;
@@ -80,23 +82,28 @@ public abstract class AbstractSuggestBox<T, W extends ValueHolderLabel<T>>
 
 	protected ValueRendererFactory<T, W> valueRendererFactory;
 
-	@SuppressWarnings("unchecked")
-	interface SuggestBoxUiBinder extends UiBinder<Widget, AbstractSuggestBox> {
-	}
-
-	protected @UiField
-	SuggestTextBoxWidget<T, W> textField;
+	// @SuppressWarnings("rawtypes")
+	// interface SuggestBoxUiBinder extends UiBinder<Widget, AbstractSuggestBox> {
+	// }
 
 	public AbstractSuggestBox() {
 		this(null);
 	}
 
 	public AbstractSuggestBox(String defaultText) {
-		initWidget(uiBinder.createAndBindUi(this));
+	}
+
+	/**
+	 * This method must be called in the implementation's constructor
+	 * 
+	 * @param defaultText
+	 *          the defalt text. Can be null
+	 */
+	protected void init(String defaultText) {
 		setStyleName(SUGGEST_FIELD_COMP);
-		textField.setRepresenter(this);
-		textField.setStyleName(SUGGEST_FIELD);
-		textField.setDefaultText(defaultText);
+		getTextField().setRepresenter(this);
+		getTextField().setStyleName(SUGGEST_FIELD);
+		getTextField().setDefaultText(defaultText);
 		suggestWidget.setWidget(scrollPanel);
 		setValueRendererFactory(new DefaultValueRendererFactory<T, W>());
 	}
@@ -110,12 +117,20 @@ public abstract class AbstractSuggestBox<T, W extends ValueHolderLabel<T>>
 	// public void onMouseOut(MouseOutEvent event) {
 	// }
 
-	@UiHandler("textField")
+	/**
+	 * Default double click handling
+	 */
+	// @UiHandler("textField")
 	public void onDoubleClick(DoubleClickEvent event) {
 		doubleClicked(event);
 	}
 
-	@UiHandler("textField")
+	/**
+	 * Default blur event handling
+	 * 
+	 * @param event
+	 */
+	// @UiHandler("textField")
 	public void onBlur(BlurEvent event) {
 		new Timer() {
 			@Override
@@ -146,11 +161,12 @@ public abstract class AbstractSuggestBox<T, W extends ValueHolderLabel<T>>
 		}
 	}
 
-	protected boolean isShowingSuggestList() {
-		return suggestWidget.isShowing();
-	}
-
-	@UiHandler("textField")
+	/**
+	 * Default keyboard events handling
+	 * 
+	 * @param keyUpEvent
+	 */
+	// @UiHandler("textField")
 	public void onKeyUp(KeyUpEvent keyUpEvent) {
 		int keyCode = keyUpEvent.getNativeKeyCode();
 
@@ -234,6 +250,15 @@ public abstract class AbstractSuggestBox<T, W extends ValueHolderLabel<T>>
 	}
 
 	/**
+	 * returns true if the suggest list is visible
+	 * 
+	 * @return true if the suggest list is visible
+	 */
+	protected boolean isShowingSuggestList() {
+		return suggestWidget.isShowing();
+	}
+
+	/**
 	 * 
 	 */
 	protected void highlightSelectedValue() {
@@ -301,8 +326,8 @@ public abstract class AbstractSuggestBox<T, W extends ValueHolderLabel<T>>
 	}
 
 	protected void showSuggestList() {
-		suggestWidget.adjustPosition(textField.getAbsoluteLeft(),
-				textField.getAbsoluteTop() + textField.getOffsetHeight());
+		suggestWidget.adjustPosition(getTextField().getAbsoluteLeft(),
+				getTextField().getAbsoluteTop() + getTextField().getOffsetHeight());
 		highlightSelectedValue();
 		suggestWidget.show();
 	}
@@ -399,9 +424,9 @@ public abstract class AbstractSuggestBox<T, W extends ValueHolderLabel<T>>
 	 *         choices
 	 */
 	protected boolean fillValue(final T t, boolean commit) {
-		textField.setText(toString(t));
+		getTextField().setText(toString(t));
 		hideSuggestList();
-		textField.setFocus(true);
+		getTextField().setFocus(true);
 		selected = t;
 		typed = toString(t);
 		if (commit) {
@@ -480,11 +505,11 @@ public abstract class AbstractSuggestBox<T, W extends ValueHolderLabel<T>>
 	 * @return the text fiel
 	 */
 	public String getText() {
-		return textField.getTextValue();
+		return getTextField().getTextValue();
 	}
 
 	public void setText(String str) {
-		textField.setText(str);
+		getTextField().setText(str);
 		typed = str;
 	}
 
@@ -512,11 +537,11 @@ public abstract class AbstractSuggestBox<T, W extends ValueHolderLabel<T>>
 	}
 
 	public void setEnabled(boolean enabled) {
-		textField.setEnabled(enabled);
+		getTextField().setEnabled(enabled);
 	}
 
 	public void setFocus(boolean focus) {
-		textField.setFocus(focus);
+		getTextField().setFocus(focus);
 	}
 
 	protected abstract List<T> getFiltredPossibilities(String text);
@@ -593,11 +618,11 @@ public abstract class AbstractSuggestBox<T, W extends ValueHolderLabel<T>>
 	}
 
 	public String getDefaultText() {
-		return textField.getDefaultText();
+		return getTextField().getDefaultText();
 	}
 
 	public void setDefaultText(String text) {
-		this.textField.setDefaultText(text);
+		this.getTextField().setDefaultText(text);
 	}
 
 	/**
@@ -607,9 +632,9 @@ public abstract class AbstractSuggestBox<T, W extends ValueHolderLabel<T>>
 	 */
 	protected void mouseOnButton(boolean onButton) {
 		if (onButton && !isReadOnly())
-			textField.addStyleName(SUGGEST_FIELD_HOVER);
+			getTextField().addStyleName(SUGGEST_FIELD_HOVER);
 		else
-			textField.removeStyleName(SUGGEST_FIELD_HOVER);
+			getTextField().removeStyleName(SUGGEST_FIELD_HOVER);
 	}
 
 	/**
@@ -618,7 +643,7 @@ public abstract class AbstractSuggestBox<T, W extends ValueHolderLabel<T>>
 	 * @param event
 	 */
 	protected void doubleClicked(DoubleClickEvent event) {
-		this.textField.setSelectionRange(0, getText().length());
+		this.getTextField().setSelectionRange(0, getText().length());
 		recomputePopupContent(KeyCodes.KEY_RIGHT);
 	}
 
@@ -632,63 +657,66 @@ public abstract class AbstractSuggestBox<T, W extends ValueHolderLabel<T>>
 	}
 
 	public Validator<String> getValidator() {
-		return textField.getValidator();
+		return getTextField().getValidator();
 	}
 
 	public void setValidator(Validator<String> validator) {
-		textField.setValidator(validator);
+		getTextField().setValidator(validator);
 	}
 
 	public String getErrorTextStyle() {
-		return textField.getErrorTextStyle();
+		return getTextField().getErrorTextStyle();
 	}
 
 	public String getMandatoryTextStyle() {
-		return textField.getMandatoryTextStyle();
+		return getTextField().getMandatoryTextStyle();
 	}
 
 	public boolean isMandatory() {
-		return textField.isMandatory();
+		return getTextField().isMandatory();
 	}
 
 	public void setDefaultTextStyle(String defaultTextStyle) {
-		textField.setDefaultTextStyle(defaultTextStyle);
+		getTextField().setDefaultTextStyle(defaultTextStyle);
 	}
 
 	public void setErrorTextStyle(String errorTextStyle) {
-		textField.setErrorTextStyle(errorTextStyle);
+		getTextField().setErrorTextStyle(errorTextStyle);
 	}
 
 	public void setMandatory(boolean mandatory) {
-		textField.setMandatory(mandatory);
+		getTextField().setMandatory(mandatory);
 	}
 
 	public void setMandatoryTextStyle(String defaultMandatoryTextStyle) {
-		textField.setMandatoryTextStyle(defaultMandatoryTextStyle);
+		getTextField().setMandatoryTextStyle(defaultMandatoryTextStyle);
 	}
 
 	public String getDefaultTextStyle() {
-		return textField.getDefaultTextStyle();
+		return getTextField().getDefaultTextStyle();
 	}
 
 	public String getReadOnlyTextStyle() {
-		return textField.getReadOnlyTextStyle();
+		return getTextField().getReadOnlyTextStyle();
 	}
 
 	public boolean isReadOnly() {
-		return textField.isReadOnly();
+		return getTextField().isReadOnly();
 	}
 
 	public void setReadOnly(boolean readOnly) {
-		textField.setReadOnly(readOnly);
+		getTextField().setReadOnly(readOnly);
 	}
 
 	public void setReadOnlyTextStyle(String readOnlyTextStyle) {
-		textField.setReadOnlyTextStyle(readOnlyTextStyle);
+		getTextField().setReadOnlyTextStyle(readOnlyTextStyle);
 	}
 
 	public void setSelected(T selected) {
 		this.selected = selected;
 		setText(toString(selected));
 	}
+
+	public abstract SuggestTextBoxWidget<T, W> getTextField();
+
 }

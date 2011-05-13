@@ -14,7 +14,7 @@
 					<!-- permet de prévenir d'eventuel besoin du designer -->
 					<td align="left" style="vertical-align: top;" class="eu-nextstreet-SuggestFieldPanel-content">
 						<!-- le widget -->
-						<into:SuggestTextBoxWidget ui:field="textField"></into:SuggestTextBoxWidget>
+						<into:SuggestTextBoxWidgetImpl ui:field="textField"></into:SuggestTextBoxWidgetImpl>
 					</td>
 					<!-- cellule pour le bord droit -->
 					<td class="eu-nextstreet-SuggestFieldPanel-right">
