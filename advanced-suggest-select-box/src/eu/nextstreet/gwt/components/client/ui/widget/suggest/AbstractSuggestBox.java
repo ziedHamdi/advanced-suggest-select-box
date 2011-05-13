@@ -35,7 +35,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueRendererFactory.ListRenderer;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.DefaultSuggestBox;
-import eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.DefaultSuggestList;
+import eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.DefaultSuggestionPopup;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.simple.DefaultValueRendererFactory;
 import eu.nextstreet.gwt.components.shared.Validator;
 
@@ -66,7 +66,7 @@ public abstract class AbstractSuggestBox<T, W extends ValueHolderLabel<T>>
 	protected T selected;
 	protected String typed;
 	protected boolean caseSensitive;
-	protected SuggestWidget<T> suggestWidget = new DefaultSuggestList<T>();
+	protected SuggestWidget<T> suggestWidget = new DefaultSuggestionPopup<T>();
 	protected ScrollPanel scrollPanel = new ScrollPanel();
 	protected ListRenderer<T, W> listRenderer;
 	protected boolean strictMode;

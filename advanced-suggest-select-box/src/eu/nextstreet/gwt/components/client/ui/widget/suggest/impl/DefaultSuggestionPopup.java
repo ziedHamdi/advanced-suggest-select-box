@@ -27,19 +27,19 @@ import eu.nextstreet.gwt.components.client.ui.widget.suggest.SuggestWidget;
  * 
  * @param <T>
  */
-public class DefaultSuggestList<T> extends PopupPanel implements
+public class DefaultSuggestionPopup<T> extends PopupPanel implements
 		SuggestWidget<T> {
 	private static final String POPUP_STYLE = "eu-nextstreet-SuggestPopup";
 
-	public DefaultSuggestList() {
+	public DefaultSuggestionPopup() {
 		this(true, false);
 	}
 
-	public DefaultSuggestList(boolean autoHide) {
+	public DefaultSuggestionPopup(boolean autoHide) {
 		this(autoHide, false);
 	}
 
-	public DefaultSuggestList(boolean autoHide, boolean modal) {
+	public DefaultSuggestionPopup(boolean autoHide, boolean modal) {
 		super(autoHide, modal);
 		setStylePrimaryName(POPUP_STYLE);
 	}

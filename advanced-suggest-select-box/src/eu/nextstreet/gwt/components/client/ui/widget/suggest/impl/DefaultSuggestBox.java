@@ -30,6 +30,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.AbstractSuggestBox;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.SuggestTextBoxWidget;
+import eu.nextstreet.gwt.components.client.ui.widget.suggest.SuggestTextBoxWidgetImpl;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueHolderLabel;
 
 /**
@@ -54,7 +55,7 @@ public class DefaultSuggestBox<T, W extends ValueHolderLabel<T>> extends
 			.create(SuggestBoxUiBinder.class);
 
 	protected @UiField
-	SuggestTextBoxWidget<T, W> textField;
+	SuggestTextBoxWidgetImpl<T, W> textField;
 
 	protected List<T> possiblilities;
 	protected boolean startsWith;
@@ -176,12 +177,13 @@ public class DefaultSuggestBox<T, W extends ValueHolderLabel<T>> extends
 		this.startsWith = startsWith;
 	}
 
-	public SuggestTextBoxWidget<T, W> getTextField() {
+	@Override
+	public SuggestTextBoxWidgetImpl<T, W> getTextField() {
 		return textField;
 	}
 
 	public void setTextField(SuggestTextBoxWidget<T, W> textField) {
-		this.textField = textField;
+		this.textField = (SuggestTextBoxWidgetImpl<T, W>) textField;
 	}
 
 }
