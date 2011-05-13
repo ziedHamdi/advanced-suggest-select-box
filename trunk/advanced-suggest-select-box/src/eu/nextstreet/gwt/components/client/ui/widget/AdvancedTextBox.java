@@ -34,15 +34,17 @@ import eu.nextstreet.gwt.components.shared.ValidationException;
 import eu.nextstreet.gwt.components.shared.Validator;
 
 /**
- * A text box that handles additional events like the double click and supports the default text feature
+ * A text box that handles additional events like the double click and supports
+ * the default text feature
  * 
- * NOTE: You should use {@link #getTextValue()} instead of {@link #getText()} to avoid getting the default text instead
- * of an empty one.
+ * NOTE: You should use {@link #getTextValue()} instead of {@link #getText()} to
+ * avoid getting the default text instead of an empty one.
  * 
  * <BR/>
  * This class has the following styles:
  * <ul>
- * <li><b>eu-nextstreet-AdvancedTextBoxDefaultText</b> defines the style of the default text</li>
+ * <li><b>eu-nextstreet-AdvancedTextBoxDefaultText</b> defines the style of the
+ * default text</li>
  * </ul>
  * 
  * @author Zied Hamdi founder of http://into-i.fr
@@ -101,7 +103,8 @@ public class AdvancedTextBox extends TextBox implements HasDoubleClickHandlers {
 			@Override
 			public void onFocus(FocusEvent event) {
 				String text = AdvancedTextBox.this.getText();
-				if (AdvancedTextBox.this.defaultText == null || !AdvancedTextBox.this.defaultText.equals(text)) {
+				if (AdvancedTextBox.this.defaultText == null
+						|| !AdvancedTextBox.this.defaultText.equals(text)) {
 					setSelectionRange(0, text.length());
 				} else {
 					AdvancedTextBox.super.setText("");
@@ -127,7 +130,8 @@ public class AdvancedTextBox extends TextBox implements HasDoubleClickHandlers {
 	}
 
 	@Override
-	public HandlerRegistration addDoubleClickHandler(final DoubleClickHandler handler) {
+	public HandlerRegistration addDoubleClickHandler(
+			final DoubleClickHandler handler) {
 		return addDomHandler(handler, DoubleClickEvent.getType());
 	}
 
@@ -156,9 +160,11 @@ public class AdvancedTextBox extends TextBox implements HasDoubleClickHandlers {
 	}
 
 	/**
-	 * true if and only if the value is empty after trimming (if the value is the default text, returns false)
+	 * true if and only if the value is empty after trimming (if the value is the
+	 * default text, returns false)
 	 * 
-	 * @return true if and only if the value is empty after trimming (if the value is the default text, returns false)
+	 * @return true if and only if the value is empty after trimming (if the value
+	 *         is the default text, returns false)
 	 * @see #isEmpty() to integrate the test of having the default text in.
 	 */
 	protected boolean isEmptyTextField() {
@@ -172,7 +178,8 @@ public class AdvancedTextBox extends TextBox implements HasDoubleClickHandlers {
 	 * @return
 	 */
 	public boolean isEmpty() {
-		return isEmptyTextField() || (defaultText == null ? true : defaultText.equals(getText()));
+		return isEmptyTextField()
+				|| (defaultText == null ? true : defaultText.equals(getText()));
 	}
 
 	/**
@@ -190,7 +197,7 @@ public class AdvancedTextBox extends TextBox implements HasDoubleClickHandlers {
 			ValidationException error = null;
 			if (validator != null) {
 				try {
-					validator.validate(getText());
+					validator.validate(text);
 				} catch (ValidationException ex) {
 					error = ex;
 				}
@@ -215,7 +222,8 @@ public class AdvancedTextBox extends TextBox implements HasDoubleClickHandlers {
 	}
 
 	/**
-	 * By default sets the title of the field to the message of the validator exception
+	 * By default sets the title of the field to the message of the validator
+	 * exception
 	 * 
 	 * @param error
 	 */
@@ -249,11 +257,12 @@ public class AdvancedTextBox extends TextBox implements HasDoubleClickHandlers {
 	 * Returns the current text or an empty text if default value
 	 * 
 	 * <BR/>
-	 * <b>Note:</b> {@link #getText()} cannot be overriden since many other parent functions use it (like
-	 * {@link #setSelectionRange(int, int)}).
+	 * <b>Note:</b> {@link #getText()} cannot be overriden since many other parent
+	 * functions use it (like {@link #setSelectionRange(int, int)}).
 	 * 
 	 * 
-	 * @return an empty string if the current text is the default value or the contained text
+	 * @return an empty string if the current text is the default value or the
+	 *         contained text
 	 */
 	public String getTextValue() {
 		String text = super.getText();
@@ -371,7 +380,8 @@ public class AdvancedTextBox extends TextBox implements HasDoubleClickHandlers {
 	}
 
 	/**
-	 * Returns the component that is holding this text box (for example the SuggestBox)
+	 * Returns the component that is holding this text box (for example the
+	 * SuggestBox)
 	 * 
 	 * @return
 	 */

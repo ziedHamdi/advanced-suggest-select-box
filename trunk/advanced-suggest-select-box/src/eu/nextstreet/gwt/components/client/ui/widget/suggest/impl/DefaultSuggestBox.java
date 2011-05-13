@@ -19,7 +19,17 @@ package eu.nextstreet.gwt.components.client.ui.widget.suggest.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.DoubleClickEvent;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.ui.Widget;
+
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.AbstractSuggestBox;
+import eu.nextstreet.gwt.components.client.ui.widget.suggest.SuggestTextBoxWidget;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueHolderLabel;
 
 /**
@@ -28,11 +38,24 @@ import eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueHolderLabel;
  * 
  * @author Zied Hamdi
  * 
- * @param <T> the class type of the items
- * @param <W> the {@link ValueHolderLabel} implementation class
+ * @param <T>
+ *          the class type of the items
+ * @param <W>
+ *          the {@link ValueHolderLabel} implementation class
  */
 public class DefaultSuggestBox<T, W extends ValueHolderLabel<T>> extends
 		AbstractSuggestBox<T, W> {
+
+	@SuppressWarnings("rawtypes")
+	interface SuggestBoxUiBinder extends UiBinder<Widget, DefaultSuggestBox> {
+	}
+
+	private static SuggestBoxUiBinder uiBinder = GWT
+			.create(SuggestBoxUiBinder.class);
+
+	protected @UiField
+	SuggestTextBoxWidget<T, W> textField;
+
 	protected List<T> possiblilities;
 	protected boolean startsWith;
 
@@ -55,11 +78,31 @@ public class DefaultSuggestBox<T, W extends ValueHolderLabel<T>> extends
 
 	public DefaultSuggestBox(String defaultText, List<T> possiblilities,
 			boolean caseSensitive, boolean startsWith) {
-		super(defaultText);
+		initWidget(uiBinder.createAndBindUi(this));
+		init(defaultText);
+
 		this.possiblilities = possiblilities;
 		this.startsWith = startsWith;
 		super.setCaseSensitive(caseSensitive);
 	}
+
+	// ------------------ default event handling -----------------------
+	@UiHandler("textField")
+	public void onKeyUp(KeyUpEvent keyUpEvent) {
+		super.onKeyUp(keyUpEvent);
+	}
+
+	@UiHandler("textField")
+	public void onBlur(BlurEvent event) {
+		super.onBlur(event);
+	}
+
+	@UiHandler("textField")
+	public void onDoubleClick(DoubleClickEvent event) {
+		super.onDoubleClick(event);
+	}
+
+	// -------------------------- end.
 
 	public void add(T t) {
 		possiblilities.add(t);
@@ -80,8 +123,8 @@ public class DefaultSuggestBox<T, W extends ValueHolderLabel<T>> extends
 	}
 
 	/**
-	 * used to define the filtering strategy, override and check in the inner
-	 * list if this element should appear
+	 * used to define the filtering strategy, override and check in the inner list
+	 * if this element should appear
 	 * 
 	 * @param text
 	 * @param t
@@ -107,8 +150,7 @@ public class DefaultSuggestBox<T, W extends ValueHolderLabel<T>> extends
 		if (startsWith || commit || strictMode) {
 			super.fillValue(t, commit);
 			if (!commit && !strictMode) {
-				textField.setSelectionRange(startIndex, textField.getText()
-						.length()
+				textField.setSelectionRange(startIndex, textField.getText().length()
 						- startIndex);
 			}
 			return true;
@@ -132,6 +174,14 @@ public class DefaultSuggestBox<T, W extends ValueHolderLabel<T>> extends
 
 	public void setStartsWith(boolean startsWith) {
 		this.startsWith = startsWith;
+	}
+
+	public SuggestTextBoxWidget<T, W> getTextField() {
+		return textField;
+	}
+
+	public void setTextField(SuggestTextBoxWidget<T, W> textField) {
+		this.textField = textField;
 	}
 
 }
