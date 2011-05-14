@@ -36,7 +36,7 @@ The simplest test case of this library is the following:
 
 By running this example, you will see the default behavior and look of the component. 
 
-An extension of the suggest box to support icons is *DefaultIconedSuggestBox*, it handles explicitly the left part of the *DefaultSuggestBox* to add it an icon (I recommend you take a look at the source code to see how direct is the process of extending the Suggest Box features).  
+An extension of the suggest box to support icons is _DefaultIconedSuggestBox_, it handles explicitly the left part of the _DefaultSuggestBox_ to add it an icon (I recommend you take a look at the source code to see how direct is the process of extending the Suggest Box features).  
 
 {{{
 	public void onModuleLoad() {
@@ -65,7 +65,7 @@ An extension of the suggest box to support icons is *DefaultIconedSuggestBox*, i
 	}
 }}}
 
-You must wonder what was put in the call 'box.setIconLinker(iconLinker)' !?. The icon linker gives us what icon to put on a given value. 
+You must wonder what was put in the call `box.setIconLinker(iconLinker)`!?. The icon linker gives us what icon to put on a given value. 
 In our online example we have a pretty simple implementation that supposes there are images with the same name as tha values:
 {{{
 	/**
@@ -80,7 +80,7 @@ In our online example we have a pretty simple implementation that supposes there
 	};
 }}}
 
-As you surely understood at this point 'ValueRepresentationTransformer<T,R>' is a general purpose interface designed to translate a value into one of its representations. The representation can be an icon, but can also be a complex widget. The coming versions of this project will show other uses of this interface.
+As you surely understood at this point `ValueRepresentationTransformer<T,R>` is a general purpose interface designed to translate a value into one of its representations. The representation can be an icon, but can also be a complex widget. The coming versions of this project will show other uses of this interface.
 
 This example shows also the limitations of the standard components:
 ==Filtering limitations==
