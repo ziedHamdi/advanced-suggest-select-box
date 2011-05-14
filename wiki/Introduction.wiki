@@ -101,11 +101,19 @@ public class MySuggestBox extends DefaultSuggestBox {
 }}}
   
 ===Extended way===
-`DefaultSuggestBox` has a simple implementation of the base class's abstract methods `AbstractSuggestBox<T>`.
+`DefaultSuggestBox` has a simple implementation of the base class's abstract methods `AbstractSuggestBox<T,W>`.
 
-`AbstractSuggestBox<T>` doesn't hold the list of items neither it defines how to hold them. Instead it only declares an abstract method `protected abstract List<T> getFiltredPossibilities(String text);` that it calls each time it needs to show (or update) the list. This way it delegates the responsibility of the list management to a user defined object: this allows to get the list from the server for example only when needed, or to generate values from what the user is typing etc...
-Therefore by extending `AbstractSuggestBox<T>` you will have to hold you list values alone. You can also decide for example not to show the list unless the user typed at least 3 letters. 
-Remember all what is required from you is to give back the list through the method `getFiltredPossibilities(String text)`.
+`AbstractSuggestBox<T,W>` doesn't hold the list of items neither it defines how to hold them. Instead it only declares an abstract method `protected abstract List<T> getFiltredPossibilities(String text);` that it calls each time it needs to show (or update) the list. This way it delegates the responsibility of the list management to a user defined object: this allows to get the list from the server for example only when needed, or to generate values from what the user is typing etc...
+Therefore by extending `AbstractSuggestBox<T,W>` you will have to hold you list values alone. You can also decide for example not to show the list unless the user typed at least 3 letters. 
+Of course, you can extend any subclass of `AbstractSuggestBox<T,W>` and override only the needed methods instead of implementing all methods.
+
+To control the list that is displayed when the user types a text, return the list of items by overriding the method `getFiltredPossibilities(String text)`.
+
+==Widget design==
+
+`DefaultSuggestBox` defines through a ui.xml file the look it has. There are many possibilities to alter this look by appending elements all around it through the methods available in its field *textField* of type `SuggestTextBoxWidgetImpl<T, W>`. The Iconed version uses `setLeftWidget(IsWidget left)` to put an icon to the left of the widget. Similar methods `setXXXWidget` are available for the 4 sides. 
+
+If the available settings aren't sufficient for your needs you can  build a new design by extending `AbstractSuggestBox<T,W>` and creating your own implementation of `SuggestTextBoxWidget<T, W>`. The method 'AbstractSuggestBox.getTextField()` is your connection to the API. In addition, you can keep the behavior of the default event handling by calling from your implementation the methods `onBlur`, `onKeyUp`, `onDoubleClick` and more. If you decided to start your own component, we recommend you look at the code of `DefaultSuggestBox` that is pretty direct.
 
 ==Displaying the list differently==
 ===CSS styling===
