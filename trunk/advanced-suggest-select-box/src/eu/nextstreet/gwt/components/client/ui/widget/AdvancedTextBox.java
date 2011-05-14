@@ -193,7 +193,7 @@ public class AdvancedTextBox extends TextBox implements HasDoubleClickHandlers {
 		if (isReadOnly()) {
 			addStyleName(getReadOnlyTextStyle());
 		} else {
-			String text = getText();
+			String text = getTextValue();
 			ValidationException error = null;
 			if (validator != null) {
 				try {
@@ -203,7 +203,7 @@ public class AdvancedTextBox extends TextBox implements HasDoubleClickHandlers {
 				}
 			}
 			if (error == null) {
-				if (isEmptyTextField() || getTextValue().trim().length() == 0) {
+				if (isEmptyTextField() || text.trim().length() == 0) {
 					addStyleName(getTextStyle());
 				} else {
 					removeStyleName(getTextStyle());
@@ -331,6 +331,7 @@ public class AdvancedTextBox extends TextBox implements HasDoubleClickHandlers {
 
 	public void setValidator(Validator<String> validator) {
 		this.validator = validator;
+		handleTextStyles();
 	}
 
 	public String getReadOnlyTextStyle() {
