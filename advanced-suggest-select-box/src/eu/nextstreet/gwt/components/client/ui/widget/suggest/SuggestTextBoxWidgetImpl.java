@@ -425,4 +425,54 @@ public class SuggestTextBoxWidgetImpl<T, W extends ValueHolderLabel<T>> extends
 		representer.mouseOnButton(false);
 	}
 
+	// --------------------- layout widgets accessors -------------------------
+	public DockPanel getPanel() {
+		return panel;
+	}
+
+	public void setPanel(DockPanel panel) {
+		this.panel = panel;
+	}
+
+	public AdvancedTextBox getAdvancedTextBox() {
+		return advancedTextBox;
+	}
+
+	public void setAdvancedTextBox(AdvancedTextBox advancedTextBox) {
+		this.advancedTextBox = advancedTextBox;
+	}
+
+	public SimplePanel getLeft() {
+		return left;
+	}
+
+	public void setLeft(SimplePanel left) {
+		this.left = left;
+	}
+
+	public SimplePanel getRight() {
+		return right;
+	}
+
+	public void setRight(SimplePanel right) {
+		this.right = right;
+	}
+
+	public SimplePanel getTop() {
+		return top;
+	}
+
+	public void setTop(SimplePanel top) {
+		this.top = top;
+	}
+
+	public SimplePanel getBottom() {
+		return bottom;
+	}
+
+	public void setBottom(SimplePanel bottom) {
+		this.bottom = bottom;
+	}
+
+	// ------------------------------------------------------- end.
 }

@@ -1,6 +1,8 @@
 package eu.nextstreet.gwt.components.client.ui.widget.suggest.iconed.impl;
 
+import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 import eu.nextstreet.gwt.components.client.ui.common.data.ValueRepresentationTransformer;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.iconed.IconedValueHolderLabel;
@@ -24,6 +26,10 @@ public class DefaultIconedSuggestBox<T, W extends IconedValueHolderLabel<T>>
 
 	public DefaultIconedSuggestBox(String defaultText) {
 		super(defaultText);
+		SimplePanel iconPanel = textField.getLeft();
+		DockPanel widgetPanel = textField.getPanel();
+		widgetPanel.setCellHorizontalAlignment(iconPanel, DockPanel.ALIGN_CENTER);
+		widgetPanel.setCellVerticalAlignment(iconPanel, DockPanel.ALIGN_MIDDLE);
 	}
 
 	@Override
@@ -37,6 +43,16 @@ public class DefaultIconedSuggestBox<T, W extends IconedValueHolderLabel<T>>
 	 */
 	public void valueSelected(T value) {
 		super.valueSelected(value);
+		fillIcon(value);
+	}
+
+	/**
+	 * Fills the icon part with the value's corresponding image
+	 * 
+	 * @param value
+	 *          value
+	 */
+	protected void fillIcon(T value) {
 		textField.setLeftWidget(iconLinker.transform(value));
 	};
 
@@ -46,6 +62,13 @@ public class DefaultIconedSuggestBox<T, W extends IconedValueHolderLabel<T>>
 	@Override
 	public void valueTyped(String value) {
 		super.valueTyped(value);
+		emptyIcon();
+	}
+
+	/**
+	 * Makes the icon part empty
+	 */
+	protected void emptyIcon() {
 		textField.setLeftWidget(null);
 	}
 
@@ -59,4 +82,11 @@ public class DefaultIconedSuggestBox<T, W extends IconedValueHolderLabel<T>>
 				.setIconLinker(iconLinker);
 	}
 
+	@Override
+	public T computeSelected(String text) {
+		T selected = super.computeSelected(text);
+		if (selected != null)
+			fillIcon(selected);
+		return selected;
+	}
 }

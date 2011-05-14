@@ -28,6 +28,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
  */
 public class MultipleHandlerRegistration extends ArrayList<HandlerRegistration>
 		implements HandlerRegistration {
+	private static final long serialVersionUID = 1L;
 
 	@Override
 	public void removeHandler() {

@@ -18,6 +18,8 @@ import eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.simple.Default
 
 public class IconedValueRenderer<T> extends Composite implements
 		IconedValueHolderLabel<T> {
+	private static final String ITEM_HOVER = "eu-nextstreet-SuggestItemHover";
+	public static final String SELECTED = "eu-nextstreet-SuggestItemSelected";
 
 	protected HorizontalPanel horizontalPanel = new HorizontalPanel();
 	protected Image icon;
@@ -30,7 +32,10 @@ public class IconedValueRenderer<T> extends Composite implements
 		this.icon = icon;
 
 		horizontalPanel.setSpacing(5);
+		horizontalPanel.setHorizontalAlignment(HorizontalPanel.ALIGN_LEFT);
 		horizontalPanel.add(icon);
+		horizontalPanel.setCellWidth(icon, "20px");
+
 		horizontalPanel.add(label);
 	}
 
@@ -46,12 +51,21 @@ public class IconedValueRenderer<T> extends Composite implements
 
 	@Override
 	public void setSelected(boolean selected) {
-		label.setSelected(selected);
+		// label.setSelected(selected);
+		if (selected)
+			addStyleName(SELECTED);
+		else
+			removeStyleName(SELECTED);
 	}
 
 	@Override
 	public void hover(boolean hover) {
-		label.hover(hover);
+		// label.hover(hover);
+		if (hover)
+			addStyleName(ITEM_HOVER);
+		else
+			removeStyleName(ITEM_HOVER);
+
 	}
 
 	@Override

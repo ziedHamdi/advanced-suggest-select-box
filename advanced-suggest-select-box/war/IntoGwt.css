@@ -8,6 +8,12 @@ h1 {
 	text-align: center;
 }
 
+h3 {
+	color:#ff7700;
+}
+h4 {
+	color:#ff7700;
+}
 .sendButton {
 	display: block;
 	font-size: 16pt;
@@ -71,11 +77,13 @@ h1 {
 }
 
 .eu-nextstreet-SuggestItem {
+	width: 100%;
 	font-size: 0.9em;
 	padding: 0 3px;
 }
 
 .eu-nextstreet-SuggestItemSelected {
+	width: 100%;
 	-moz-border-radius: 6px;
 	border-radius: 6px;	
 		
@@ -87,7 +95,12 @@ h1 {
 }
 
 .eu-nextstreet-SuggestItemHover {
+	width: 100%;
 	font-weight: bold;
+	
+	background-color: #cce4f5;
+	-moz-border-radius: 6px;
+	border-radius: 6px;	
 }
 
 .eu-nextstreet-SuggestMatchingString {
@@ -131,7 +144,6 @@ h1 {
 }
 
 .eu-nextstreet-SuggestPopup table {
-	width: 120px;
 }
 
 .eu-nextstreet-SuggestFieldHover {
@@ -186,7 +198,6 @@ h1 {
 }
 
 .eu-nextstreet-SuggestFieldPopupSimpleTable tr td {
-	border: 1px solid gray;
 }
 
 .eu-nextstreet-SuggestFieldPopupSimpleTableCell {
@@ -194,13 +205,17 @@ h1 {
 }
 
 .eu-nextstreet-SuggestFieldPopupSimpleTableCell-selected {
-	background-color: #aaffaa;
-}
+	background-color:#b5b5b5;
+	text-shadow: 1px 1px 1px #d5d5d5;
+	filter: dropshadow(color=#d5d5d5, offx=1, offy=1);}
 
 .eu-nextstreet-SuggestFieldPopupSimpleTableCell-hover {
-	font-weight: bold;
+	text-shadow: 1px 1px 1px #707cba;
+	filter: dropshadow(color=#707cba, offx=1, offy=1);
 }
 
 .eu-nextstreet-SuggestTableMatchingString {
-	background: transparent url( img/matching-str-bg.PNG ) repeat-x left top;
+	background-color: #b0fc24;
+	text-shadow: 1px 1px 1px #25e1fa;
+	filter: dropshadow(color=#25e1fa, offx=1, offy=1);
 }
