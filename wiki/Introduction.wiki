@@ -29,12 +29,56 @@ The simplest test case of this library is the following:
 		box.add(new Value("01 - ABCD"));
 		box.add(new Value("02 - CDEF"));
 		box.add(new Value("03 - GHIJ"));
-		RootPanel.get("nameFieldContainer").add(box);
+		RootPanel.get("suggestBoxContainer").add(box);
 	}
 
 }}}
 
 By running this example, you will see the default behavior and look of the component. 
+
+An extension of the suggest box that supports icons is *DefaultIconedSuggestBox*, it handles explicitly the left part of the *DefaultSuggestBox* to add it an icon (I recommend you take a look at the source code to see how simple it is to do)
+
+{{{
+	public void onModuleLoad() {
+		class Value {
+			String str;
+
+			public Value(String str) {
+				this.str = str;
+			}
+
+			@Override
+			public String toString() {
+				return str;
+			}
+
+		}
+		DefaultIconedSuggestBox box = new DefaultIconedSuggestBox<Value, IconedValueHolderLabel<Value>>(
+				"select or type value");
+		box.add(new Value("01 - ABCD"));
+		box.add(new Value("02 - CDEF"));
+		box.add(new Value("03 - GHIJ"));
+
+		box.setIconLinker(iconLinker);
+
+		RootPanel.get("suggestBoxContainer").add(box);
+	}
+}}}
+
+You must wonder what to put in 'box.setIconLinker(iconLinker)'?
+In our online example we have a pretty simple implementation that supposes there are images with the same name as tha values:
+{{{
+	/**
+	 * This class aims to give the icon corresponding to each value
+	 */
+	static final ValueRepresentationTransformer<Value, Image> iconLinker = new ValueRepresentationTransformer<Value, Image>() {
+
+		@Override
+		public Image transform(Value value) {
+			return new Image("img/chrome_extentions/" + value.str + ".png");
+		}
+	};
+}}}
 
 This example shows also the limitations of the standard components:
 ==Filtering limitations==
