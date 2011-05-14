@@ -36,7 +36,7 @@ The simplest test case of this library is the following:
 
 By running this example, you will see the default behavior and look of the component. 
 
-An extension of the suggest box that supports icons is *DefaultIconedSuggestBox*, it handles explicitly the left part of the *DefaultSuggestBox* to add it an icon (I recommend you take a look at the source code to see how simple it is to do)
+An extension of the suggest box that supports icons is *DefaultIconedSuggestBox*, it handles explicitly the left part of the *DefaultSuggestBox* to add it an icon (I recommend you take a look at the source code to see how direct is the process of extending the Suggest Box features).  
 
 {{{
 	public void onModuleLoad() {
