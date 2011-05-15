@@ -65,7 +65,7 @@ public class SimpleTableListRenderer<T, W extends SimpleTableRowItemRenderer<T>>
 	}
 
 	@Override
-	public W getRow(int index) {
+	public W getAt(int index) {
 		return rows.get(index);
 	}
 

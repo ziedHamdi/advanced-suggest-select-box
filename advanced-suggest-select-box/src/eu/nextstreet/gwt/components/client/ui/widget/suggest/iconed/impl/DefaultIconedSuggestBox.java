@@ -5,7 +5,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import eu.nextstreet.gwt.components.client.ui.common.data.ValueRepresentationTransformer;
-import eu.nextstreet.gwt.components.client.ui.widget.suggest.iconed.IconedValueHolderLabel;
+import eu.nextstreet.gwt.components.client.ui.widget.suggest.iconed.IconedValueHolderItem;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.DefaultSuggestBox;
 
 /**
@@ -18,7 +18,7 @@ import eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.DefaultSuggest
  * @param <W>
  *          renderer
  */
-public class DefaultIconedSuggestBox<T, W extends IconedValueHolderLabel<T>>
+public class DefaultIconedSuggestBox<T, W extends IconedValueHolderItem<T>>
 		extends DefaultSuggestBox<T, W> {
 	/** Gives an image for each value */
 	@SuppressWarnings("unchecked")

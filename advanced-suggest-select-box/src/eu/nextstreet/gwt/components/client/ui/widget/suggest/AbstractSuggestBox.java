@@ -55,7 +55,7 @@ import eu.nextstreet.gwt.components.shared.Validator;
  * 
  * @param <T>
  */
-public abstract class AbstractSuggestBox<T, W extends ValueHolderLabel<T>>
+public abstract class AbstractSuggestBox<T, W extends EventHandlingValueHolderItem<T>>
 		extends ChangeEventHandlerHolder<Boolean, SuggestChangeEvent<T, W>> {
 
 	private static final String SUGGEST_FIELD_COMP = "eu-nextstreet-SuggestFieldComp";
@@ -191,7 +191,7 @@ public abstract class AbstractSuggestBox<T, W extends ValueHolderLabel<T>>
 
 		}
 
-		ValueHolderLabel<T> popupWidget = getSelectedItem();
+		EventHandlingValueHolderItem<T> popupWidget = getSelectedItem();
 		if (popupWidget != null && selectedIndex != -1)
 			popupWidget.setSelected(false);
 		int widgetCount = listRenderer.getWidgetCount();
@@ -262,7 +262,7 @@ public abstract class AbstractSuggestBox<T, W extends ValueHolderLabel<T>>
 	 * 
 	 */
 	protected void highlightSelectedValue() {
-		ValueHolderLabel<T> popupWidget = getSelectedItem();
+		EventHandlingValueHolderItem<T> popupWidget = getSelectedItem();
 		if (popupWidget != null) {
 			popupWidget.setSelected(true);
 			UIObject uiObject = popupWidget.getUiObject();
@@ -403,9 +403,9 @@ public abstract class AbstractSuggestBox<T, W extends ValueHolderLabel<T>>
 		return t.toString();
 	}
 
-	private ValueHolderLabel<T> getSelectedItem() {
+	private EventHandlingValueHolderItem<T> getSelectedItem() {
 		if (selectedIndex != -1 && listRenderer.getWidgetCount() > selectedIndex)
-			return (ValueHolderLabel<T>) listRenderer.getRow(selectedIndex);
+			return (EventHandlingValueHolderItem<T>) listRenderer.getAt(selectedIndex);
 		return null;
 	}
 
@@ -551,7 +551,7 @@ public abstract class AbstractSuggestBox<T, W extends ValueHolderLabel<T>>
 	 * 
 	 * @return
 	 */
-	public ValueRendererFactory<T, ? extends ValueHolderLabel<T>> getValueRendererFactory() {
+	public ValueRendererFactory<T, ? extends EventHandlingValueHolderItem<T>> getValueRendererFactory() {
 		return valueRendererFactory;
 	}
 

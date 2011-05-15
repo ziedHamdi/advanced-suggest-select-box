@@ -16,6 +16,8 @@
  */
 package eu.nextstreet.gwt.components.client.ui.widget.suggest;
 
+import com.google.gwt.user.client.ui.IsWidget;
+
 /**
  * Isolates the creation of suggested items rendering widgets
  * 
@@ -26,7 +28,7 @@ package eu.nextstreet.gwt.components.client.ui.widget.suggest;
  * @param <W>
  *          the returned widget type
  */
-public interface ValueRendererFactory<T, W extends ValueHolderLabel<T>> {
+public interface ValueRendererFactory<T, W extends ValueHolderItem<T>> {
 	/**
 	 * Holds the items of the suggest box
 	 * 
@@ -35,7 +37,7 @@ public interface ValueRendererFactory<T, W extends ValueHolderLabel<T>> {
 	 * @param <T>
 	 *          the type of the value
 	 */
-	public static interface ListRenderer<T, W> {
+	public static interface ListRenderer<T, W> extends IsWidget {
 
 		/**
 		 * elements in list
@@ -64,7 +66,7 @@ public interface ValueRendererFactory<T, W extends ValueHolderLabel<T>> {
 		 *          position
 		 * @return item
 		 */
-		W getRow(int index);
+		W getAt(int index);
 
 	}
 

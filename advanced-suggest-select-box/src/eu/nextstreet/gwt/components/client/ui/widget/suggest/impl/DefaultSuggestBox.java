@@ -31,7 +31,7 @@ import com.google.gwt.user.client.ui.Widget;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.AbstractSuggestBox;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.SuggestTextBoxWidget;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.SuggestTextBoxWidgetImpl;
-import eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueHolderLabel;
+import eu.nextstreet.gwt.components.client.ui.widget.suggest.EventHandlingValueHolderItem;
 
 /**
  * Implements a simple value holding suggest box, more advanced implementations
@@ -42,9 +42,9 @@ import eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueHolderLabel;
  * @param <T>
  *          the class type of the items
  * @param <W>
- *          the {@link ValueHolderLabel} implementation class
+ *          the {@link EventHandlingValueHolderItem} implementation class
  */
-public class DefaultSuggestBox<T, W extends ValueHolderLabel<T>> extends
+public class DefaultSuggestBox<T, W extends EventHandlingValueHolderItem<T>> extends
 		AbstractSuggestBox<T, W> {
 
 	@SuppressWarnings("rawtypes")
