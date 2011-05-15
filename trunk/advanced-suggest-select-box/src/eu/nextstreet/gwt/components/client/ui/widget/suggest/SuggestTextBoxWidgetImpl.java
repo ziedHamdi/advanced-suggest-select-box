@@ -46,7 +46,7 @@ import eu.nextstreet.gwt.components.shared.Validator;
  * 
  * 
  */
-public class SuggestTextBoxWidgetImpl<T, W extends ValueHolderLabel<T>> extends
+public class SuggestTextBoxWidgetImpl<T, W extends EventHandlingValueHolderItem<T>> extends
 		Composite implements SuggestTextBoxWidget<T, W> {
 	/** the text field style name */
 	private static final String SUGGEST_FIELD = "eu-nextstreet-SuggestField";

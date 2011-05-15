@@ -19,10 +19,10 @@ package eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.simple;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.UIObject;
 
-import eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueHolderLabel;
+import eu.nextstreet.gwt.components.client.ui.widget.suggest.EventHandlingValueHolderItem;
 import eu.nextstreet.gwt.components.client.ui.widget.util.HtmlUtil;
 
-public class DefaultValueRenderer<T> extends HTML implements ValueHolderLabel<T> {
+public class DefaultValueRenderer<T> extends HTML implements EventHandlingValueHolderItem<T> {
 	private static final String ITEM_HOVER = "eu-nextstreet-SuggestItemHover";
 	private static final String MATCHING_STRING = "eu-nextstreet-SuggestMatchingString";
 	public static final String SELECTED = "eu-nextstreet-SuggestItemSelected";

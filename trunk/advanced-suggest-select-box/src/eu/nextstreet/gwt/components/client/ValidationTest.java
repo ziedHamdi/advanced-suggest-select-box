@@ -11,6 +11,7 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.CheckBox;
+import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -21,11 +22,15 @@ import eu.nextstreet.gwt.components.client.ui.common.data.ValueRepresentationTra
 import eu.nextstreet.gwt.components.client.ui.widget.AdvancedTextBox;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.AbstractSuggestBox;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.SuggestChangeEvent;
-import eu.nextstreet.gwt.components.client.ui.widget.suggest.iconed.IconedValueHolderLabel;
+import eu.nextstreet.gwt.components.client.ui.widget.suggest.iconed.IconedValueHolderItem;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.iconed.impl.DefaultIconedSuggestBox;
+import eu.nextstreet.gwt.components.client.ui.widget.suggest.iconed.impl.IconedValueRenderer;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.iconed.impl.IconedValueRendererFactory;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.table.SimpleTableRowItemRenderer;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.table.SimpleTableValueRendererFactory;
+import eu.nextstreet.gwt.components.client.ui.widget.suggest.multi.impl.MultiChoiceSuggestBox;
+import eu.nextstreet.gwt.components.client.ui.widget.suggest.multi.impl.MultiChoiceValueHolderLabel;
+import eu.nextstreet.gwt.components.client.ui.widget.suggest.multi.impl.MultiChoiceValueRendererFactory;
 import eu.nextstreet.gwt.components.shared.BasicListValidator;
 import eu.nextstreet.gwt.components.shared.ValidationException;
 import eu.nextstreet.gwt.components.shared.Validator;
@@ -73,7 +78,7 @@ public class ValidationTest {
 		// final DefaultSuggestBox<Value,ValueHolderLabel<Value>> box = new
 		// DefaultSuggestBox<Value,
 		// ValueHolderLabel<Value>>("select or type value");
-		final DefaultIconedSuggestBox box = new DefaultIconedSuggestBox<Value, IconedValueHolderLabel<Value>>(
+		final DefaultIconedSuggestBox box = new DefaultIconedSuggestBox<Value, IconedValueHolderItem<Value>>(
 				"select or type value");
 		box.setStartsWith(false);
 		fillData(box);
@@ -86,6 +91,57 @@ public class ValidationTest {
 
 		System.out.println("selected : " + box.getSelected());
 
+		VerticalPanel options = fillOptions(box);
+
+		RootPanel.get("options").add(options);
+
+		addLogInfoPanel(box);
+
+		AdvancedTextBox advancedTextBox = new AdvancedTextBox("Please type a value");
+		advancedTextBox.addDoubleClickHandler(new DoubleClickHandler() {
+
+			@Override
+			public void onDoubleClick(DoubleClickEvent event) {
+				Window.alert("Double clicked");
+			}
+		});
+		RootPanel.get("advancedTextBox").add(advancedTextBox);
+
+		final MultiChoiceSuggestBox<Value, IconedValueRenderer<Value>, MultiChoiceValueHolderLabel<Value>> multiBox = new MultiChoiceSuggestBox<ValidationTest.Value, IconedValueRenderer<Value>, MultiChoiceValueHolderLabel<Value>>(
+				"select or type value",
+				DockPanel.NORTH,
+				new MultiChoiceValueRendererFactory<Value, MultiChoiceValueHolderLabel<Value>>());
+		multiBox.setStartsWith(false);
+		fillData(multiBox);
+		box.setIconLinker(iconLinker);
+		RootPanel.get("suggestBoxMultiValueContainer").add(multiBox);
+
+	}
+
+	@SuppressWarnings("rawtypes")
+	protected static void addLogInfoPanel(final DefaultIconedSuggestBox box) {
+		final VerticalPanel infoContainer = new VerticalPanel();
+		RootPanel.get("infoContainer").add(infoContainer);
+		final DateTimeFormat dateTimeFormat = DateTimeFormat.getFormat("HH:mm:ss");
+		box.addHandler(new ChangeHandler() {
+
+			@Override
+			public void onChange(ChangeEvent event) {
+				if (infoContainer.getWidgetCount() > 3)
+					infoContainer.remove(3);
+				infoContainer.insert(
+						new Label("At "
+								+ dateTimeFormat.format(new Date())
+								+ " you "
+								+ (((SuggestChangeEvent) event).isSelected() ? "selected "
+										: "typed ")
+								+ ((AbstractSuggestBox) event.getSource()).getText()), 0);
+			}
+		});
+	}
+
+	@SuppressWarnings("rawtypes")
+	protected static VerticalPanel fillOptions(final DefaultIconedSuggestBox box) {
 		CheckBox startsWith = startsWithOption(box);
 
 		CheckBox caseSensitive = caseSensitiveOption(box);
@@ -111,37 +167,7 @@ public class ValidationTest {
 		options.add(startsWith);
 		options.add(caseSensitive);
 		// options.add(style);
-
-		RootPanel.get("options").add(options);
-
-		final VerticalPanel infoContainer = new VerticalPanel();
-		RootPanel.get("infoContainer").add(infoContainer);
-		final DateTimeFormat dateTimeFormat = DateTimeFormat.getFormat("HH:mm:ss");
-		box.addHandler(new ChangeHandler() {
-
-			@Override
-			public void onChange(ChangeEvent event) {
-				if (infoContainer.getWidgetCount() > 3)
-					infoContainer.remove(3);
-				infoContainer.insert(
-						new Label("At "
-								+ dateTimeFormat.format(new Date())
-								+ " you "
-								+ (((SuggestChangeEvent) event).isSelected() ? "selected "
-										: "typed ")
-								+ ((AbstractSuggestBox) event.getSource()).getText()), 0);
-			}
-		});
-
-		AdvancedTextBox advancedTextBox = new AdvancedTextBox("Please type a value");
-		advancedTextBox.addDoubleClickHandler(new DoubleClickHandler() {
-
-			@Override
-			public void onDoubleClick(DoubleClickEvent event) {
-				Window.alert("Double clicked");
-			}
-		});
-		RootPanel.get("advancedTextBox").add(advancedTextBox);
+		return options;
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -237,7 +263,7 @@ public class ValidationTest {
 				};
 				// box.setValueRendererFactory(tableRendererFactory)
 				box.setValueRendererFactory((event.getValue() ? tableRendererFactory
-						: new IconedValueRendererFactory<Value, IconedValueHolderLabel<Value>>(
+						: new IconedValueRendererFactory<Value, IconedValueHolderItem<Value>>(
 								iconLinker)));
 			}
 

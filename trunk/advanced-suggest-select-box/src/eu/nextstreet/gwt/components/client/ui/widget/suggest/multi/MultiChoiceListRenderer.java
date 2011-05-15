@@ -14,32 +14,44 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.simple;
 
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
+package eu.nextstreet.gwt.components.client.ui.widget.suggest.multi;
 
-import eu.nextstreet.gwt.components.client.ui.widget.suggest.EventHandlingValueHolderItem;
+import com.google.gwt.user.client.ui.FlowPanel;
+
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueRendererFactory.ListRenderer;
 
 /**
- * The default list renderer has all needed methods implemented by its parent
- * class
+ * @author Zied Hamdi
  * 
- * @author Zied Hamdi founder of http://into-i.fr
- * 
- * @param <T>
  */
-public class DefaultListRenderer<T, W extends EventHandlingValueHolderItem<T>> extends
-		VerticalPanel implements ListRenderer<T, W> {
+public class MultiChoiceListRenderer<T, C extends MultiChoiceValueHolderItem<T, C>>
+		extends FlowPanel implements ListRenderer<T, C> {
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueRendererFactory
+	 * .ListRenderer#add(java.lang.Object)
+	 */
 	@Override
-	public void add(W item) {
-		super.add((Widget) item);
+	public void add(C item) {
+		item.addedTo(this);
+		super.add(item);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueRendererFactory
+	 * .ListRenderer#getRow(int)
+	 */
 	@SuppressWarnings("unchecked")
-	public W getAt(int index) {
-		return (W) super.getWidget(index);
+	@Override
+	public C getAt(int index) {
+		return (C) super.getWidget(index);
 	}
+
 }

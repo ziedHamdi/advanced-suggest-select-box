@@ -3,12 +3,12 @@ package eu.nextstreet.gwt.components.client.ui.widget.suggest.iconed.impl;
 import com.google.gwt.user.client.ui.Image;
 
 import eu.nextstreet.gwt.components.client.ui.common.data.ValueRepresentationTransformer;
-import eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueHolderLabel;
+import eu.nextstreet.gwt.components.client.ui.widget.suggest.EventHandlingValueHolderItem;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueRendererFactory;
-import eu.nextstreet.gwt.components.client.ui.widget.suggest.iconed.IconedValueHolderLabel;
+import eu.nextstreet.gwt.components.client.ui.widget.suggest.iconed.IconedValueHolderItem;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.simple.DefaultListRenderer;
 
-public class IconedValueRendererFactory<T, W extends IconedValueHolderLabel<T>>
+public class IconedValueRendererFactory<T, W extends IconedValueHolderItem<T>>
 		implements ValueRendererFactory<T, W> {
 
 	/** Gives an image for each value */
@@ -25,7 +25,7 @@ public class IconedValueRendererFactory<T, W extends IconedValueHolderLabel<T>>
 		@SuppressWarnings("unchecked")
 		W toReturn = (W) new IconedValueRenderer<T>(value, icon, filterText,
 				caseSensitive);
-		toReturn.setStyleName(ValueHolderLabel.ITEM_DEFAULT_STYLE);
+		toReturn.setStyleName(EventHandlingValueHolderItem.ITEM_DEFAULT_STYLE);
 		return toReturn;
 	}
 

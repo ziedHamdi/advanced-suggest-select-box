@@ -14,32 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.simple;
+package eu.nextstreet.gwt.components.client.ui.widget.suggest;
 
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
-
-import eu.nextstreet.gwt.components.client.ui.widget.suggest.EventHandlingValueHolderItem;
-import eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueRendererFactory.ListRenderer;
+import com.google.gwt.event.dom.client.HasAllMouseHandlers;
+import com.google.gwt.event.dom.client.HasClickHandlers;
 
 /**
- * The default list renderer has all needed methods implemented by its parent
- * class
+ * Representation of an item in the suggest list that handles events
+ * independently
  * 
  * @author Zied Hamdi founder of http://into-i.fr
  * 
  * @param <T>
+ *          the type of the item value
  */
-public class DefaultListRenderer<T, W extends EventHandlingValueHolderItem<T>> extends
-		VerticalPanel implements ListRenderer<T, W> {
-
-	@Override
-	public void add(W item) {
-		super.add((Widget) item);
-	}
-
-	@SuppressWarnings("unchecked")
-	public W getAt(int index) {
-		return (W) super.getWidget(index);
-	}
+public interface EventHandlingValueHolderItem<T> extends ValueHolderItem<T>,
+		HasAllMouseHandlers, HasClickHandlers {
 }

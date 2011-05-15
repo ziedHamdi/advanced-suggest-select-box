@@ -2,7 +2,7 @@ package eu.nextstreet.gwt.components.client.ui.widget.suggest.iconed;
 
 import com.google.gwt.user.client.ui.Image;
 
-import eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueHolderLabel;
+import eu.nextstreet.gwt.components.client.ui.widget.suggest.EventHandlingValueHolderItem;
 
 /**
  * Adds the parsing for icon values
@@ -12,7 +12,7 @@ import eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueHolderLabel;
  * @param <T>
  *          a value that can be represented by an icon
  */
-public interface IconedValueHolderLabel<T> extends ValueHolderLabel<T> {
+public interface IconedValueHolderItem<T> extends EventHandlingValueHolderItem<T> {
 
 	/**
 	 * Returns the icon representing the current value

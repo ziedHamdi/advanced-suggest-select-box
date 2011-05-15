@@ -16,7 +16,7 @@
  */
 package eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.simple;
 
-import eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueHolderLabel;
+import eu.nextstreet.gwt.components.client.ui.widget.suggest.EventHandlingValueHolderItem;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueRendererFactory;
 
 /**
@@ -28,10 +28,10 @@ import eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueRendererFactor
  * @param <W>
  *            the type of the value holder label
  * 
- * @see ValueHolderLabel
+ * @see EventHandlingValueHolderItem
  * @see ValueRendererFactory
  */
-public class DefaultValueRendererFactory<T, W extends ValueHolderLabel<T>>
+public class DefaultValueRendererFactory<T, W extends EventHandlingValueHolderItem<T>>
 		implements ValueRendererFactory<T, W> {
 
 	@SuppressWarnings("unchecked")
@@ -40,7 +40,7 @@ public class DefaultValueRendererFactory<T, W extends ValueHolderLabel<T>>
 			boolean caseSensitive) {
 		W toReturn = (W) new DefaultValueRenderer<T>(value, filterText,
 				caseSensitive);
-		toReturn.setStyleName(ValueHolderLabel.ITEM_DEFAULT_STYLE);
+		toReturn.setStyleName(EventHandlingValueHolderItem.ITEM_DEFAULT_STYLE);
 		return toReturn;
 	}
 

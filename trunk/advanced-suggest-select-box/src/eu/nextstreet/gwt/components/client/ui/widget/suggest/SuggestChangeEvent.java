@@ -26,7 +26,7 @@ import com.google.gwt.event.dom.client.ChangeEvent;
  * 
  * @param <T>
  */
-public class SuggestChangeEvent<T, W extends ValueHolderLabel<T>> extends
+public class SuggestChangeEvent<T, W extends EventHandlingValueHolderItem<T>> extends
 		ChangeEvent {
 	protected AbstractSuggestBox<T, W> source;
 	protected T selection;

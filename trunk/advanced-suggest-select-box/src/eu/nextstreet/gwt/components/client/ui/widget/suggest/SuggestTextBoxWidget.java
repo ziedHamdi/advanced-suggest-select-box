@@ -30,7 +30,7 @@ import eu.nextstreet.gwt.components.shared.Validator;
  * @param <W>
  *          the suggest box items representer type (only for consistency)
  */
-public interface SuggestTextBoxWidget<T, W extends ValueHolderLabel<T>> extends
+public interface SuggestTextBoxWidget<T, W extends EventHandlingValueHolderItem<T>> extends
 		IsWidget, MouseDownHandler, MouseMoveHandler, MouseOutHandler,
 		HasKeyUpHandlers, HasKeyDownHandlers, HasDoubleClickHandlers,
 		HasBlurHandlers {

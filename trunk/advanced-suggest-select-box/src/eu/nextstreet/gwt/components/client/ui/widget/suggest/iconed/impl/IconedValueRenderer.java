@@ -13,11 +13,11 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.UIObject;
 
-import eu.nextstreet.gwt.components.client.ui.widget.suggest.iconed.IconedValueHolderLabel;
+import eu.nextstreet.gwt.components.client.ui.widget.suggest.iconed.IconedValueHolderItem;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.simple.DefaultValueRenderer;
 
 public class IconedValueRenderer<T> extends Composite implements
-		IconedValueHolderLabel<T> {
+		IconedValueHolderItem<T> {
 	private static final String ITEM_HOVER = "eu-nextstreet-SuggestItemHover";
 	public static final String SELECTED = "eu-nextstreet-SuggestItemSelected";
 

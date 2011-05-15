@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package eu.nextstreet.gwt.components.client.ui.widget.suggest;
 
-import com.google.gwt.event.dom.client.HasAllMouseHandlers;
-import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.UIObject;
 
 /**
@@ -26,9 +26,9 @@ import com.google.gwt.user.client.ui.UIObject;
  * @author Zied Hamdi founder of http://into-i.fr
  * 
  * @param <T>
+ *          value type
  */
-public interface ValueHolderLabel<T> extends HasAllMouseHandlers,
-		HasClickHandlers {
+public interface ValueHolderItem<T> extends IsWidget {
 	public static final String ITEM_DEFAULT_STYLE = "eu-nextstreet-SuggestItem";
 
 	/**
@@ -68,8 +68,7 @@ public interface ValueHolderLabel<T> extends HasAllMouseHandlers,
 	public void setStyleName(String item);
 
 	/**
-	 * Returns a {@link UIObject} represented on the screen for this value
-	 * holder
+	 * Returns a {@link UIObject} represented on the screen for this value holder
 	 * 
 	 * @return
 	 */
