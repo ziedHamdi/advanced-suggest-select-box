@@ -24,9 +24,9 @@ import eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueRendererFactor
  * @author Zied Hamdi founder of http://into-i.fr
  * 
  * @param <T>
- *            the type of the values
+ *          the type of the values
  * @param <W>
- *            the type of the value holder label
+ *          the type of the value holder label
  * 
  * @see EventHandlingValueHolderItem
  * @see ValueRendererFactory
@@ -36,10 +36,9 @@ public class DefaultValueRendererFactory<T, W extends EventHandlingValueHolderIt
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public W createValueRenderer(T value, String filterText,
-			boolean caseSensitive) {
+	public W createValueRenderer(T value, String filterText, boolean caseSensitive) {
 		W toReturn = (W) new DefaultValueRenderer<T>(value, filterText,
-				caseSensitive);
+				caseSensitive, this);
 		toReturn.setStyleName(EventHandlingValueHolderItem.ITEM_DEFAULT_STYLE);
 		return toReturn;
 	}

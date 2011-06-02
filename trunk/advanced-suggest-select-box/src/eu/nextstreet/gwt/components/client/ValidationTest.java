@@ -110,12 +110,13 @@ public class ValidationTest {
 		final MultiChoiceSuggestBox<Value, IconedValueRenderer<Value>, MultiChoiceValueHolderLabel<Value>> multiBox = new MultiChoiceSuggestBox<ValidationTest.Value, IconedValueRenderer<Value>, MultiChoiceValueHolderLabel<Value>>(
 				"select or type value",
 				DockPanel.NORTH,
-				new MultiChoiceValueRendererFactory<Value, MultiChoiceValueHolderLabel<Value>>());
+				new MultiChoiceValueRendererFactory<Value, MultiChoiceValueHolderLabel<Value>>(
+						iconLinker));
 		multiBox.setStartsWith(false);
 		multiBox.getTextField().getTop()
 				.setStyleName("eu-nextstreet-MultiChoiceSelection");
 		fillData(multiBox);
-		box.setIconLinker(iconLinker);
+		multiBox.setIconLinker(iconLinker);
 		RootPanel.get("suggestBoxMultiValueContainer").add(multiBox);
 
 	}
@@ -238,7 +239,7 @@ public class ValidationTest {
 					protected SimpleTableRowItemRenderer<Value> newInstance(Value value,
 							String filterText, boolean caseSensitive) {
 						SimpleTableRowItemRenderer<Value> simpleTableRowItemRenderer = new SimpleTableRowItemRenderer<Value>(
-								value, filterText, caseSensitive) {
+								value, filterText, caseSensitive, this) {
 
 							@Override
 							protected String[] explodeValueInColumns(Value value,

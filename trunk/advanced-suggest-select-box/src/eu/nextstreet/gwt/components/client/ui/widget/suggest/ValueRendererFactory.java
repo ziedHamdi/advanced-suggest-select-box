@@ -19,7 +19,9 @@ package eu.nextstreet.gwt.components.client.ui.widget.suggest;
 import com.google.gwt.user.client.ui.IsWidget;
 
 /**
- * Isolates the creation of suggested items rendering widgets
+ * Isolates the creation of suggested items rendering widgets. An instance of
+ * this calss's implementation is considered as a context. It is therefore
+ * accessible from {@link ValueHolderItem#getValueRendererFactory()}
  * 
  * @author Zied Hamdi founder of http://into-i.fr
  * 
@@ -86,4 +88,5 @@ public interface ValueRendererFactory<T, W extends ValueHolderItem<T>> {
 	 * @return
 	 */
 	ListRenderer<T, W> createListRenderer();
+
 }

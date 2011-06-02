@@ -26,9 +26,9 @@ import eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueRendererFactor
  * @author Zied Hamdi founder of http://into-i.fr
  * 
  * @param <T>
- *            the value type (for each item)
+ *          the value type (for each item)
  * @param <W>
- *            the view object representing the value row
+ *          the view object representing the value row
  */
 public class SimpleTableValueRendererFactory<T, W extends SimpleTableRowItemRenderer<T>>
 		implements ValueRendererFactory<T, W> {
@@ -43,8 +43,7 @@ public class SimpleTableValueRendererFactory<T, W extends SimpleTableRowItemRend
 	}
 
 	@Override
-	public W createValueRenderer(T value, String filterText,
-			boolean caseSensitive) {
+	public W createValueRenderer(T value, String filterText, boolean caseSensitive) {
 		W toReturn = newInstance(value, filterText, caseSensitive);
 		toReturn.setStyleName(cellStyle);
 		return toReturn;
@@ -53,7 +52,7 @@ public class SimpleTableValueRendererFactory<T, W extends SimpleTableRowItemRend
 	@SuppressWarnings("unchecked")
 	protected W newInstance(T value, String filterText, boolean caseSensitive) {
 		W toReturn = (W) new SimpleTableRowItemRenderer<T>(value, filterText,
-				caseSensitive);
+				caseSensitive, this);
 		return toReturn;
 	}
 
@@ -71,5 +70,16 @@ public class SimpleTableValueRendererFactory<T, W extends SimpleTableRowItemRend
 
 	public void setCellStyle(String cellStyle) {
 		this.cellStyle = cellStyle;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueRendererFactory
+	 * #toString(T)
+	 */
+	public String toString(T value) {
+		return null;
 	}
 }

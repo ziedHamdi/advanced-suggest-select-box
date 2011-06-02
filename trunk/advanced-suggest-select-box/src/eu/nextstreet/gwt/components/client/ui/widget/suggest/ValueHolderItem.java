@@ -74,4 +74,12 @@ public interface ValueHolderItem<T> extends IsWidget {
 	 */
 	public UIObject getUiObject();
 
+	/**
+	 * Any created instance must be aware of its factory since it can hold context
+	 * specific information
+	 * 
+	 * @return the factory that created this instance
+	 */
+	ValueRendererFactory<T, ?> getValueRendererFactory();
+
 }

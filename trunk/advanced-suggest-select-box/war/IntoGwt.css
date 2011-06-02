@@ -236,10 +236,13 @@ h4 {
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
 	border-radius: 5px;
-
 	background-color: #CBDDFA;
 }
 
 .eu-nextstreet-MultiChoiceSelection {
 	border-bottom: 1px solid #d5d5d5;
+}
+
+.eu-nextstreet-MultiItem {
+	vertical-align: middle;
 }
