@@ -25,8 +25,11 @@ import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.dom.client.MouseWheelHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Image;
 
+import eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueHolderItem;
+import eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueRendererFactory;
+import eu.nextstreet.gwt.components.client.ui.widget.suggest.iconed.impl.IconedValueRenderer;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.multi.BasicMultiChoiceValueHolderItem;
 
 /**
@@ -35,15 +38,19 @@ import eu.nextstreet.gwt.components.client.ui.widget.suggest.multi.BasicMultiCho
  * @param <T>
  *          item value type
  */
-public class MultiChoiceValueHolderLabel<T> extends
-		BasicMultiChoiceValueHolderItem<T, Label, MultiChoiceValueHolderLabel<T>> {
+public class MultiChoiceValueHolderLabel<T>
+		extends
+		BasicMultiChoiceValueHolderItem<T, IconedValueRenderer<T>, MultiChoiceValueHolderLabel<T>> {
 	private static final String MULTI_CHOICE_ITEM = "eu-nextstreet-MultiChoiceItem";
 
 	/**
-	 * @param concreteWidget
+	 * 
+	 * @param value
+	 * @param iconlinker
 	 */
-	public MultiChoiceValueHolderLabel(T value) {
-		super(value);
+	public MultiChoiceValueHolderLabel(T value,
+			ValueRendererFactory<T, ? extends ValueHolderItem<T>> valueRendererFactory) {
+		super(value, valueRendererFactory);
 		setStyleName(MULTI_CHOICE_ITEM);
 	}
 
@@ -53,9 +60,12 @@ public class MultiChoiceValueHolderLabel<T> extends
 	 * @see eu.nextstreet.gwt.components.client.ui.common.data.
 	 * ValueRepresentationTransformer#transform(java.lang.Object)
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public Label transform(T value) {
-		return new Label(value.toString());
+	public IconedValueRenderer<T> transform(T value) {
+		return new IconedValueRenderer<T>(value,
+				(Image) ((MultiChoiceValueRendererFactory) getValueRendererFactory())
+						.getIconLinker().transform(value), "", false, valueRendererFactory);
 	}
 
 	// -------------------- these are unused for now ------------------

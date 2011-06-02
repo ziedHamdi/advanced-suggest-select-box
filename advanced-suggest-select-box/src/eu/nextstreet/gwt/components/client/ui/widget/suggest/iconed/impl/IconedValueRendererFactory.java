@@ -24,7 +24,7 @@ public class IconedValueRendererFactory<T, W extends IconedValueHolderItem<T>>
 		Image icon = constructIcon(value);
 		@SuppressWarnings("unchecked")
 		W toReturn = (W) new IconedValueRenderer<T>(value, icon, filterText,
-				caseSensitive);
+				caseSensitive, this);
 		toReturn.setStyleName(EventHandlingValueHolderItem.ITEM_DEFAULT_STYLE);
 		return toReturn;
 	}
@@ -57,6 +57,17 @@ public class IconedValueRendererFactory<T, W extends IconedValueHolderItem<T>>
 
 	public void setIconLinker(ValueRepresentationTransformer<T, Image> iconLinker) {
 		this.iconLinker = iconLinker;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueRendererFactory
+	 * #toString(T)
+	 */
+	public String toString(T value) {
+		return null;
 	}
 
 }

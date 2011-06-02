@@ -29,6 +29,8 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.UIObject;
 
+import eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueHolderItem;
+import eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueRendererFactory;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.iconed.IconedValueHolderItem;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.impl.simple.DefaultValueRenderer;
 
@@ -48,11 +50,14 @@ public class IconedValueRenderer<T> extends Composite implements
 	protected HorizontalPanel horizontalPanel = new HorizontalPanel();
 	protected Image icon;
 	protected DefaultValueRenderer<T> label;
+	protected ValueRendererFactory<T, ? extends ValueHolderItem<T>> valueRendererFactory;
 
 	public IconedValueRenderer(T value, Image icon, String filterText,
-			boolean caseSensitive) {
+			boolean caseSensitive,
+			ValueRendererFactory<T, ? extends ValueHolderItem<T>> valueRendererFactory) {
 		initWidget(horizontalPanel);
-		label = new DefaultValueRenderer<T>(value, filterText, caseSensitive);
+		label = new DefaultValueRenderer<T>(value, filterText, caseSensitive,
+				valueRendererFactory);
 		if (icon == null) {
 			icon = new Image();
 		}
@@ -145,6 +150,11 @@ public class IconedValueRenderer<T> extends Composite implements
 	@Override
 	public Image getIcon() {
 		return icon;
+	}
+
+	@Override
+	public ValueRendererFactory<T, ? extends ValueHolderItem<T>> getValueRendererFactory() {
+		return valueRendererFactory;
 	}
 
 }

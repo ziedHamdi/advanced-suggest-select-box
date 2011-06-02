@@ -17,6 +17,9 @@
 
 package eu.nextstreet.gwt.components.client.ui.widget.suggest.multi.impl;
 
+import com.google.gwt.user.client.ui.Image;
+
+import eu.nextstreet.gwt.components.client.ui.common.data.ValueRepresentationTransformer;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueRendererFactory;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.multi.MultiChoiceListRenderer;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.multi.MultiChoiceValueHolderItem;
@@ -33,6 +36,17 @@ import eu.nextstreet.gwt.components.client.ui.widget.suggest.multi.MultiChoiceVa
 public class MultiChoiceValueRendererFactory<T, C extends MultiChoiceValueHolderItem<T, C>>
 		implements ValueRendererFactory<T, C> {
 
+	/** transforms a value into its icon representation */
+	protected ValueRepresentationTransformer<T, Image> iconLinker;
+
+	/**
+	 * @param iconlinker
+	 */
+	public MultiChoiceValueRendererFactory(
+			ValueRepresentationTransformer<T, Image> iconLinker) {
+		this.iconLinker = iconLinker;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -43,7 +57,7 @@ public class MultiChoiceValueRendererFactory<T, C extends MultiChoiceValueHolder
 	@SuppressWarnings("unchecked")
 	@Override
 	public C createValueRenderer(T value, String filterText, boolean caseSensitive) {
-		return (C) new MultiChoiceValueHolderLabel<T>(value);
+		return (C) new MultiChoiceValueHolderLabel<T>(value, this);
 	}
 
 	/*
@@ -56,6 +70,26 @@ public class MultiChoiceValueRendererFactory<T, C extends MultiChoiceValueHolder
 	@Override
 	public eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueRendererFactory.ListRenderer<T, C> createListRenderer() {
 		return new MultiChoiceListRenderer<T, C>();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueRendererFactory
+	 * #toString(T)
+	 */
+	public String toString(T value) {
+		return null;
+	}
+
+	/**
+	 * returns the icon linker to values
+	 * 
+	 * @return the icon linker to values
+	 */
+	public ValueRepresentationTransformer<T, Image> getIconLinker() {
+		return iconLinker;
 	}
 
 }

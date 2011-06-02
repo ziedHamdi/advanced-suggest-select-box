@@ -26,6 +26,8 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.UIObject;
 
 import eu.nextstreet.gwt.components.client.ui.common.data.ValueRepresentationTransformer;
+import eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueHolderItem;
+import eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueRendererFactory;
 
 /**
  * Has no concrete widget for the displayed item, but prepares the space for it
@@ -55,6 +57,7 @@ public abstract class BasicMultiChoiceValueHolderItem<T, R extends IsWidget, C e
 	protected HorizontalPanel panel = new HorizontalPanel();
 	protected R concreteWidget;
 	protected IsWidget removeButton;
+	protected ValueRendererFactory<T, ? extends ValueHolderItem<T>> valueRendererFactory;
 
 	/**
 	 * Decorates the concrete widget with functional 'remove' button
@@ -62,14 +65,16 @@ public abstract class BasicMultiChoiceValueHolderItem<T, R extends IsWidget, C e
 	 * @param concreteWidget
 	 *          item
 	 */
-	public BasicMultiChoiceValueHolderItem(T value) {
-		super();
+	public BasicMultiChoiceValueHolderItem(T value,
+			ValueRendererFactory<T, ? extends ValueHolderItem<T>> valueRendererFactory) {
+		this.valueRendererFactory = valueRendererFactory;
 		this.concreteWidget = transform(value);
 		setWidget(panel);
 		setStyleName(STYLE);
 		createRemoveButton();
 		panel.add(concreteWidget);
 		panel.add(removeButton);
+		panel.setCellVerticalAlignment(removeButton, HorizontalPanel.ALIGN_MIDDLE);
 		panel.setCellWidth(removeButton, "16px");
 	}
 
@@ -130,6 +135,10 @@ public abstract class BasicMultiChoiceValueHolderItem<T, R extends IsWidget, C e
 			}
 		});
 
+	}
+
+	public ValueRendererFactory<T, ? extends ValueHolderItem<T>> getValueRendererFactory() {
+		return valueRendererFactory;
 	}
 
 }

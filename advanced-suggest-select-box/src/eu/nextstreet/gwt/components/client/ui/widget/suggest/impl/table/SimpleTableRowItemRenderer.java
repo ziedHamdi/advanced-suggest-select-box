@@ -37,6 +37,8 @@ import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
 
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.EventHandlingValueHolderItem;
+import eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueHolderItem;
+import eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueRendererFactory;
 import eu.nextstreet.gwt.components.client.ui.widget.util.HtmlUtil;
 
 /**
@@ -63,12 +65,15 @@ public class SimpleTableRowItemRenderer<T> extends BasicWidgetListHolder
 	protected T value;
 	protected boolean caseSensitive;
 	protected String styleName;
+	protected ValueRendererFactory<T, ? extends ValueHolderItem<T>> valueRendererFactory;
 
 	public SimpleTableRowItemRenderer(T value, String filterText,
-			boolean caseSensitive) {
+			boolean caseSensitive,
+			ValueRendererFactory<T, ? extends ValueHolderItem<T>> valueRendererFactory) {
 		this.value = value;
 		this.caseSensitive = caseSensitive;
 		fillHtml(value, filterText, caseSensitive);
+		this.valueRendererFactory = valueRendererFactory;
 	}
 
 	/**
@@ -324,5 +329,9 @@ public class SimpleTableRowItemRenderer<T> extends BasicWidgetListHolder
 	public Widget asWidget() {
 		throw new UnsupportedOperationException(
 				"There's no element in GWT to represent a row, this is a special case that shouldn't be called");
+	}
+
+	public ValueRendererFactory<T, ? extends ValueHolderItem<T>> getValueRendererFactory() {
+		return valueRendererFactory;
 	}
 }
