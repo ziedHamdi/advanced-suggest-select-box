@@ -17,7 +17,7 @@
 
 package eu.nextstreet.gwt.components.client.ui.widget.suggest.multi;
 
-import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueRendererFactory.ListRenderer;
 
@@ -26,7 +26,12 @@ import eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueRendererFactor
  * 
  */
 public class MultiChoiceListRenderer<T, C extends MultiChoiceValueHolderItem<T, C>>
-		extends FlowPanel implements ListRenderer<T, C> {
+		extends HorizontalPanel implements ListRenderer<T, C> {
+
+	public MultiChoiceListRenderer() {
+		super();
+		setSpacing(2);
+	}
 
 	/*
 	 * (non-Javadoc)

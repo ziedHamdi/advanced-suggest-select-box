@@ -37,12 +37,14 @@ import eu.nextstreet.gwt.components.client.ui.widget.suggest.multi.BasicMultiCho
  */
 public class MultiChoiceValueHolderLabel<T> extends
 		BasicMultiChoiceValueHolderItem<T, Label, MultiChoiceValueHolderLabel<T>> {
+	private static final String MULTI_CHOICE_ITEM = "eu-nextstreet-MultiChoiceItem";
 
 	/**
 	 * @param concreteWidget
 	 */
 	public MultiChoiceValueHolderLabel(T value) {
 		super(value);
+		setStyleName(MULTI_CHOICE_ITEM);
 	}
 
 	/*

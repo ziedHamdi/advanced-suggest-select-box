@@ -110,6 +110,18 @@ h4 {
 	filter: dropshadow(color=#95ff8f, offx=1, offy=1);
 }
 
+.eu-nextstreet-SuggestField-top {
+	border: 1px solid white;
+}
+.eu-nextstreet-SuggestField-bottom {
+	border: 1px solid white;
+}
+.eu-nextstreet-SuggestField-left {
+	border: 1px solid white;
+}
+.eu-nextstreet-SuggestField-right {
+	border: 1px solid white;
+}
 .eu-nextstreet-SuggestField {
 	margin: 2px 0 0 0;
 	background: transparent url('img/arrow.png') no-repeat right 5px;
@@ -218,4 +230,16 @@ h4 {
 	background-color: #b0fc24;
 	text-shadow: 1px 1px 1px #25e1fa;
 	filter: dropshadow(color=#25e1fa, offx=1, offy=1);
+}
+
+.eu-nextstreet-MultiChoiceItem {
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+
+	background-color: #CBDDFA;
+}
+
+.eu-nextstreet-MultiChoiceSelection {
+	border-bottom: 1px solid #d5d5d5;
 }

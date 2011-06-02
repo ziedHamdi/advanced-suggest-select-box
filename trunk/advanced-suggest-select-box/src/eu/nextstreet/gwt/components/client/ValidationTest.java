@@ -112,6 +112,8 @@ public class ValidationTest {
 				DockPanel.NORTH,
 				new MultiChoiceValueRendererFactory<Value, MultiChoiceValueHolderLabel<Value>>());
 		multiBox.setStartsWith(false);
+		multiBox.getTextField().getTop()
+				.setStyleName("eu-nextstreet-MultiChoiceSelection");
 		fillData(multiBox);
 		box.setIconLinker(iconLinker);
 		RootPanel.get("suggestBoxMultiValueContainer").add(multiBox);
