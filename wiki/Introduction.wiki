@@ -96,6 +96,7 @@ Similarly, you can create a multivalued select box with only some lines of code:
 		multiBox.setIconLinker(iconLinker);
 		RootPanel.get("suggestBoxMultiValueContainer").add(multiBox);
 }}}
+MultiChoiceValueRendererFactory is the class that handles the creation of the selected items and their container. It is constructed with the same iconLinker to have thes same icons on the values (you could choose to have smaller icons or no icons for that section for example) 
 
 All these examples can be found in the class `eu.nextstreet.gwt.components.client.ValidationTest` that is also used internally to test the demo application.
 
