@@ -46,10 +46,14 @@ import eu.nextstreet.gwt.components.shared.Validator;
  * 
  * 
  */
-public class SuggestTextBoxWidgetImpl<T, W extends EventHandlingValueHolderItem<T>> extends
-		Composite implements SuggestTextBoxWidget<T, W> {
+public class SuggestTextBoxWidgetImpl<T, W extends EventHandlingValueHolderItem<T>>
+		extends Composite implements SuggestTextBoxWidget<T, W> {
 	/** the text field style name */
 	private static final String SUGGEST_FIELD = "eu-nextstreet-SuggestField";
+	private static final String SUGGEST_FIELD_TOP = "eu-nextstreet-SuggestField-top";
+	private static final String SUGGEST_FIELD_BOTTOM = "eu-nextstreet-SuggestField-bottom";
+	private static final String SUGGEST_FIELD_LEFT = "eu-nextstreet-SuggestField-left";
+	private static final String SUGGEST_FIELD_RIGHT = "eu-nextstreet-SuggestField-right";
 
 	/** the main panel */
 	protected DockPanel panel = new DockPanel();
@@ -129,11 +133,13 @@ public class SuggestTextBoxWidgetImpl<T, W extends EventHandlingValueHolderItem<
 	private void initPanels() {
 		panel.add(advancedTextBox, DockPanel.CENTER);
 		panel.add(top, DockPanel.NORTH);
-		top.setHeight("0px");
+		top.setStyleName(SUGGEST_FIELD_TOP);
 		panel.add(bottom, DockPanel.SOUTH);
-		bottom.setHeight("0px");
+		bottom.setStyleName(SUGGEST_FIELD_BOTTOM);
 		advancedTextBox.setStyleName(SUGGEST_FIELD);
+		left.setStyleName(SUGGEST_FIELD_LEFT);
 		panel.add(left, DockPanel.WEST);
+		right.setStyleName(SUGGEST_FIELD_RIGHT);
 		panel.add(right, DockPanel.EAST);
 	}
 
