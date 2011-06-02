@@ -40,9 +40,10 @@ public class MultiChoiceValueRendererFactory<T, C extends MultiChoiceValueHolder
 	 * eu.nextstreet.gwt.components.client.ui.widget.suggest.ValueRendererFactory
 	 * #createValueRenderer(java.lang.Object, java.lang.String, boolean)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public C createValueRenderer(T value, String filterText, boolean caseSensitive) {
-		return null;
+		return (C) new MultiChoiceValueHolderLabel<T>(value);
 	}
 
 	/*

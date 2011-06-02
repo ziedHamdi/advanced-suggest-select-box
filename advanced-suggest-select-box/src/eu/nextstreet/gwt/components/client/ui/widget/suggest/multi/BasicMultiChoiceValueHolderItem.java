@@ -65,6 +65,7 @@ public abstract class BasicMultiChoiceValueHolderItem<T, R extends IsWidget, C e
 	public BasicMultiChoiceValueHolderItem(T value) {
 		super();
 		this.concreteWidget = transform(value);
+		setWidget(panel);
 		setStyleName(STYLE);
 		createRemoveButton();
 		panel.add(concreteWidget);
