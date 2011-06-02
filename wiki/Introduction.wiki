@@ -82,6 +82,23 @@ In our online example we have a pretty simple implementation that supposes there
 
 As you surely understood at this point `ValueRepresentationTransformer<T,R>` is a general purpose interface designed to translate a value into one of its representations. The representation can be an icon, but can also be a complex widget. The coming versions of this project will show other uses of this interface.
 
+Similarly, you can create a multivalued select box with only some lines of code:
+{{{
+		final MultiChoiceSuggestBox<Value, IconedValueRenderer<Value>, MultiChoiceValueHolderLabel<Value>> multiBox = new MultiChoiceSuggestBox<ValidationTest.Value, IconedValueRenderer<Value>, MultiChoiceValueHolderLabel<Value>>(
+				"select or type value",
+				DockPanel.NORTH,
+				new MultiChoiceValueRendererFactory<Value, MultiChoiceValueHolderLabel<Value>>(
+						iconLinker));
+		multiBox.setStartsWith(false);
+		multiBox.getTextField().getTop()
+				.setStyleName("eu-nextstreet-MultiChoiceSelection");
+		fillData(multiBox);
+		multiBox.setIconLinker(iconLinker);
+		RootPanel.get("suggestBoxMultiValueContainer").add(multiBox);
+}}}
+
+All these examples can be found in the class `eu.nextstreet.gwt.components.client.ValidationTest` that is also used internally to test the demo application.
+
 These examples of use show some limitations of the standard components:
 ==Filtering limitations==
 In many cases, list values have a business code and a label (at least). Users wish to have the possibility to filter by typing either the code or the label. For example, the user could wish to type AB and see the element *01 - ABCD* selected. 
