@@ -1,0 +1,248 @@
+/** Add css rules here for your application. */
+/** Example rules used by the template application (remove for your app) */
+h1 {
+	font-size: 2em;
+	font-weight: bold;
+	color: #777777;
+	margin: 40px 0px 70px;
+	text-align: center;
+}
+
+h3 {
+	color:#ff7700;
+}
+h4 {
+	color:#ff7700;
+}
+.sendButton {
+	display: block;
+	font-size: 16pt;
+}
+
+/** Most GWT widgets already have a style name defined */
+.gwt-DialogBox {
+	width: 400px;
+}
+
+.dialogVPanel {
+	margin: 5px;
+}
+
+.serverResponseLabelError {
+	color: red;
+}
+
+/** Set ids using widget.getElement().setId("idOfElement") */
+#closeButton {
+	margin: 15px 6px 6px;
+}
+
+/* la suggest box CUSTOM */
+.eu-nextstreet-SuggestFieldPanel {
+	border: 1px solid blue;
+	-moz-border-radius: 8px;
+	border-radius: 8px;
+	
+	-webkit-box-shadow: 1px 1px 8px #9fa7eb;
+	-moz-box-shadow: 1px 1px 8px #9fa7eb;
+	box-shadow: 1px 1px 8px #414178;
+}
+
+.eu-nextstreet-SuggestFieldPanel table tr {
+	
+}
+
+.eu-nextstreet-SuggestFieldPanel .eu-nextstreet-SuggestFieldPanel-left {
+	
+}
+
+.eu-nextstreet-SuggestFieldPanel .eu-nextstreet-SuggestFieldPanel-left .eu-nextstreet-SuggestFieldPanel-leftInner
+	{
+	
+}
+
+.eu-nextstreet-SuggestFieldPanel .eu-nextstreet-SuggestFieldPanel-content
+	{
+	
+}
+
+.eu-nextstreet-SuggestFieldPanel .eu-nextstreet-SuggestFieldPanel-right
+	{
+	
+}
+
+.eu-nextstreet-SuggestFieldPanel .eu-nextstreet-SuggestFieldPanel-right .eu-nextstreet-SuggestFieldPanel-rightInner
+	{
+	
+}
+
+.eu-nextstreet-SuggestItem {
+	width: 100%;
+	font-size: 0.9em;
+	padding: 0 3px;
+}
+
+.eu-nextstreet-SuggestItemSelected {
+	width: 100%;
+	-moz-border-radius: 6px;
+	border-radius: 6px;	
+		
+	text-shadow: 1px 1px 1px #949dff;
+	filter: dropshadow(color=#949dff, offx=1, offy=1);
+	
+	background-color: #cbddfa;
+	color: black;
+}
+
+.eu-nextstreet-SuggestItemHover {
+	width: 100%;
+	font-weight: bold;
+	
+	background-color: #cce4f5;
+	-moz-border-radius: 6px;
+	border-radius: 6px;	
+}
+
+.eu-nextstreet-SuggestMatchingString {
+	color: #0f8a04;
+
+	text-shadow: 1px 1px 1px #95ff8f;
+	filter: dropshadow(color=#95ff8f, offx=1, offy=1);
+}
+
+.eu-nextstreet-SuggestField-top {
+	border: 1px solid white;
+}
+.eu-nextstreet-SuggestField-bottom {
+	border: 1px solid white;
+}
+.eu-nextstreet-SuggestField-left {
+	border: 1px solid white;
+}
+.eu-nextstreet-SuggestField-right {
+	border: 1px solid white;
+}
+.eu-nextstreet-SuggestField {
+	margin: 2px 0 0 0;
+	background: transparent url('img/arrow.png') no-repeat right 5px;
+	border: none;
+	height: 16px;
+	padding-right: 10px; /*for the arrow image on the right*/
+
+	text-shadow: 1px 1px 1px #9fa7eb;
+	filter: dropshadow(color = #9fa7eb, offx = 1, offy = 1);
+}
+
+.eu-nextstreet-SuggestPopup {
+	background-color: #f3f3f3;
+	border: 1px solid blue;
+	border-top: 0px;
+
+	-moz-border-radius-topleft: 0px;
+	-moz-border-radius-topright: 0px;
+	-moz-border-radius-bottomright: 8px;
+	-moz-border-radius-bottomleft: 8px;
+	
+	border-top-left-radius: 0px;
+	border-top-right-radius: 0px;
+	border-bottom-right-radius: 8px;
+	border-bottom-left-radius: 8px;
+
+	-webkit-box-shadow: 1px 1px 8px #9fa7eb;
+	-moz-box-shadow: 1px 1px 8px #9fa7eb;
+	box-shadow: 1px 1px 8px #414178;
+
+	padding: 5px;
+}
+
+.eu-nextstreet-SuggestPopup table {
+}
+
+.eu-nextstreet-SuggestFieldHover {
+	cursor: pointer;
+	
+	-webkit-box-shadow: 1px 1px 6px #dbe9ff;
+	-moz-box-shadow: 1px 1px 6px #dbe9ff;
+	box-shadow: 1px 1px 6px #dbe9ff;
+}
+
+.eu-nextstreet-AdvancedTextBoxDefaultText {
+	color: #999999;
+}
+
+.eu-nextstreet-AdvancedTextBoxErrorText {
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+	
+	text-shadow: 1px 1px 1px #a90329;
+	filter: dropshadow(color=#a90329, offx=1, offy=1);
+	
+	background-color: #ffc2c2;
+	color: black;
+}
+
+.eu-nextstreet-AdvancedTextBoxMandatoryText {
+	background-color: #ff9999;
+	
+	border: 0px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+	
+	-webkit-box-shadow: 1px 1px 8px #ff9999;
+	-moz-box-shadow: 1px 1px 8px #ff9999;
+	box-shadow: 1px 1px 8px #ff9999;}
+
+.eu-nextstreet-AdvancedTextBoxReadOnlyText {
+	background-color: #dddddd;
+	color: gray;
+	
+	border: 0px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+	
+	-webkit-box-shadow: 1px 1px 8px #9fa7eb;
+	-moz-box-shadow: 1px 1px 8px #9fa7eb;
+	box-shadow: 1px 1px 8px #414178;
+}
+
+.eu-nextstreet-SuggestFieldPopupSimpleTable {
+	padding: 0;
+}
+
+.eu-nextstreet-SuggestFieldPopupSimpleTable tr td {
+}
+
+.eu-nextstreet-SuggestFieldPopupSimpleTableCell {
+	
+}
+
+.eu-nextstreet-SuggestFieldPopupSimpleTableCell-selected {
+	background-color:#b5b5b5;
+	text-shadow: 1px 1px 1px #d5d5d5;
+	filter: dropshadow(color=#d5d5d5, offx=1, offy=1);}
+
+.eu-nextstreet-SuggestFieldPopupSimpleTableCell-hover {
+	text-shadow: 1px 1px 1px #707cba;
+	filter: dropshadow(color=#707cba, offx=1, offy=1);
+}
+
+.eu-nextstreet-SuggestTableMatchingString {
+	background-color: #b0fc24;
+	text-shadow: 1px 1px 1px #25e1fa;
+	filter: dropshadow(color=#25e1fa, offx=1, offy=1);
+}
+
+.eu-nextstreet-MultiChoiceItem {
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	background-color: #CBDDFA;
+}
+
+.eu-nextstreet-MultiChoiceSelection {
+	border-bottom: 1px solid #d5d5d5;
+}
+
+.eu-nextstreet-MultiItem {
+	vertical-align: middle;
+}
