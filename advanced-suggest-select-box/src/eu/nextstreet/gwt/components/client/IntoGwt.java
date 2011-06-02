@@ -29,7 +29,7 @@ public class IntoGwt implements EntryPoint {
 	/**
 	 * When set to true, the testing demo app is launched
 	 */
-	private boolean test = false;
+	private boolean test = true;
 
 	/**
 	 * This is the entry point method.
