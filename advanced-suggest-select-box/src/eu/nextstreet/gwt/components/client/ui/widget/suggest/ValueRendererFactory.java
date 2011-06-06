@@ -76,16 +76,19 @@ public interface ValueRendererFactory<T, W extends ValueHolderItem<T>> {
 	 * returns the widget representing an item in the suggest list
 	 * 
 	 * @param value
+	 *          the item value
 	 * @param filterText
+	 *          the text that was typed in the suggest box
 	 * @param caseSensitive
-	 * @return
+	 *          whether typing is case sensitive or not
+	 * @return the widget
 	 */
 	W createValueRenderer(T value, String filterText, boolean caseSensitive);
 
 	/**
 	 * Creates the widget responsible for displaying the list of possible items
 	 * 
-	 * @return
+	 * @return the widget
 	 */
 	ListRenderer<T, W> createListRenderer();
 

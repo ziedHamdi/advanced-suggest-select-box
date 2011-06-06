@@ -34,7 +34,7 @@ public interface ValueHolderItem<T> extends IsWidget {
 	/**
 	 * returns the value it represents
 	 * 
-	 * @return
+	 * @return the value it represents
 	 */
 	public T getValue();
 
@@ -49,7 +49,8 @@ public interface ValueHolderItem<T> extends IsWidget {
 	/**
 	 * Highlights the item if it's the one selected
 	 * 
-	 * @param focused
+	 * @param selected
+	 *          true is is selected
 	 */
 	public void setSelected(boolean selected);
 
@@ -70,7 +71,7 @@ public interface ValueHolderItem<T> extends IsWidget {
 	/**
 	 * Returns a {@link UIObject} represented on the screen for this value holder
 	 * 
-	 * @return
+	 * @return a {@link UIObject} represented on the screen for this value holder
 	 */
 	public UIObject getUiObject();
 

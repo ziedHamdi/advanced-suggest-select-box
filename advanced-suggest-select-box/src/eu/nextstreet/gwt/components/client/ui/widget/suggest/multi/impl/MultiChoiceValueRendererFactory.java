@@ -40,7 +40,8 @@ public class MultiChoiceValueRendererFactory<T, C extends MultiChoiceValueHolder
 	protected ValueRepresentationTransformer<T, Image> iconLinker;
 
 	/**
-	 * @param iconlinker
+	 * @param iconLinker
+	 *          the value transformer into icons
 	 */
 	public MultiChoiceValueRendererFactory(
 			ValueRepresentationTransformer<T, Image> iconLinker) {

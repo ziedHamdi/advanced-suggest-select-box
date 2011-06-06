@@ -144,7 +144,6 @@ public class AdvancedTextBox extends TextBox implements HasDoubleClickHandlers {
 	/**
 	 * If the box text is empty fills it with the default value
 	 * 
-	 * @param text
 	 */
 	protected void handleDefaultText() {
 		if (defaultText != null && defaultText.length() > 0) {
@@ -175,7 +174,7 @@ public class AdvancedTextBox extends TextBox implements HasDoubleClickHandlers {
 	/**
 	 * returns true if the current text is empty or equal to the default text
 	 * 
-	 * @return
+	 * @return true if the current text is empty or equal to the default text
 	 */
 	public boolean isEmpty() {
 		return isEmptyTextField()
@@ -185,9 +184,6 @@ public class AdvancedTextBox extends TextBox implements HasDoubleClickHandlers {
 	/**
 	 * Adds or removes the default text style depending on the value
 	 * 
-	 * @param empty
-	 * 
-	 * @param text
 	 */
 	protected void handleTextStyles() {
 		if (isReadOnly()) {
@@ -236,7 +232,6 @@ public class AdvancedTextBox extends TextBox implements HasDoubleClickHandlers {
 	 * By default removes the title of the field (in case it was previously set by
 	 * {@link #handleError(ValidationException)})
 	 * 
-	 * @param error
 	 */
 	protected void removeError() {
 		if (uiHandler != null)
@@ -384,7 +379,7 @@ public class AdvancedTextBox extends TextBox implements HasDoubleClickHandlers {
 	 * Returns the component that is holding this text box (for example the
 	 * SuggestBox)
 	 * 
-	 * @return
+	 * @return the component that is holding this text box
 	 */
 	public Widget getRepresenter() {
 		return representer;

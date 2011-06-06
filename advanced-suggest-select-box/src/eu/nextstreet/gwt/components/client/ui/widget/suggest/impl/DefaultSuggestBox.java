@@ -29,9 +29,9 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Widget;
 
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.AbstractSuggestBox;
+import eu.nextstreet.gwt.components.client.ui.widget.suggest.EventHandlingValueHolderItem;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.SuggestTextBoxWidget;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.SuggestTextBoxWidgetImpl;
-import eu.nextstreet.gwt.components.client.ui.widget.suggest.EventHandlingValueHolderItem;
 
 /**
  * Implements a simple value holding suggest box, more advanced implementations
@@ -44,8 +44,8 @@ import eu.nextstreet.gwt.components.client.ui.widget.suggest.EventHandlingValueH
  * @param <W>
  *          the {@link EventHandlingValueHolderItem} implementation class
  */
-public class DefaultSuggestBox<T, W extends EventHandlingValueHolderItem<T>> extends
-		AbstractSuggestBox<T, W> {
+public class DefaultSuggestBox<T, W extends EventHandlingValueHolderItem<T>>
+		extends AbstractSuggestBox<T, W> {
 
 	@SuppressWarnings("rawtypes")
 	interface SuggestBoxUiBinder extends UiBinder<Widget, DefaultSuggestBox> {
@@ -129,7 +129,7 @@ public class DefaultSuggestBox<T, W extends EventHandlingValueHolderItem<T>> ext
 	 * 
 	 * @param text
 	 * @param t
-	 * @return
+	 * @return true if the element should be included in the list
 	 */
 	protected boolean accept(String text, T t) {
 		String stringValue = caseSensitive ? toString(t) : toString(t)
