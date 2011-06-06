@@ -46,7 +46,9 @@ public class MultiChoiceValueHolderLabel<T>
 	/**
 	 * 
 	 * @param value
-	 * @param iconlinker
+	 *          value
+	 * @param valueRendererFactory
+	 *          the factory the created this instance
 	 */
 	public MultiChoiceValueHolderLabel(T value,
 			ValueRendererFactory<T, ? extends ValueHolderItem<T>> valueRendererFactory) {

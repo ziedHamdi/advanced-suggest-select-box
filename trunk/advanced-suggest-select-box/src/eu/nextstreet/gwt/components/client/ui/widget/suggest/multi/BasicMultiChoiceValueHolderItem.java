@@ -62,8 +62,10 @@ public abstract class BasicMultiChoiceValueHolderItem<T, R extends IsWidget, C e
 	/**
 	 * Decorates the concrete widget with functional 'remove' button
 	 * 
-	 * @param concreteWidget
-	 *          item
+	 * @param value
+	 *          item value
+	 * @param valueRendererFactory
+	 *          the factory that created this instance
 	 */
 	public BasicMultiChoiceValueHolderItem(T value,
 			ValueRendererFactory<T, ? extends ValueHolderItem<T>> valueRendererFactory) {

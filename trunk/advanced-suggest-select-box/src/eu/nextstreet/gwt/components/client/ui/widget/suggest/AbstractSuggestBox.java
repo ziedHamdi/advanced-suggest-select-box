@@ -405,7 +405,8 @@ public abstract class AbstractSuggestBox<T, W extends EventHandlingValueHolderIt
 
 	private EventHandlingValueHolderItem<T> getSelectedItem() {
 		if (selectedIndex != -1 && listRenderer.getWidgetCount() > selectedIndex)
-			return (EventHandlingValueHolderItem<T>) listRenderer.getAt(selectedIndex);
+			return (EventHandlingValueHolderItem<T>) listRenderer
+					.getAt(selectedIndex);
 		return null;
 	}
 
@@ -515,12 +516,14 @@ public abstract class AbstractSuggestBox<T, W extends EventHandlingValueHolderIt
 
 	/**
 	 * Not used in the the library: utility method to get the typed item
-	 * corresponding to a given text Warning! this methods calls
-	 * {@link #getFiltredPossibilities(String)} that could make a call to the
-	 * server, you should avoid calling it.
+	 * corresponding to a given text
+	 * 
+	 * <b>Warning!</b> this methods calls {@link #getFiltredPossibilities(String)}
+	 * that could make a call to the server, you should avoid calling it.
 	 * 
 	 * @param text
-	 * @return
+	 *          the typed text
+	 * @return the item that corresponds to text or null if none
 	 */
 	public T computeSelected(String text) {
 		List<T> possibilities = getFiltredPossibilities(text);
@@ -547,9 +550,9 @@ public abstract class AbstractSuggestBox<T, W extends EventHandlingValueHolderIt
 	protected abstract List<T> getFiltredPossibilities(String text);
 
 	/**
-	 * returns the curent suggest renderer items factory
+	 * returns the curent suggest renderer factory
 	 * 
-	 * @return
+	 * @return the curent suggest box renderer factory
 	 */
 	public ValueRendererFactory<T, ? extends EventHandlingValueHolderItem<T>> getValueRendererFactory() {
 		return valueRendererFactory;
@@ -599,7 +602,7 @@ public abstract class AbstractSuggestBox<T, W extends EventHandlingValueHolderIt
 	 * change event will be called each time a value is selected or if it has to
 	 * wait until a blur occurs.
 	 * 
-	 * @return
+	 * @return true if the event is immediate
 	 */
 	public boolean isMultipleChangeEvent() {
 		return multipleChangeEvent;
