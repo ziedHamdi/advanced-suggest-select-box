@@ -72,6 +72,12 @@ public class ValidationTest {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static void testWidget() {
+		RootPanel suggestBoxContainer = RootPanel.get("suggestBoxContainer");
+		if (suggestBoxContainer == null) {
+			System.err
+					.println("Library Test code is enabled while it seems it shouldn't. Please inform the author of the library to turn off the test or set eu.nextstreet.gwt.components.client.IntoGwt.test=false;");
+			return;
+		}
 		// Can't use generics in this example since we switch between a table
 		// and a label view so the second argument is ? extends
 		// ValueHolderLabel<Value>
@@ -85,7 +91,7 @@ public class ValidationTest {
 
 		box.setIconLinker(iconLinker);
 
-		RootPanel.get("suggestBoxContainer").add(box);
+		suggestBoxContainer.add(box);
 		// box.setText("Chrome Toolbox");
 		box.computeSelected(box.getText());
 
