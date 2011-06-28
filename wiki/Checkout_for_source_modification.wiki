@@ -22,4 +22,4 @@ When prompted if the existing files can be overridden choose yes so that the gwt
 
 _To be sure the "new project wizard" didn't override the files downloaded from svn, redo a svn synchronize on the project and select "override and update" on the project root._
 
-You're done! you can run the gwt project now.
+You're done! you can run the gwt project now. Check the boolean variable IntoGWT.test is initialized to 'true': this enables the test procedure.
