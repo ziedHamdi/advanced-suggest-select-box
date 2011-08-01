@@ -22,6 +22,6 @@ When prompted if the existing files can be overridden choose yes so that the gwt
 
 _To be sure the "new project wizard" didn't override the files downloaded from svn, redo a svn synchronize on the project and select "override and update" on the project root._
 
-*To be able to see the [http://into-i.fr/suggestbox/ demo app] running, you need to set the boolean field IntoGwt.test value to true*
+*To be able to see the [http://into-i.fr/suggestbox/ demo app] running, you need to set the boolean field _IntoGwt.test_ value to true, then run the project as a GWT application*
 
 You're done! you can run the gwt project now. Check the boolean variable IntoGWT.test is initialized to 'true': this enables the test procedure.
