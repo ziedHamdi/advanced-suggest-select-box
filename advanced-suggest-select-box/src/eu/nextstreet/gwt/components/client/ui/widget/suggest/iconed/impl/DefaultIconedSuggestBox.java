@@ -22,7 +22,7 @@ public class DefaultIconedSuggestBox<T, W extends IconedValueHolderItem<T>>
 		extends DefaultSuggestBox<T, W> {
 	/** Gives an image for each value */
 	@SuppressWarnings("unchecked")
-	protected ValueRepresentationTransformer<T, Image> iconLinker = ValueRepresentationTransformer.NULL_TRANSFORMER;
+	protected ValueRepresentationTransformer<T, Image>	iconLinker	= ValueRepresentationTransformer.NULL_TRANSFORMER;
 
 	public DefaultIconedSuggestBox(String defaultText) {
 		super(defaultText);
@@ -82,11 +82,8 @@ public class DefaultIconedSuggestBox<T, W extends IconedValueHolderItem<T>>
 				.setIconLinker(iconLinker);
 	}
 
-	@Override
-	public T computeSelected(String text) {
-		T selected = super.computeSelected(text);
+	protected void setSelectedValue(T selected) {
 		if (selected != null)
 			fillIcon(selected);
-		return selected;
-	}
+	};
 }

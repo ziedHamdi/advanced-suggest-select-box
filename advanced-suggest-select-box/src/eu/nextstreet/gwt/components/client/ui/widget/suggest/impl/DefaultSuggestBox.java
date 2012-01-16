@@ -30,6 +30,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.AbstractSuggestBox;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.EventHandlingValueHolderItem;
+import eu.nextstreet.gwt.components.client.ui.widget.suggest.SuggestPossibilitiesCallBack;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.SuggestTextBoxWidget;
 import eu.nextstreet.gwt.components.client.ui.widget.suggest.SuggestTextBoxWidgetImpl;
 
@@ -51,14 +52,14 @@ public class DefaultSuggestBox<T, W extends EventHandlingValueHolderItem<T>>
 	interface SuggestBoxUiBinder extends UiBinder<Widget, DefaultSuggestBox> {
 	}
 
-	private static SuggestBoxUiBinder uiBinder = GWT
-			.create(SuggestBoxUiBinder.class);
+	private static SuggestBoxUiBinder	uiBinder	= GWT
+																									.create(SuggestBoxUiBinder.class);
 
 	protected @UiField
-	SuggestTextBoxWidgetImpl<T, W> textField;
+	SuggestTextBoxWidgetImpl<T, W>		textField;
 
-	protected List<T> possiblilities;
-	protected boolean startsWith;
+	protected List<T>									possiblilities;
+	protected boolean									startsWith;
 
 	public DefaultSuggestBox() {
 		this(false, true);
@@ -114,13 +115,14 @@ public class DefaultSuggestBox<T, W extends EventHandlingValueHolderItem<T>>
 	}
 
 	@Override
-	protected List<T> getFiltredPossibilities(String text) {
+	protected void computeFiltredPossibilities(String text,
+			SuggestPossibilitiesCallBack<T> suggestPossibilitiesCallBack) {
 		List<T> toReturn = new ArrayList<T>();
 		for (T t : possiblilities) {
 			if (accept(text, t))
 				toReturn.add(t);
 		}
-		return toReturn;
+		suggestPossibilitiesCallBack.setPossibilities(toReturn);
 	}
 
 	/**
