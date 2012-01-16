@@ -14,28 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package eu.nextstreet.gwt.components.client;
+package eu.nextstreet.gwt.components.client.ui.widget.suggest;
 
-import com.google.gwt.core.client.EntryPoint;
+import java.util.List;
 
 /**
- * Entry point classes define <code>onModuleLoad()</code>.
+ * Call back interface to handle asynchronous information handling
+ * 
+ * @author Zied Hamdi
+ * 
+ * @param <T>
  */
-public class IntoGwt implements EntryPoint {
-	public static native void changeCss(String styleFile) /*-{
-		$doc.getElementById("cssFile").href = styleFile;
-	}-*/;
+public interface SuggestPossibilitiesCallBack<T> {
 
 	/**
-	 * When set to true, the testing demo app is launched
+	 * This method has to be called when data is available
+	 * 
+	 * @param possibilities
+	 *          the possibilities for the last request
 	 */
-	private boolean	test	= true;
-
-	/**
-	 * This is the entry point method.
-	 */
-	public void onModuleLoad() {
-		if (test)
-			ValidationTest.testWidget();
-	}
+	void setPossibilities(List<T> possibilities);
 }
