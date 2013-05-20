@@ -20,14 +20,14 @@ In MultiChoiceSuggestBox there are three generic arguments
 {{{
 MultiChoiceSuggestBox<Value, IconedValueRenderer<Value>, MultiChoiceValueHolderLabel<Value>>
 }}}
-  #The class type of the values contained in the suggest box
-  #The representer of a value while in the suggested values list
-  #The representer of a selected value while in the selected items list 
+  # The class type of the values contained in the suggest box
+  # The representer of a value while in the suggested values list
+  # The representer of a selected value while in the selected items list 
 
 In addition, it receives three parameters in its constructor:
-  #The "no value" text that helps to understand what the field is for
-  #The position of the panel that will hold the selected values list (note that you have the possibility to put the panel completely out of the box)
-  #The factory for the items of the "selected values panel" (the type of the items was mentioned as the third generic argument)
+  # The "no value" text that helps to understand what the field is for
+  # The position of the panel that will hold the selected values list (note that you have the possibility to put the panel completely out of the box)
+  # The factory for the items of the "selected values panel" (the type of the items was mentioned as the third generic argument)
 
 With the following lines, we decided to make the selected values show only icons and no text:
 {{{
