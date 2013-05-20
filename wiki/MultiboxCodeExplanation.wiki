@@ -67,7 +67,7 @@ Now you can set the values with which the suggest box is initialized
 
 Congratulations! you're done. You can now react on events. 
 
-See also the Introduction section for further details
+See also the [Introduction] section for further details
 
 The complete example is below
 
