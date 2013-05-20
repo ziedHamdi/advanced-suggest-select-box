@@ -25,25 +25,25 @@ In addition, it receives three parameters in its constructor:
 
 With the following lines, we decided to make the selected values show only icons and no text:
 {{{
-                ((AbstractValueRendererFactory) choiceItemsRendererFactory.getTextRendererFactory()).setStringFormulator(new StringFormulator<Value>() {
+((AbstractValueRendererFactory) choiceItemsRendererFactory.getTextRendererFactory()).setStringFormulator(new StringFormulator<Value>() {
 
-                        @Override
-                        public String toString(Value t) {
-                                return "";
-                        }
-                });
+  @Override
+  public String toString(Value t) {
+    return "";
+  }
+});
 }}} 
 
 With the following line, we say to the suggest box which text should be displayed for the elements in the suggestion list (while still not selected)
 {{{
-                multiBox.setStringFormulator(stringFormulator);
+multiBox.setStringFormulator(stringFormulator);
 }}}
 
 We also tell the suggest box to suggest only elements that start with the typed text (as opposed to "contains" the typed text)
 
 *Note that the options mecanism can allow you to extend the suggest box and pass it your own options through this same mechanism*
 {{{
-                multiBox.putOption(new BooleanOption(DefaultOptions.STARTS_WITH.name(), true));
+multiBox.putOption(new BooleanOption(DefaultOptions.STARTS_WITH.name(), true));
 }}}
 
 The next line sets the interpreter of the items for the icon zone (which is displayed in the suggestion list) :
@@ -53,10 +53,10 @@ The next line sets the interpreter of the items for the icon zone (which is disp
 
 Now you can set the values with which the suggest box is initialized
 {{{
-                List<Value> multiSelection = new ArrayList<ValidationTest.Value>();
-                multiSelection.add(blogger);
-                multiSelection.add(chromeToolBox);
-                multiBox.setValues(multiSelection);
+List<Value> multiSelection = new ArrayList<ValidationTest.Value>();
+multiSelection.add(blogger);
+multiSelection.add(chromeToolBox);
+multiBox.setValues(multiSelection);
 }}}
 
 Congratulations! you're done. You can now react on events. 
