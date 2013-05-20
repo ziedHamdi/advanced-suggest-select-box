@@ -23,7 +23,9 @@ In addition, it receives three parameters in its constructor:
   # The position of the panel that will hold the selected values list (note that you have the possibility to put the panel completely out of the box)
   # The factory for the items of the "selected values panel" (the type of the items was mentioned as the third generic argument)
 
-With the following lines, we decided to make the selected values show only icons and no text:
+With the following lines, we decided to make the selected values show only icons and no text. 
+Any Widget can be returned by the factory to represent selected items in the suggest box, for that, you need to implement *ValueRendererFactory*. By default we provided a mechanism that should fulfill the need of the majority of users : it displays text or an icon + text. This mechanism uses the *StringFormulator* that transforms an Object value to its String human readable representation. The mechanism of creating the text value through StringFormulator is expressed in AbstractValueRendererFactory. So we must cast our factory to AbstractValueRendererFactory to get access to the wanted method: *setStringFormulator*. From that instant, the method *toString(V value)* will be used to display the text value of an item
+choiceItemsRendererFactory.getTextRendererFactory()
 {{{
 ((AbstractValueRendererFactory) choiceItemsRendererFactory.getTextRendererFactory()).setStringFormulator(new StringFormulator<Value>() {
 
