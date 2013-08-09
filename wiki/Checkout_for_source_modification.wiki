@@ -16,7 +16,7 @@ Select *Checkout as a project configured using the New Project Wizard* then pres
 
 In the project name type : *IntoGwt* , and in the package name type *eu.nextstreet.gwt.components* 
 
-Select a gwt version 2.0 or higher. And optionally uncheck the Google Web Application option checkbox.
+Select a gwt version 2.5 or higher. 
 
 When prompted if the existing files can be overridden choose yes so that the gwt.xml original file overrides the one created by your project wizard.
 
@@ -25,3 +25,7 @@ _To be sure the "new project wizard" didn't override the files downloaded from s
 *To be able to see the [http://into-i.fr/suggestbox/ demo app] running, you need to set the boolean field _IntoGwt.test_ value to true, then run the project as a GWT application*
 
 You're done! you can run the gwt project now. Check the boolean variable IntoGWT.test is initialized to 'true': this enables the test procedure.
+
+=Troubleshooting=
+==lib/gwt-servlet.jar missing==
+If the project doesn't compile, uncheck the Google Web Application option checkbox (Project properties -> Google -> Web Kit -> Use Google web toolkit). press OK and wait until it compiles. Then go back to that menu and check the option again. Clicking ok should resolve the issue.
