@@ -16,7 +16,7 @@ Select *Checkout as a project configured using the New Project Wizard* then pres
 
 In the project name type : *IntoGwt* , and in the package name type *eu.nextstreet.gwt.components* 
 
-Select a gwt version 2.5 or higher. 
+Select a gwt version 2.5 or higher. (you can try with lower versions, but you should know we're not testing the project under the 2.5 version)
 
 When prompted if the existing files can be overridden choose yes so that the gwt.xml original file overrides the one created by your project wizard.
 
