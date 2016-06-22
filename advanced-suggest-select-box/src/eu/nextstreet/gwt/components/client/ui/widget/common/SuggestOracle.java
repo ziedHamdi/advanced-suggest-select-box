@@ -28,12 +28,15 @@ public abstract class SuggestOracle<T> {
 	protected AbstractBaseWidget contextWidget;
 
 	/**
-	 * Callback for {@link com.google.gwt.user.client.ui.SuggestOracle}. Every {@link Request} should be associated with a callback that should be called after a
-	 * {@link Response} is generated.
+	 * Callback for {@link com.google.gwt.user.client.ui.SuggestOracle}. Every
+	 * {@link Request} should be associated with a callback that should be called
+	 * after a {@link Response} is generated.
 	 */
 	public interface Callback<T> {
 		/**
-		 * Consume the suggestions created by a {@link com.google.gwt.user.client.ui.SuggestOracle} in response to a {@link Request}.
+		 * Consume the suggestions created by a
+		 * {@link com.google.gwt.user.client.ui.SuggestOracle} in response to a
+		 * {@link Request}.
 		 * 
 		 * @param request
 		 *          the request
@@ -47,7 +50,7 @@ public abstract class SuggestOracle<T> {
 	 * A {@link com.google.gwt.user.client.ui.SuggestOracle} request.
 	 */
 	public static class Request implements IsSerializable {
-		private int limit = 20;
+		private int limit = 30;
 		private String query;
 
 		/**
@@ -72,7 +75,8 @@ public abstract class SuggestOracle<T> {
 		 * @param query
 		 *          the query string
 		 * @param limit
-		 *          limit on the number of suggestions that should be created for this query
+		 *          limit on the number of suggestions that should be created for
+		 *          this query
 		 */
 		public Request(String query, int limit) {
 			setQuery(query);
@@ -122,7 +126,8 @@ public abstract class SuggestOracle<T> {
 	 * {@link com.google.gwt.user.client.ui.SuggestOracle} response.
 	 * 
 	 * <p>
-	 * Can optionally have truncation information provided. To indicate that there are more results but the number is not known, use:
+	 * Can optionally have truncation information provided. To indicate that there
+	 * are more results but the number is not known, use:
 	 * 
 	 * <p>
 	 * <code>response.setMoreSuggestions(true);</code>
@@ -137,7 +142,8 @@ public abstract class SuggestOracle<T> {
 		private Collection<T> suggestions;
 
 		/**
-		 * The response is considered to have "more suggestions" when the number of matching suggestions exceeds {@link Request#getLimit}, so the response
+		 * The response is considered to have "more suggestions" when the number of
+		 * matching suggestions exceeds {@link Request#getLimit}, so the response
 		 * suggestion list is truncated.
 		 */
 		private boolean moreSuggestions = false;
@@ -157,7 +163,8 @@ public abstract class SuggestOracle<T> {
 		 * Constructor for {@link Response}.
 		 * 
 		 * @param suggestions
-		 *          each element of suggestions must implement the {@link Suggestion} interface
+		 *          each element of suggestions must implement the
+		 *          {@link Suggestion} interface
 		 */
 		public Response(Collection<T> suggestions) {
 			setSuggestions(suggestions);
@@ -166,14 +173,16 @@ public abstract class SuggestOracle<T> {
 		/**
 		 * Gets how many more suggestions there are.
 		 * 
-		 * @return the count. if there no more suggestions or the number of more suggestions is unknown, returns 0.
+		 * @return the count. if there no more suggestions or the number of more
+		 *         suggestions is unknown, returns 0.
 		 */
 		public int getMoreSuggestionsCount() {
 			return this.numMoreSuggestions;
 		}
 
 		/**
-		 * Gets the collection of suggestions. Each suggestion must implement the {@link Suggestion} interface.
+		 * Gets the collection of suggestions. Each suggestion must implement the
+		 * {@link Suggestion} interface.
 		 * 
 		 * @return the collection of suggestions
 		 */
@@ -182,25 +191,30 @@ public abstract class SuggestOracle<T> {
 		}
 
 		/**
-		 * Gets whether or not the suggestion list was truncated due to the {@link Request#getLimit}.
+		 * Gets whether or not the suggestion list was truncated due to the
+		 * {@link Request#getLimit}.
 		 */
 		public boolean hasMoreSuggestions() {
 			return this.moreSuggestions;
 		}
 
 		/**
-		 * Sets whether or not the suggestion list was truncated due to the {@link Request#getLimit}.
+		 * Sets whether or not the suggestion list was truncated due to the
+		 * {@link Request#getLimit}.
 		 */
 		public void setMoreSuggestions(boolean moreSuggestions) {
 			this.moreSuggestions = moreSuggestions;
 		}
 
 		/**
-		 * Sets whether or not the suggestion list was truncated due to the {@link Request#getLimit}, by providing an exact count of remaining suggestions.
+		 * Sets whether or not the suggestion list was truncated due to the
+		 * {@link Request#getLimit}, by providing an exact count of remaining
+		 * suggestions.
 		 * 
 		 * @param count
-		 *          number of truncated suggestions. Pass 0 to indicate there are no other suggestions, which is equivalent to {@link #setMoreSuggestions(boolean)
-		 *          setMoreSuggestions(false)}.
+		 *          number of truncated suggestions. Pass 0 to indicate there are no
+		 *          other suggestions, which is equivalent to
+		 *          {@link #setMoreSuggestions(boolean) setMoreSuggestions(false)}.
 		 */
 		public void setMoreSuggestionsCount(int count) {
 			this.numMoreSuggestions = count;
@@ -208,7 +222,8 @@ public abstract class SuggestOracle<T> {
 		}
 
 		/**
-		 * Sets the suggestions for this response. Each suggestion must implement the {@link Suggestion} interface.
+		 * Sets the suggestions for this response. Each suggestion must implement
+		 * the {@link Suggestion} interface.
 		 * 
 		 * @param suggestions
 		 *          the suggestions
@@ -222,7 +237,8 @@ public abstract class SuggestOracle<T> {
 	}
 
 	/**
-	 * Should {@link Suggestion} display strings be treated as HTML? If true, this all suggestions' display strings will be interpreted as HTML, otherwise as
+	 * Should {@link Suggestion} display strings be treated as HTML? If true, this
+	 * all suggestions' display strings will be interpreted as HTML, otherwise as
 	 * text.
 	 * 
 	 * @return by default, returns false
@@ -232,11 +248,13 @@ public abstract class SuggestOracle<T> {
 	}
 
 	/**
-	 * Generate a {@link Response} based on a default request. The request query must be null as it represents the results the oracle should return based on no
-	 * query string.
+	 * Generate a {@link Response} based on a default request. The request query
+	 * must be null as it represents the results the oracle should return based on
+	 * no query string.
 	 * <p>
 	 * After the {@link Response} is created, it is passed into
-	 * {@link Callback#onSuggestionsReady(com.google.gwt.user.client.ui.SuggestOracle.Request, com.google.gwt.user.client.ui.SuggestOracle.Response)} .
+	 * {@link Callback#onSuggestionsReady(com.google.gwt.user.client.ui.SuggestOracle.Request, com.google.gwt.user.client.ui.SuggestOracle.Response)}
+	 * .
 	 * </p>
 	 * 
 	 * @param request
@@ -250,8 +268,10 @@ public abstract class SuggestOracle<T> {
 	}
 
 	/**
-	 * Generate a {@link Response} based on a specific {@link Request}. After the {@link Response} is created, it is passed into
-	 * {@link Callback#onSuggestionsReady(com.google.gwt.user.client.ui.SuggestOracle.Request, com.google.gwt.user.client.ui.SuggestOracle.Response)} .
+	 * Generate a {@link Response} based on a specific {@link Request}. After the
+	 * {@link Response} is created, it is passed into
+	 * {@link Callback#onSuggestionsReady(com.google.gwt.user.client.ui.SuggestOracle.Request, com.google.gwt.user.client.ui.SuggestOracle.Response)}
+	 * .
 	 * 
 	 * @param request
 	 *          the request
